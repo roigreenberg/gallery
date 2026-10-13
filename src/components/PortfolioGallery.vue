@@ -12,11 +12,10 @@ const props = defineProps({
 });
 
 // Category mapping: Normalize English categories to Hebrew UI labels
-// Note: Moon and night sky photos are categorized under 'נוף' (Landscape)
 const categoryMap = {
   'wildlife': 'טבע וציפורים',
   'landscape': 'נוף',
-  'astrophotography': 'נוף',
+  'astrophotography': 'אסטרופוטוגרפיה',
   'macro': 'מאקרו',
   'nature': 'טבע וציפורים',
   'portrait': 'טבע וציפורים',
@@ -50,9 +49,7 @@ const normalizedPhotos = computed(() => {
 
     const tags = Array.isArray(ai.tags) ? ai.tags : (Array.isArray(p.tags) ? p.tags : []);
     const behavior = Array.isArray(ai.behavior) ? ai.behavior : [];
-    const allPhotoTags = Array.from(new Set([...tags, ...behavior]))
-      .filter(Boolean)
-      .filter(t => !t.includes('אסטרונומ'));
+    const allPhotoTags = Array.from(new Set([...tags, ...behavior])).filter(Boolean);
 
     return {
       id: p.id || p.filename || String(Math.random()),
@@ -81,8 +78,8 @@ const normalizedPhotos = computed(() => {
   });
 });
 
-// Categories list in UI (Astrophotography removed)
-const categories = ['הכל', 'טבע וציפורים', 'נוף', 'מאקרו'];
+// Categories list in UI
+const categories = ['הכל', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
 
 // Active filter states
 const activeCategory = ref('הכל');
