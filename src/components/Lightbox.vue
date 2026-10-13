@@ -186,6 +186,17 @@ const handleTagClick = (tag) => {
   emit('select-tag', tag);
 };
 
+// Format date strictly to DD/MM/YYYY
+const formatDate = (dateStr) => {
+  if (!dateStr || typeof dateStr !== 'string') return '';
+  const match = dateStr.trim().match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})/);
+  if (match) {
+    const [, year, month, day] = match;
+    return `${day}/${month}/${year}`;
+  }
+  return dateStr;
+};
+
 // ==========================================
 // Zoom & Pan Management (Prevents Swipe Conflict)
 // ==========================================
@@ -641,7 +652,7 @@ onUnmounted(() => {
                 <!-- Date -->
                 <div v-if="photo.exif.date" class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80 col-span-2 flex items-center gap-2">
                   <Calendar class="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span class="text-slate-400 text-xs font-mono">{{ photo.exif.date }}</span>
+                  <span class="text-slate-400 text-xs font-mono">{{ formatDate(photo.exif.date) }}</span>
                 </div>
               </div>
             </div>

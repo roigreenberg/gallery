@@ -27,6 +27,32 @@ const getCategoryHebrew = (cat) => {
   return categoryMap[cat] || cat || 'טבע וציפורים';
 };
 
+// Format any date or EXIF timestamp to DD/MM/YYYY
+const formatDateDDMMYYYY = (dateStr) => {
+  if (!dateStr || typeof dateStr !== 'string') return '';
+  const clean = dateStr.trim();
+  if (!clean) return '';
+
+  // Match EXIF "YYYY:MM:DD" or standard "YYYY-MM-DD"
+  const match = clean.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})/);
+  if (match) {
+    const [, year, month, day] = match;
+    return `${day}/${month}/${year}`;
+  }
+
+  try {
+    const parsed = new Date(clean.replace(/:/g, '-'));
+    if (!isNaN(parsed.getTime())) {
+      const d = String(parsed.getDate()).padStart(2, '0');
+      const m = String(parsed.getMonth() + 1).padStart(2, '0');
+      const y = parsed.getFullYear();
+      return `${d}/${m}/${y}`;
+    }
+  } catch (e) {}
+
+  return clean;
+};
+
 // Normalize raw photo records to standard flat format used by components
 const normalizedPhotos = computed(() => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -73,7 +99,7 @@ const normalizedPhotos = computed(() => {
         aperture: exif.aperture || '',
         shutterSpeed: exif.shutter_speed || exif.shutterSpeed || '',
         iso: exif.iso ? String(exif.iso) : '',
-        date: exif.date_time_original || exif.date || '',
+        date: formatDateDDMMYYYY(exif.date_time_original || exif.date || ''),
         location: exif.location || ''
       }
     };

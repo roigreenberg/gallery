@@ -668,8 +668,10 @@ HTML_PAGE = """<!DOCTYPE html>
       document.getElementById('editCategoryBadge').innerText = getPhotoCategory(photo);
       document.getElementById('editIdBadge').innerText = photo.id;
       document.getElementById('editHeaderTitle').innerText = getPhotoTitle(photo);
-      document.getElementById('editSpeciesHeader').innerText = `${getPhotoSpecies(photo)} (${ai.species_latin || photo.species_la || ''})`;
-      document.getElementById('editLocationHeader').innerText = exif.date_time_original || exif.camera_model || '';
+      const rawDate = exif.date_time_original || '';
+      const dateMatch = rawDate.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})/);
+      const formattedExifDate = dateMatch ? `${dateMatch[3]}/${dateMatch[2]}/${dateMatch[1]}` : rawDate;
+      document.getElementById('editLocationHeader').innerText = formattedExifDate ? `${formattedExifDate} • ${exif.camera_model || ''}` : (exif.camera_model || '');
 
       // Update Featured button state
       const btnFeatured = document.getElementById('btnToggleFeatured');
