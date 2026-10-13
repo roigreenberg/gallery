@@ -504,7 +504,7 @@ onUnmounted(() => {
 
           <!-- Image Container with Progressive Fade-in & Full Vertical/Horizontal Fit -->
           <div
-            class="relative flex items-center justify-center w-full h-full max-w-full max-h-full overflow-hidden select-none"
+            class="relative flex items-center justify-center w-full h-full max-w-full max-h-full min-h-0 min-w-0 overflow-hidden select-none"
             @mousedown="handleMouseDown"
             @mousemove="handleMouseMove"
             @mouseup="handleMouseUp"
@@ -513,9 +513,9 @@ onUnmounted(() => {
             @touchend="handleImageTouchEnd"
             @dblclick="toggleZoom"
           >
-            <!-- Zoom transform wrapper -->
+            <!-- Zoom transform wrapper: full container fit to strictly bound vertical & horizontal images -->
             <div
-              class="relative flex items-center justify-center max-w-full max-h-full"
+              class="relative w-full h-full min-h-0 min-w-0 flex items-center justify-center"
               :style="{
                 transform: `scale(${zoomScale}) translate(${panX / zoomScale}px, ${panY / zoomScale}px)`,
                 transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.2, 0, 0, 1)',
@@ -526,20 +526,22 @@ onUnmounted(() => {
               <img
                 :src="photo.thumbnail"
                 :alt="photo.title"
-                class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 filter select-none pointer-events-none"
-                :class="isHighResLoaded ? 'opacity-0 blur-0 scale-100 absolute inset-0 m-auto' : 'opacity-100 blur-sm scale-100'"
+                class="absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 filter select-none pointer-events-none"
+                :class="isHighResLoaded ? 'opacity-0 blur-0' : 'opacity-100 blur-sm'"
+                style="max-height: 100%; max-width: 100%; object-fit: contain;"
                 loading="eager"
                 decoding="sync"
                 draggable="false"
               />
 
-              <!-- High-Res Display Image -->
+              <!-- High-Res Display Image: strictly clamped to 100% stage height & width -->
               <img
                 :src="photo.display"
                 :alt="photo.title"
                 @load="handleHighResLoad"
-                class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-opacity duration-300 select-none pointer-events-none"
-                :class="isHighResLoaded ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 m-auto'"
+                class="absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-opacity duration-300 select-none pointer-events-none"
+                :class="isHighResLoaded ? 'opacity-100' : 'opacity-0'"
+                style="max-height: 100%; max-width: 100%; object-fit: contain;"
                 loading="eager"
                 decoding="async"
                 draggable="false"
@@ -577,7 +579,7 @@ onUnmounted(() => {
         >
           <aside
             v-if="showDrawer"
-            class="w-full lg:w-96 shrink-0 max-h-[40vh] lg:max-h-full overflow-y-auto bg-slate-900/90 border-t lg:border-t-0 lg:border-r border-slate-800/90 backdrop-blur-2xl p-5 sm:p-6 space-y-6 text-right z-30 shadow-2xl"
+            class="w-full lg:w-96 shrink-0 max-h-[32vh] lg:max-h-full overflow-y-auto bg-slate-900/90 border-t lg:border-t-0 lg:border-r border-slate-800/90 backdrop-blur-2xl p-4 sm:p-6 space-y-5 text-right z-30 shadow-2xl"
           >
             <!-- Title and taxonomy -->
             <div>
