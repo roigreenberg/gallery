@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import FilterBar from './FilterBar.vue';
 import GalleryGrid from './GalleryGrid.vue';
 import Lightbox from './Lightbox.vue';
+import SelectionModal from './SelectionModal.vue';
 
 const props = defineProps({
   initialPhotos: {
@@ -57,6 +58,7 @@ const normalizedPhotos = computed(() => {
       species_he: ai.species_hebrew || p.species_he || '',
       species_la: ai.species_latin || p.species_la || '',
       category: getCategoryHebrew(ai.category || p.category),
+      is_featured: Boolean(p.is_featured),
       description: ai.description || p.description || '',
       thumbnail: fixUrl(rawThumb),
       display: fixUrl(rawDisplay),
@@ -79,7 +81,7 @@ const normalizedPhotos = computed(() => {
 });
 
 // Categories list in UI
-const categories = ['הכל', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
+const categories = ['הכל', 'נבחרות ⭐', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
 
 // Active filter states
 const activeCategory = ref('הכל');
@@ -106,7 +108,9 @@ const allTags = computed(() => {
 const filteredPhotos = computed(() => {
   return normalizedPhotos.value.filter(photo => {
     // 1. Category check
-    if (activeCategory.value !== 'הכל' && photo.category !== activeCategory.value) {
+    if (activeCategory.value === 'נבחרות ⭐') {
+      if (!photo.is_featured) return false;
+    } else if (activeCategory.value !== 'הכל' && photo.category !== activeCategory.value) {
       return false;
     }
 
@@ -184,9 +188,71 @@ const setupObserver = () => {
   observer.observe(sentinelRef.value);
 };
 
+// ==========================================
+// Client Selection & LocalStorage Sync
+// ==========================================
+const STORAGE_KEY = 'roigreenberg_selected_photos';
+const selectedPhotoIds = ref([]);
+const isSelectionModalOpen = ref(false);
+
+const loadSavedSelections = () => {
+  if (typeof window === 'undefined') return;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        selectedPhotoIds.value = parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to load selected photos from localStorage', e);
+  }
+};
+
 onMounted(() => {
   setupObserver();
+  loadSavedSelections();
 });
+
+watch(selectedPhotoIds, (newIds) => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newIds));
+  } catch (e) {
+    console.error('Failed to save selected photos to localStorage', e);
+  }
+}, { deep: true });
+
+const selectedPhotos = computed(() => {
+  const set = new Set(selectedPhotoIds.value);
+  return normalizedPhotos.value.filter(p => set.has(p.id));
+});
+
+const togglePhotoSelection = (photo) => {
+  const idx = selectedPhotoIds.value.indexOf(photo.id);
+  if (idx >= 0) {
+    selectedPhotoIds.value.splice(idx, 1);
+  } else {
+    selectedPhotoIds.value.push(photo.id);
+  }
+};
+
+const removePhotoSelection = (photoId) => {
+  selectedPhotoIds.value = selectedPhotoIds.value.filter(id => id !== photoId);
+};
+
+const clearPhotoSelection = () => {
+  selectedPhotoIds.value = [];
+};
+
+const openSelectionModal = () => {
+  isSelectionModalOpen.value = true;
+};
+
+const closeSelectionModal = () => {
+  isSelectionModalOpen.value = false;
+};
 
 watch(sentinelRef, () => {
   setupObserver();
@@ -251,16 +317,47 @@ const navigateToPhoto = (photo) => {
       :activeTag="activeTag"
       :filteredCount="filteredPhotos.length"
       :totalCount="normalizedPhotos.length"
+      :selectedCount="selectedPhotoIds.length"
       @update:category="handleCategoryChange"
       @update:search="handleSearchChange"
       @update:tag="handleTagChange"
       @reset-filters="resetFilters"
+      @open-selection="openSelectionModal"
     />
+
+    <!-- Featured Category Banner -->
+    <div
+      v-if="activeCategory === 'נבחרות ⭐'"
+      class="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-transparent p-4 sm:p-5 flex items-center justify-between gap-4 backdrop-blur-sm"
+    >
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0 border border-amber-500/30">
+          ⭐
+        </div>
+        <div>
+          <h2 class="text-white font-bold text-base sm:text-lg">תמונות נבחרות מהפורטפוליו</h2>
+          <p class="text-xs sm:text-sm text-slate-400">
+            אוסף הצילומים המובחרים. ניתן לסמן תמונות ב-➕ וללחוץ על ״תמונות שבחרתי״ לשליחת הרשימה בוואטסאפ.
+          </p>
+        </div>
+      </div>
+      <button
+        v-if="selectedPhotoIds.length > 0"
+        type="button"
+        @click="openSelectionModal"
+        class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shrink-0 transition-colors cursor-pointer"
+      >
+        <span>צפה בבחירה</span>
+        <span class="bg-black/20 px-2 py-0.5 rounded-full text-[11px]">{{ selectedPhotoIds.length }}</span>
+      </button>
+    </div>
 
     <!-- Masonry Grid with paged visible items -->
     <GalleryGrid
       :photos="visiblePhotos"
+      :selectedIds="selectedPhotoIds"
       @select-photo="openPhoto"
+      @toggle-select="togglePhotoSelection"
     />
 
     <!-- Invisible Sentinel for smooth automatic infinite scroll -->
@@ -281,6 +378,40 @@ const navigateToPhoto = (photo) => {
     <div v-else-if="filteredPhotos.length > PAGE_SIZE" class="text-center py-8 text-xs text-slate-500">
       ✓ הוצגו כל {{ filteredPhotos.length }} התמונות
     </div>
+
+    <!-- Floating Selection Pill when photos are selected -->
+    <transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="transform translate-y-8 opacity-0"
+      enter-to-class="transform translate-y-0 opacity-100"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="transform translate-y-0 opacity-100"
+      leave-to-class="transform translate-y-8 opacity-0"
+    >
+      <div
+        v-if="selectedPhotoIds.length > 0"
+        class="fixed bottom-6 right-6 z-40 flex items-center shadow-2xl"
+      >
+        <button
+          type="button"
+          @click="openSelectionModal"
+          class="px-5 py-3 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm flex items-center gap-3 shadow-lg shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        >
+          <span class="text-base">📋</span>
+          <span>נבחרו {{ selectedPhotoIds.length }} תמונות</span>
+          <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full font-mono">פתח</span>
+        </button>
+      </div>
+    </transition>
+
+    <!-- Client Selection & WhatsApp Export Modal -->
+    <SelectionModal
+      :isOpen="isSelectionModalOpen"
+      :selectedPhotos="selectedPhotos"
+      @close="closeSelectionModal"
+      @remove="removePhotoSelection"
+      @clear="clearPhotoSelection"
+    />
 
     <!-- Lightbox Modal -->
     <Lightbox

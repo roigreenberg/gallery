@@ -38,7 +38,8 @@
       "description": "שמי שקיעה עזים בצבעי אדום וכתום מעל צללית של בניינים."
     },
     "processed_at": "2026-10-12T23:46:48.501622",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20261005-20261005-20261005_182529",
@@ -79,7 +80,8 @@
       "description": "צללית של קו רקיע עירוני על רקע שמי שקיעה דרמטיים בצבעי כתום וסגול."
     },
     "processed_at": "2026-10-12T23:46:48.501622",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20261001-RG5_4152",
@@ -123,7 +125,8 @@
       "description": "צילום פורטרט של שפן סלע מואר באור שמש אחורי רך."
     },
     "processed_at": "2026-10-12T23:46:48.501622",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20261001-RG5_4124",
@@ -167,7 +170,8 @@
       "description": "שלושה שפני סלע עומדים על סלע בולט בתנוחות תצפית שונות."
     },
     "processed_at": "2026-10-12T23:46:48.501622",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260930-RG5_3911",
@@ -211,7 +215,8 @@
       "description": "ציפור קטנה עומדת על צמח קוצני ומביטה מטה בריכוז."
     },
     "processed_at": "2026-10-12T23:46:48.501622",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260930-RG5_3806",
@@ -255,7 +260,8 @@
       "description": "חנקן נובי עומד בביטחון על ראשו של צמח קוצני יבש."
     },
     "processed_at": "2026-10-12T23:46:32.549685",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260930-RG5_3536",
@@ -299,7 +305,8 @@
       "description": "חכלילית סלעים קטנה נחה על ענפים דקים ומפותלים."
     },
     "processed_at": "2026-10-12T23:46:32.549685",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260930-RG5_3436",
@@ -343,7 +350,8 @@
       "description": "ציפור חופמי עומדת על קרקע בוצית רטובה בחיפוש אחר מזון."
     },
     "processed_at": "2026-10-12T23:46:32.549685",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260930-20260930_064419",
@@ -384,7 +392,8 @@
       "description": "מראה של שקיעה צבעונית מעל גבעות עם נדנדה ואופניים בחצר."
     },
     "processed_at": "2026-10-12T23:46:32.549685",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260929-RG5_3009",
@@ -428,7 +437,8 @@
       "description": "סבכי שחור-ראש עומד על ענף יבש ומביט בפרי המונח לפניו."
     },
     "processed_at": "2026-10-12T23:46:32.549685",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260929-RG5_2995",
@@ -1355,7 +1365,8 @@
       "description": "צילום מפורט וחד של פני הירח המלא בגוון זהוב עמוק."
     },
     "processed_at": "2026-10-12T23:45:27.687006",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260927-RG5_9508_1",
@@ -1398,7 +1409,8 @@
       "description": "ירח מלא וגדול מאיר מעל צללית של עץ וקו רקיע עירוני."
     },
     "processed_at": "2026-10-12T23:45:27.687006",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260927-RG5_9497",
@@ -1441,7 +1453,8 @@
       "description": "ירח מלא וכתום עולה מעל רכס הרים חשוך בשעת לילה."
     },
     "processed_at": "2026-10-12T23:45:27.687006",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260927-RG5_9179",
@@ -2194,7 +2207,8 @@
       "description": "דבורת דבש נתפסה ברגע של תעופה מדויקת לקראת נחיתה על תפרחת סגולה."
     },
     "processed_at": "2026-10-12T23:44:51.905329",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260922-RG5_5529",
@@ -2282,7 +2296,8 @@
       "description": "פרפר קטן ממשפחת ההספריתיים נח על תפרחת סגולה ביום אביבי."
     },
     "processed_at": "2026-10-12T23:44:39.553425",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260922-RG5_5440",
@@ -3557,7 +3572,8 @@
       "description": "נוף פנורמי של גבעות רכות עטופות בערפל קל תחת שמי הבוקר."
     },
     "processed_at": "2026-10-12T23:43:12.376661",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260911-RG5_0227",
@@ -3602,7 +3618,8 @@
       "description": "צמח קוצני יבש בקידמת התמונה על רקע גבעות מטושטשות בערפל בוקר."
     },
     "processed_at": "2026-10-12T23:43:12.376661",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260911-RG5_0219",
@@ -3646,7 +3663,8 @@
       "description": "צילום מאקרו ממוקד של שני פירות צבר על רקע מטושטש."
     },
     "processed_at": "2026-10-12T23:43:12.376661",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260911-RG5_0217",
@@ -3691,7 +3709,8 @@
       "description": "צילום תקריב של פירות צבר בשלים המוארים באור שמש רך."
     },
     "processed_at": "2026-10-12T23:43:12.376661",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260911-20260911_063517",
@@ -3736,7 +3755,8 @@
       "description": "מבט רחב על שיחי צבר עמוסי פירות תחת אור הזהב של הזריחה."
     },
     "processed_at": "2026-10-12T23:43:12.376661",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260910-RG5_0140",
@@ -4391,7 +4411,8 @@
       "description": "צללית של כלי טיס זעיר ממונע על רקע שמי שקיעה כתומים."
     },
     "processed_at": "2026-10-12T23:42:36.289548",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260908-RG5_7334",
@@ -4747,7 +4768,8 @@
       "description": "חזית של טרקטור עובד בשדה בשעת דמדומים עם אורות דולקים."
     },
     "processed_at": "2026-10-12T23:42:14.704854",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260907-RG5_6879",
@@ -4837,7 +4859,8 @@
       "description": "מבט ממוקד בין שורות גפנים המדגיש את עומק השדה והטקסטורה של הקרקע."
     },
     "processed_at": "2026-10-12T23:41:55.580060",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260907-20260907_184849",
@@ -4881,7 +4904,8 @@
       "description": "נוף פנורמי של כרמים המשתרעים אל עבר האופק תחת שמי שקיעה צבעוניים."
     },
     "processed_at": "2026-10-12T23:41:55.580060",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260907-RG5_6854",
@@ -4926,7 +4950,8 @@
       "description": "אשכול ענבים כהים בשלבי הבשלה מתקדמים ותחילת התייבשות על הגפן."
     },
     "processed_at": "2026-10-12T23:42:14.704854",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260907-20260907_183550",
@@ -5633,7 +5658,8 @@
       "description": "צילום מאקרו עדין של קורי עכביש מתוחים על גבעול יבש בשדה."
     },
     "processed_at": "2026-10-12T23:41:11.533770",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260902-RG5_5254",
@@ -7211,7 +7237,8 @@
       "description": "צילום תקריב מפורט של פני הירח המלא על רקע שחור."
     },
     "processed_at": "2026-10-12T23:39:47.237402",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260827-RG5_2773",
@@ -7255,7 +7282,8 @@
       "description": "ירח מלא וגדול זורח מעל קו אופק עם עצים בשעת דמדומים."
     },
     "processed_at": "2026-10-12T23:39:47.237402",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260826-RG5_2577",
@@ -7926,7 +7954,8 @@
       "description": "דבורת דבש נוחתת על פני המים ויוצרת אדוות מעגליות סביבה."
     },
     "processed_at": "2026-10-12T23:39:15.680005",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260825-RG5_9497",
@@ -7970,7 +7999,8 @@
       "description": "שפירית אדומה נחה על קצה ענף יבש על רקע מטושטש."
     },
     "processed_at": "2026-10-12T23:39:04.131674",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260825-RG5_9477",
@@ -8188,7 +8218,8 @@
       "description": "שמש גדולה שוקעת מעבר לקו רכס, צובעת את השמיים בגוונים עזים של כתום ואדום."
     },
     "processed_at": "2026-10-12T23:36:34.010195",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260819-RG5_8635_1",
@@ -10670,7 +10701,8 @@
       "description": "צילום ממוקד של השמש השוקעת ככדור בוער על רקע שמיים חשוכים."
     },
     "processed_at": "2026-10-12T23:36:02.548158",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260814-RG5_9427",
@@ -10754,7 +10786,8 @@
       "description": "קרני השמש השוקעת מציצות מבעד למחטי עץ האורן ויוצרות משחקי אור וצל."
     },
     "processed_at": "2026-10-12T23:36:02.548158",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260814-RG5_9410",
@@ -11808,7 +11841,8 @@
       "description": "קרני שמש חמות חודרות מבעד לענפי עץ אורן בשעת שקיעה."
     },
     "processed_at": "2026-10-12T23:34:22.178570",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260806-RG5_6821",
@@ -13141,7 +13175,8 @@
       "description": "להקת ציפורים חוצה את פני הירח המלא בשמי הערב."
     },
     "processed_at": "2026-10-12T23:32:34.184312",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260728-RG5_0521",
@@ -19067,7 +19102,8 @@
       "description": "צילום תקריב מפורט של ראש עורב אפור המדגיש את מרקם הנוצות והעין."
     },
     "processed_at": "2026-10-13T00:57:04.085973",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260616-RG5_0260",
@@ -40064,7 +40100,8 @@
       "description": "דמויות במדים צופות בזריחה מראש הר."
     },
     "processed_at": "2026-10-12T23:25:11.853643",
-    "last_edited_at": null
+    "last_edited_at": null,
+    "is_featured": true
   },
   {
     "id": "20260412-20260412_055208",

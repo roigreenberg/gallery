@@ -203,6 +203,7 @@ class PhotoRecord(BaseModel):
     ai: PhotoAITags
     processed_at: str
     last_edited_at: Optional[str] = None
+    is_featured: Optional[bool] = False
 
 
 # ==============================================================================

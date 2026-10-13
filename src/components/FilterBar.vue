@@ -30,10 +30,14 @@ const props = defineProps({
   totalCount: {
     type: Number,
     required: true
+  },
+  selectedCount: {
+    type: Number,
+    default: 0
   }
 });
 
-const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'reset-filters']);
+const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'reset-filters', 'open-selection']);
 
 const hasActiveFilters = computed(() => {
   return props.activeCategory !== 'הכל' || props.searchQuery.trim() !== '' || Boolean(props.activeTag);
@@ -67,8 +71,8 @@ const hasActiveFilters = computed(() => {
         </button>
       </div>
 
-      <!-- Result Counter & Clear Action -->
-      <div class="flex items-center justify-between md:justify-end gap-3 text-xs sm:text-sm text-slate-400">
+      <!-- Result Counter & Clear & Selection Action -->
+      <div class="flex items-center justify-between md:justify-end gap-3 text-xs sm:text-sm text-slate-400 flex-wrap">
         <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 border border-slate-800">
           <span class="inline-block w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
           <span>מוצגות </span>
@@ -76,6 +80,22 @@ const hasActiveFilters = computed(() => {
           <span> מתוך </span>
           <span>{{ totalCount }} תמונות</span>
         </div>
+
+        <!-- Chosen Photos Button -->
+        <button
+          type="button"
+          @click="emit('open-selection')"
+          class="px-3.5 py-1.5 rounded-full border transition text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm"
+          :class="selectedCount > 0 ? 'bg-sky-950 border-sky-500 text-sky-300 ring-1 ring-sky-500/40 shadow-sky-500/10' : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800'"
+        >
+          <span>📋 תמונות שבחרתי</span>
+          <span
+            v-if="selectedCount > 0"
+            class="px-1.5 py-0.2 rounded-full bg-sky-500 text-slate-950 text-[10px] font-black"
+          >
+            {{ selectedCount }}
+          </span>
+        </button>
 
         <button
           v-if="hasActiveFilters"
