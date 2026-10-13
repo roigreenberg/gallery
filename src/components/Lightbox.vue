@@ -28,9 +28,21 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'select-tag', 'navigate']);
 
-// Drawer toggle state
+// Drawer toggle state (desktop starts open, mobile starts closed for maximum photo stage)
 const showDrawer = ref(true);
 const isHighResLoaded = ref(false);
+const isSlowLoading = ref(false);
+let slowTimer = null;
+
+// Browser cache & preloader tracker
+const preloadedUrls = new Set();
+
+const preloadSingleImage = (url) => {
+  if (!url || preloadedUrls.has(url)) return;
+  preloadedUrls.add(url);
+  const img = new Image();
+  img.src = url;
+};
 
 // Current photo index
 const currentIndex = computed(() => {
@@ -40,6 +52,68 @@ const currentIndex = computed(() => {
 
 const hasNext = computed(() => currentIndex.value < props.photosList.length - 1);
 const hasPrev = computed(() => currentIndex.value > 0);
+
+// Preload 2 next and 2 previous photos into browser cache
+const preloadAdjacentPhotos = (index) => {
+  if (index < 0 || !props.photosList || props.photosList.length === 0) return;
+
+  // Priority order: next 1, previous 1, next 2, previous 2
+  const steps = [1, -1, 2, -2];
+  for (const step of steps) {
+    const targetIdx = index + step;
+    if (targetIdx >= 0 && targetIdx < props.photosList.length) {
+      const p = props.photosList[targetIdx];
+      if (p) {
+        if (p.display) preloadSingleImage(p.display);
+        if (p.thumbnail) preloadSingleImage(p.thumbnail);
+      }
+    }
+  }
+};
+
+const handleHighResLoad = () => {
+  isHighResLoaded.value = true;
+  isSlowLoading.value = false;
+  if (slowTimer) {
+    clearTimeout(slowTimer);
+    slowTimer = null;
+  }
+};
+
+const checkAndPreloadCurrent = () => {
+  if (!props.photo) return;
+
+  if (slowTimer) {
+    clearTimeout(slowTimer);
+    slowTimer = null;
+  }
+  isSlowLoading.value = false;
+
+  // Check if high-res image is already cached in browser
+  const displayUrl = props.photo.display;
+  if (displayUrl) {
+    const testImg = new Image();
+    testImg.src = displayUrl;
+    if (testImg.complete) {
+      isHighResLoaded.value = true;
+    } else {
+      isHighResLoaded.value = false;
+      // If image takes more than 200ms to load, show gentle loading status
+      slowTimer = setTimeout(() => {
+        if (!isHighResLoaded.value) {
+          isSlowLoading.value = true;
+        }
+      }, 200);
+    }
+  } else {
+    isHighResLoaded.value = false;
+  }
+
+  // Preload next and previous photos in the background (microtask delay so current image takes network priority)
+  setTimeout(() => {
+    preloadAdjacentPhotos(currentIndex.value);
+  }, 40);
+};
 
 // In RTL layout:
 // "Next" image logically moves forward in the sequence
@@ -102,14 +176,20 @@ const handleKeyDown = (e) => {
 };
 
 watch(() => props.photo, () => {
-  isHighResLoaded.value = false;
-});
+  checkAndPreloadCurrent();
+}, { immediate: true });
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown);
+  if (typeof window !== 'undefined') {
+    // On mobile screens, collapse drawer by default to maximize portrait and landscape photos
+    showDrawer.value = window.innerWidth >= 1024;
+    window.addEventListener('keydown', handleKeyDown);
+  }
+  checkAndPreloadCurrent();
 });
 
 onUnmounted(() => {
+  if (slowTimer) clearTimeout(slowTimer);
   window.removeEventListener('keydown', handleKeyDown);
 });
 </script>
@@ -130,7 +210,7 @@ onUnmounted(() => {
       @touchend="handleTouchEnd"
     >
       <!-- Top Action Bar -->
-      <header class="flex items-center justify-between px-4 sm:px-6 py-3.5 z-20 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md">
+      <header class="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3.5 z-20 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md">
         <!-- Title & Counter -->
         <div class="flex items-center gap-3">
           <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800/80 text-sky-400 font-mono">
@@ -170,10 +250,10 @@ onUnmounted(() => {
       </header>
 
       <!-- Main Content Area: Image + Floating Navigation + Metadata Drawer -->
-      <div class="relative flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div class="relative flex-1 min-h-0 min-w-0 flex flex-col lg:flex-row overflow-hidden">
         
         <!-- Large Image Stage -->
-        <div class="relative flex-1 flex items-center justify-center p-2 sm:p-6 lg:p-8 min-h-0">
+        <div class="relative flex-1 min-h-0 min-w-0 w-full h-full flex items-center justify-center p-2 sm:p-4 lg:p-6 overflow-hidden">
           
           <!-- Navigation Arrow Right (Previous in RTL) -->
           <button
@@ -195,25 +275,46 @@ onUnmounted(() => {
             <ChevronLeft class="w-6 h-6" />
           </button>
 
-          <!-- Image Container with Progressive Fade-in -->
-          <div class="relative max-w-full max-h-full flex items-center justify-center">
-            <!-- Low-res thumbnail placeholder while display image loads -->
+          <!-- Image Container with Progressive Fade-in & Full Vertical/Horizontal Fit -->
+          <div class="relative flex items-center justify-center w-full h-full max-w-full max-h-full">
+            <!-- Low-res thumbnail placeholder while display image loads (instant LQIP) -->
             <img
               :src="photo.thumbnail"
               :alt="photo.title"
-              class="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl filter blur-sm transition-opacity duration-300"
-              :class="isHighResLoaded ? 'opacity-0 absolute inset-0' : 'opacity-100'"
+              class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 filter select-none"
+              :class="isHighResLoaded ? 'opacity-0 blur-0 scale-100 absolute inset-0 m-auto pointer-events-none' : 'opacity-100 blur-sm scale-100'"
+              loading="eager"
+              decoding="sync"
             />
+
             <!-- High-Res Display Image -->
             <img
               :src="photo.display"
               :alt="photo.title"
-              @load="isHighResLoaded = true"
-              :class="[
-                'max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl transition-opacity duration-500',
-                isHighResLoaded ? 'opacity-100' : 'opacity-0'
-              ]"
+              @load="handleHighResLoad"
+              class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-opacity duration-300 select-none"
+              :class="isHighResLoaded ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 m-auto pointer-events-none'"
+              loading="eager"
+              decoding="async"
             />
+
+            <!-- Subtle loading badge if high-res takes more than 200ms -->
+            <Transition
+              enter-active-class="transition duration-200 ease-out"
+              enter-from-class="opacity-0 translate-y-2"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition duration-150 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 translate-y-2"
+            >
+              <div
+                v-if="!isHighResLoaded && isSlowLoading"
+                class="absolute bottom-4 z-20 px-4 py-1.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/10 shadow-xl flex items-center gap-2 pointer-events-none"
+              >
+                <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                <span class="text-xs text-slate-300 font-medium">טוען באיכות מלאה...</span>
+              </div>
+            </Transition>
           </div>
         </div>
 
@@ -228,7 +329,7 @@ onUnmounted(() => {
         >
           <aside
             v-if="showDrawer"
-            class="w-full lg:w-96 max-h-[45vh] lg:max-h-full overflow-y-auto bg-slate-900/90 border-t lg:border-t-0 lg:border-r border-slate-800/90 backdrop-blur-2xl p-5 sm:p-6 space-y-6 text-right z-30 shadow-2xl"
+            class="w-full lg:w-96 shrink-0 max-h-[40vh] lg:max-h-full overflow-y-auto bg-slate-900/90 border-t lg:border-t-0 lg:border-r border-slate-800/90 backdrop-blur-2xl p-5 sm:p-6 space-y-6 text-right z-30 shadow-2xl"
           >
             <!-- Title and taxonomy -->
             <div>
