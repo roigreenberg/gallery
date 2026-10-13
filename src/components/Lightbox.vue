@@ -14,7 +14,9 @@ import {
   Tag,
   Maximize2,
   Share2,
-  Check
+  Check,
+  ZoomIn,
+  ZoomOut
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -184,16 +186,137 @@ const handleTagClick = (tag) => {
   emit('select-tag', tag);
 };
 
-// Touch gestures / Swipe support
+// ==========================================
+// Zoom & Pan Management (Prevents Swipe Conflict)
+// ==========================================
+const zoomScale = ref(1);
+const panX = ref(0);
+const panY = ref(0);
+const isDragging = ref(false);
+const dragStartX = ref(0);
+const dragStartY = ref(0);
+const initialPanX = ref(0);
+const initialPanY = ref(0);
+const lastTapTime = ref(0);
+const isMultiTouch = ref(false);
+
+const resetZoom = () => {
+  zoomScale.value = 1;
+  panX.value = 0;
+  panY.value = 0;
+  isDragging.value = false;
+};
+
+const toggleZoom = () => {
+  if (zoomScale.value > 1) {
+    resetZoom();
+  } else {
+    zoomScale.value = 2.4;
+    panX.value = 0;
+    panY.value = 0;
+  }
+};
+
+// Double-tap and pan handling on image
+const handleImageTouchStart = (e) => {
+  if (e.touches && e.touches.length > 1) {
+    isMultiTouch.value = true;
+    return;
+  }
+
+  const now = Date.now();
+  if (now - lastTapTime.value < 300) {
+    toggleZoom();
+    lastTapTime.value = 0;
+    if (e.cancelable) e.preventDefault();
+    return;
+  }
+  lastTapTime.value = now;
+
+  if (zoomScale.value > 1 && e.touches) {
+    isDragging.value = true;
+    dragStartX.value = e.touches[0].clientX;
+    dragStartY.value = e.touches[0].clientY;
+    initialPanX.value = panX.value;
+    initialPanY.value = panY.value;
+  }
+};
+
+const handleImageTouchMove = (e) => {
+  if (e.touches && e.touches.length > 1) {
+    isMultiTouch.value = true;
+    return;
+  }
+
+  if (zoomScale.value > 1 && isDragging.value && e.touches) {
+    if (e.cancelable) e.preventDefault();
+    const dx = e.touches[0].clientX - dragStartX.value;
+    const dy = e.touches[0].clientY - dragStartY.value;
+    panX.value = initialPanX.value + dx;
+    panY.value = initialPanY.value + dy;
+  }
+};
+
+const handleImageTouchEnd = () => {
+  isDragging.value = false;
+};
+
+// Mouse pan for desktop
+const handleMouseDown = (e) => {
+  if (zoomScale.value > 1) {
+    isDragging.value = true;
+    dragStartX.value = e.clientX;
+    dragStartY.value = e.clientY;
+    initialPanX.value = panX.value;
+    initialPanY.value = panY.value;
+    e.preventDefault();
+  }
+};
+
+const handleMouseMove = (e) => {
+  if (zoomScale.value > 1 && isDragging.value) {
+    const dx = e.clientX - dragStartX.value;
+    const dy = e.clientY - dragStartY.value;
+    panX.value = initialPanX.value + dx;
+    panY.value = initialPanY.value + dy;
+  }
+};
+
+const handleMouseUp = () => {
+  isDragging.value = false;
+};
+
+// Outer Container Touch gestures / Swipe navigation
 const touchStartX = ref(0);
 const touchStartY = ref(0);
 
 const handleTouchStart = (e) => {
+  if (e.touches && e.touches.length > 1) {
+    isMultiTouch.value = true;
+    return;
+  }
+  isMultiTouch.value = false;
   touchStartX.value = e.changedTouches[0].screenX;
   touchStartY.value = e.changedTouches[0].screenY;
 };
 
 const handleTouchEnd = (e) => {
+  // 1. If multi-touch (pinch) was used, NEVER swipe!
+  if (isMultiTouch.value || (e.touches && e.touches.length > 0)) {
+    isMultiTouch.value = false;
+    return;
+  }
+
+  // 2. If browser viewport is zoomed (native mobile pinch zoom), NEVER swipe!
+  if (typeof window !== 'undefined' && window.visualViewport && window.visualViewport.scale > 1.05) {
+    return;
+  }
+
+  // 3. If image zoom is active (scale > 1), NEVER swipe!
+  if (zoomScale.value > 1.05) {
+    return;
+  }
+
   const diffX = e.changedTouches[0].screenX - touchStartX.value;
   const diffY = e.changedTouches[0].screenY - touchStartY.value;
 
@@ -213,16 +336,20 @@ const handleTouchEnd = (e) => {
 const handleKeyDown = (e) => {
   if (!props.photo) return;
   if (e.key === 'Escape') {
-    handleClose();
+    if (zoomScale.value > 1) {
+      resetZoom();
+    } else {
+      handleClose();
+    }
   } else if (e.key === 'ArrowRight') {
-    // In RTL, ArrowRight naturally corresponds to backwards/previous or next
-    goPrev();
+    if (zoomScale.value <= 1.05) goPrev();
   } else if (e.key === 'ArrowLeft') {
-    goNext();
+    if (zoomScale.value <= 1.05) goNext();
   }
 };
 
 watch(() => props.photo, () => {
+  resetZoom();
   checkAndPreloadCurrent();
 }, { immediate: true });
 
@@ -268,6 +395,22 @@ onUnmounted(() => {
 
         <!-- Controls -->
         <div class="flex items-center gap-2">
+          <!-- Toggle Zoom Button -->
+          <button
+            @click="toggleZoom"
+            :class="[
+              'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition cursor-pointer',
+              zoomScale > 1
+                ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 ring-1 ring-sky-500/30'
+                : 'border-slate-800 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-700'
+            ]"
+            :title="zoomScale > 1 ? 'אפס זום' : 'הגדל תמונה (זום)'"
+          >
+            <ZoomOut v-if="zoomScale > 1" class="w-3.5 h-3.5 text-sky-400" />
+            <ZoomIn v-else class="w-3.5 h-3.5" />
+            <span class="hidden sm:inline">{{ zoomScale > 1 ? 'אפס זום' : 'זום' }}</span>
+          </button>
+
           <!-- Share Direct Link Button -->
           <button
             @click="handleShare"
@@ -311,9 +454,25 @@ onUnmounted(() => {
         <!-- Large Image Stage -->
         <div class="relative flex-1 min-h-0 min-w-0 w-full h-full flex items-center justify-center p-2 sm:p-4 lg:p-6 overflow-hidden">
           
-          <!-- Navigation Arrow Right (Previous in RTL) - Hidden on mobile to avoid obstructing photo -->
+          <!-- Floating Zoom Reset Bar when zoomed in -->
+          <div
+            v-if="zoomScale > 1"
+            class="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-full bg-slate-950/85 text-white border border-white/20 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs pointer-events-auto"
+          >
+            <span class="text-sky-400 font-bold font-mono">{{ zoomScale.toFixed(1) }}x</span>
+            <span class="text-slate-300 text-[11px] hidden sm:inline">גרור להזזה • הקש פעמיים לאיפוס</span>
+            <button
+              type="button"
+              @click.stop="resetZoom"
+              class="px-2.5 py-0.5 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition cursor-pointer"
+            >
+              אפס גודל
+            </button>
+          </div>
+
+          <!-- Navigation Arrow Right (Previous in RTL) - Hidden on mobile or when zoomed -->
           <button
-            v-if="hasPrev"
+            v-if="hasPrev && zoomScale <= 1.05"
             @click.stop="goPrev"
             class="hidden md:flex absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
             aria-label="התמונה הקודמת"
@@ -321,9 +480,9 @@ onUnmounted(() => {
             <ChevronRight class="w-6 h-6" />
           </button>
 
-          <!-- Navigation Arrow Left (Next in RTL) - Hidden on mobile to avoid obstructing photo -->
+          <!-- Navigation Arrow Left (Next in RTL) - Hidden on mobile or when zoomed -->
           <button
-            v-if="hasNext"
+            v-if="hasNext && zoomScale <= 1.05"
             @click.stop="goNext"
             class="hidden md:flex absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
             aria-label="התמונה הבאה"
@@ -332,27 +491,48 @@ onUnmounted(() => {
           </button>
 
           <!-- Image Container with Progressive Fade-in & Full Vertical/Horizontal Fit -->
-          <div class="relative flex items-center justify-center w-full h-full max-w-full max-h-full">
-            <!-- Low-res thumbnail placeholder while display image loads (instant LQIP) -->
-            <img
-              :src="photo.thumbnail"
-              :alt="photo.title"
-              class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 filter select-none"
-              :class="isHighResLoaded ? 'opacity-0 blur-0 scale-100 absolute inset-0 m-auto pointer-events-none' : 'opacity-100 blur-sm scale-100'"
-              loading="eager"
-              decoding="sync"
-            />
+          <div
+            class="relative flex items-center justify-center w-full h-full max-w-full max-h-full overflow-hidden select-none"
+            @mousedown="handleMouseDown"
+            @mousemove="handleMouseMove"
+            @mouseup="handleMouseUp"
+            @touchstart="handleImageTouchStart"
+            @touchmove="handleImageTouchMove"
+            @touchend="handleImageTouchEnd"
+            @dblclick="toggleZoom"
+          >
+            <!-- Zoom transform wrapper -->
+            <div
+              class="relative flex items-center justify-center max-w-full max-h-full"
+              :style="{
+                transform: `scale(${zoomScale}) translate(${panX / zoomScale}px, ${panY / zoomScale}px)`,
+                transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.2, 0, 0, 1)',
+                cursor: zoomScale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in'
+              }"
+            >
+              <!-- Low-res thumbnail placeholder while display image loads (instant LQIP) -->
+              <img
+                :src="photo.thumbnail"
+                :alt="photo.title"
+                class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 filter select-none pointer-events-none"
+                :class="isHighResLoaded ? 'opacity-0 blur-0 scale-100 absolute inset-0 m-auto' : 'opacity-100 blur-sm scale-100'"
+                loading="eager"
+                decoding="sync"
+                draggable="false"
+              />
 
-            <!-- High-Res Display Image -->
-            <img
-              :src="photo.display"
-              :alt="photo.title"
-              @load="handleHighResLoad"
-              class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-opacity duration-300 select-none"
-              :class="isHighResLoaded ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 m-auto pointer-events-none'"
-              loading="eager"
-              decoding="async"
-            />
+              <!-- High-Res Display Image -->
+              <img
+                :src="photo.display"
+                :alt="photo.title"
+                @load="handleHighResLoad"
+                class="max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-opacity duration-300 select-none pointer-events-none"
+                :class="isHighResLoaded ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 m-auto'"
+                loading="eager"
+                decoding="async"
+                draggable="false"
+              />
+            </div>
 
             <!-- Subtle loading badge if high-res takes more than 200ms -->
             <Transition
