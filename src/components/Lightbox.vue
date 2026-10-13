@@ -12,7 +12,9 @@ import {
   Calendar,
   MapPin,
   Tag,
-  Maximize2
+  Maximize2,
+  Share2,
+  Check
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -28,11 +30,56 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'select-tag', 'navigate']);
 
-// Drawer toggle state (desktop starts open, mobile starts closed for maximum photo stage)
+// Drawer toggle state (always open by default so details are immediately visible)
 const showDrawer = ref(true);
 const isHighResLoaded = ref(false);
 const isSlowLoading = ref(false);
 let slowTimer = null;
+const shareCopied = ref(false);
+
+const handleShare = async () => {
+  if (!props.photo || typeof window === 'undefined') return;
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('photo', props.photo.id);
+  const shareUrl = url.toString();
+
+  const shareData = {
+    title: props.photo.title || 'צילום מאת רועי גרינברג',
+    text: `${props.photo.title || 'תמונת טבע'} | גלריית הצילום של רועי גרינברג`,
+    url: shareUrl
+  };
+
+  // 1. Try native Web Share API (mobile devices)
+  if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (err) {
+      if (err.name === 'AbortError') return; // Cancelled by user
+    }
+  }
+
+  // 2. Fallback: Copy direct URL to clipboard
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    shareCopied.value = true;
+    setTimeout(() => {
+      shareCopied.value = false;
+    }, 2500);
+  } catch (err) {
+    const ta = document.createElement('textarea');
+    ta.value = shareUrl;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    shareCopied.value = true;
+    setTimeout(() => {
+      shareCopied.value = false;
+    }, 2500);
+  }
+};
 
 // Browser cache & preloader tracker
 const preloadedUrls = new Set();
@@ -181,8 +228,6 @@ watch(() => props.photo, () => {
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
-    // On mobile screens, collapse drawer by default to maximize portrait and landscape photos
-    showDrawer.value = window.innerWidth >= 1024;
     window.addEventListener('keydown', handleKeyDown);
   }
   checkAndPreloadCurrent();
@@ -223,6 +268,17 @@ onUnmounted(() => {
 
         <!-- Controls -->
         <div class="flex items-center gap-2">
+          <!-- Share Direct Link Button -->
+          <button
+            @click="handleShare"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-slate-800 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-700 transition cursor-pointer"
+            title="שתף קישור ישיר לתמונה"
+          >
+            <Check v-if="shareCopied" class="w-3.5 h-3.5 text-emerald-400" />
+            <Share2 v-else class="w-3.5 h-3.5" />
+            <span class="text-xs">{{ shareCopied ? 'הועתק!' : 'שתף' }}</span>
+          </button>
+
           <!-- Toggle Metadata Drawer Button -->
           <button
             @click="showDrawer = !showDrawer"
@@ -255,21 +311,21 @@ onUnmounted(() => {
         <!-- Large Image Stage -->
         <div class="relative flex-1 min-h-0 min-w-0 w-full h-full flex items-center justify-center p-2 sm:p-4 lg:p-6 overflow-hidden">
           
-          <!-- Navigation Arrow Right (Previous in RTL) -->
+          <!-- Navigation Arrow Right (Previous in RTL) - Hidden on mobile to avoid obstructing photo -->
           <button
             v-if="hasPrev"
             @click.stop="goPrev"
-            class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+            class="hidden md:flex absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
             aria-label="התמונה הקודמת"
           >
             <ChevronRight class="w-6 h-6" />
           </button>
 
-          <!-- Navigation Arrow Left (Next in RTL) -->
+          <!-- Navigation Arrow Left (Next in RTL) - Hidden on mobile to avoid obstructing photo -->
           <button
             v-if="hasNext"
             @click.stop="goNext"
-            class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+            class="hidden md:flex absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
             aria-label="התמונה הבאה"
           >
             <ChevronLeft class="w-6 h-6" />

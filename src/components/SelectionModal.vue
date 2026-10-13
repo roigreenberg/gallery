@@ -17,12 +17,25 @@ const emit = defineEmits(['close', 'remove', 'clear']);
 
 const copied = ref(false);
 
-// Generate formatted export text
+const getPhotoShareUrl = (photoId) => {
+  if (typeof window === 'undefined') return '';
+  const url = new URL(window.location.href);
+  url.search = `?photo=${encodeURIComponent(photoId)}`;
+  url.hash = '';
+  return url.toString();
+};
+
+// Generate formatted export text with direct photo URLs for WhatsApp
 const formattedText = computed(() => {
   if (props.selectedPhotos.length === 0) return '';
   const lines = ['בחרתי את התמונות הבאות:'];
   props.selectedPhotos.forEach(p => {
-    lines.push(`• ${p.title} (מזהה: ${p.id})`);
+    const link = getPhotoShareUrl(p.id);
+    if (link) {
+      lines.push(`• ${p.title}\n  ${link}`);
+    } else {
+      lines.push(`• ${p.title} (מזהה: ${p.id})`);
+    }
   });
   return lines.join('\n');
 });

@@ -210,11 +210,6 @@ const loadSavedSelections = () => {
   }
 };
 
-onMounted(() => {
-  setupObserver();
-  loadSavedSelections();
-});
-
 watch(selectedPhotoIds, (newIds) => {
   if (typeof window === 'undefined') return;
   try {
@@ -254,13 +249,137 @@ const closeSelectionModal = () => {
   isSelectionModalOpen.value = false;
 };
 
-watch(sentinelRef, () => {
+// ==========================================
+// URL Deep Linking & Shareable State Sync
+// ==========================================
+let isSyncingFromUrl = false;
+
+const syncStateFromUrl = () => {
+  if (typeof window === 'undefined') return;
+  isSyncingFromUrl = true;
+
+  try {
+    const params = new URLSearchParams(window.location.search);
+
+    // 1. Category
+    const cat = params.get('category');
+    if (cat) {
+      if (cat === 'featured' || cat === 'נבחרות') {
+        activeCategory.value = 'נבחרות ⭐';
+      } else {
+        const found = categories.find(c => c === cat || c.includes(cat));
+        if (found) {
+          activeCategory.value = found;
+        } else if (categoryMap[cat]) {
+          activeCategory.value = categoryMap[cat];
+        }
+      }
+    }
+
+    // 2. Tag
+    const tag = params.get('tag');
+    if (tag) {
+      activeTag.value = tag;
+    }
+
+    // 3. Search query
+    const q = params.get('q');
+    if (q) {
+      searchQuery.value = q;
+    }
+
+    // 4. Photo in lightbox
+    const photoId = params.get('photo');
+    if (photoId) {
+      const match = normalizedPhotos.value.find(p => p.id === photoId);
+      if (match) {
+        activePhoto.value = match;
+        const idx = filteredPhotos.value.findIndex(p => p.id === match.id);
+        if (idx >= visibleCount.value) {
+          visibleCount.value = Math.min(idx + PAGE_SIZE, filteredPhotos.value.length);
+        }
+      } else {
+        activePhoto.value = null;
+      }
+    } else {
+      activePhoto.value = null;
+    }
+  } finally {
+    setTimeout(() => {
+      isSyncingFromUrl = false;
+    }, 0);
+  }
+};
+
+const updateUrl = (pushToHistory = false) => {
+  if (typeof window === 'undefined' || isSyncingFromUrl) return;
+
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+
+  // Category
+  if (activeCategory.value && activeCategory.value !== 'הכל') {
+    params.set('category', activeCategory.value);
+  } else {
+    params.delete('category');
+  }
+
+  // Tag
+  if (activeTag.value) {
+    params.set('tag', activeTag.value);
+  } else {
+    params.delete('tag');
+  }
+
+  // Search query
+  if (searchQuery.value && searchQuery.value.trim()) {
+    params.set('q', searchQuery.value.trim());
+  } else {
+    params.delete('q');
+  }
+
+  // Photo
+  if (activePhoto.value?.id) {
+    params.set('photo', activePhoto.value.id);
+  } else {
+    params.delete('photo');
+  }
+
+  const queryString = params.toString() ? `?${params.toString()}` : '';
+  const newUrl = `${url.pathname}${queryString}${url.hash}`;
+
+  if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== newUrl) {
+    if (pushToHistory) {
+      window.history.pushState(null, '', newUrl);
+    } else {
+      window.history.replaceState(null, '', newUrl);
+    }
+  }
+};
+
+onMounted(() => {
   setupObserver();
+  loadSavedSelections();
+  syncStateFromUrl();
+  window.addEventListener('popstate', syncStateFromUrl);
+});
+
+watch([activeCategory, searchQuery, activeTag], () => {
+  updateUrl(false);
+});
+
+watch(activePhoto, (newVal, oldVal) => {
+  // If opening photo from closed state, push history so browser back button closes it
+  const shouldPush = !oldVal && newVal;
+  updateUrl(shouldPush);
 });
 
 onUnmounted(() => {
   if (observer) {
     observer.disconnect();
+  }
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('popstate', syncStateFromUrl);
   }
 });
 
