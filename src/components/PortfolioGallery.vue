@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import FilterBar from './FilterBar.vue';
 import GalleryGrid from './GalleryGrid.vue';
 import Lightbox from './Lightbox.vue';
@@ -12,10 +12,11 @@ const props = defineProps({
 });
 
 // Category mapping: Normalize English categories to Hebrew UI labels
+// Note: Moon and night sky photos are categorized under 'נוף' (Landscape)
 const categoryMap = {
   'wildlife': 'טבע וציפורים',
   'landscape': 'נוף',
-  'astrophotography': 'אסטרופוטוגרפיה',
+  'astrophotography': 'נוף',
   'macro': 'מאקרו',
   'nature': 'טבע וציפורים',
   'portrait': 'טבע וציפורים',
@@ -49,7 +50,9 @@ const normalizedPhotos = computed(() => {
 
     const tags = Array.isArray(ai.tags) ? ai.tags : (Array.isArray(p.tags) ? p.tags : []);
     const behavior = Array.isArray(ai.behavior) ? ai.behavior : [];
-    const allPhotoTags = Array.from(new Set([...tags, ...behavior])).filter(Boolean);
+    const allPhotoTags = Array.from(new Set([...tags, ...behavior]))
+      .filter(Boolean)
+      .filter(t => !t.includes('אסטרונומ'));
 
     return {
       id: p.id || p.filename || String(Math.random()),
@@ -78,10 +81,10 @@ const normalizedPhotos = computed(() => {
   });
 });
 
-// Categories list in UI
-const categories = ['הכל', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
+// Categories list in UI (Astrophotography removed)
+const categories = ['הכל', 'טבע וציפורים', 'נוף', 'מאקרו'];
 
-// Active states
+// Active filter states
 const activeCategory = ref('הכל');
 const searchQuery = ref('');
 const activeTag = ref(null);
@@ -92,7 +95,7 @@ const allTags = computed(() => {
   const counts = {};
   normalizedPhotos.value.forEach(p => {
     (p.tags || []).forEach(t => {
-      if (t && t.length > 1) {
+      if (t && t.length > 1 && !t.includes('אסטרונומ')) {
         counts[t] = (counts[t] || 0) + 1;
       }
     });
@@ -134,6 +137,70 @@ const filteredPhotos = computed(() => {
   });
 });
 
+// ==========================================
+// Virtual Pagination & Infinite Scroll (Batch of 30)
+// ==========================================
+const PAGE_SIZE = 30;
+const visibleCount = ref(PAGE_SIZE);
+const sentinelRef = ref(null);
+let observer = null;
+
+// Reset pagination whenever filters change
+watch([activeCategory, searchQuery, activeTag], () => {
+  visibleCount.value = PAGE_SIZE;
+});
+
+// Sliced list of photos currently rendered in the DOM
+const visiblePhotos = computed(() => {
+  return filteredPhotos.value.slice(0, visibleCount.value);
+});
+
+const hasMore = computed(() => {
+  return visibleCount.value < filteredPhotos.value.length;
+});
+
+const loadMore = () => {
+  if (hasMore.value) {
+    visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, filteredPhotos.value.length);
+  }
+};
+
+const setupObserver = () => {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+  if (!sentinelRef.value) return;
+
+  observer = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    if (entry && entry.isIntersecting && hasMore.value) {
+      loadMore();
+    }
+  }, {
+    root: null,
+    rootMargin: '600px 0px', // Pre-load 600px before user reaches the bottom
+    threshold: 0
+  });
+
+  observer.observe(sentinelRef.value);
+};
+
+onMounted(() => {
+  setupObserver();
+});
+
+watch(sentinelRef, () => {
+  setupObserver();
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
+
 const handleCategoryChange = (cat) => {
   activeCategory.value = cat;
 };
@@ -168,6 +235,11 @@ const selectTagFromLightbox = (tag) => {
 
 const navigateToPhoto = (photo) => {
   activePhoto.value = photo;
+  // Ensure the photo navigated to in lightbox is included in visible photos
+  const idx = filteredPhotos.value.findIndex(p => p.id === photo.id);
+  if (idx >= visibleCount.value) {
+    visibleCount.value = Math.min(idx + PAGE_SIZE, filteredPhotos.value.length);
+  }
 };
 </script>
 
@@ -188,11 +260,30 @@ const navigateToPhoto = (photo) => {
       @reset-filters="resetFilters"
     />
 
-    <!-- Masonry Grid with filtered items -->
+    <!-- Masonry Grid with paged visible items -->
     <GalleryGrid
-      :photos="filteredPhotos"
+      :photos="visiblePhotos"
       @select-photo="openPhoto"
     />
+
+    <!-- Invisible Sentinel for smooth automatic infinite scroll -->
+    <div ref="sentinelRef" class="w-full h-8 pointer-events-none opacity-0"></div>
+
+    <!-- Fallback Load More button (seen only if user scrolls faster than network or observer) -->
+    <div v-if="hasMore" class="flex flex-col items-center justify-center pt-2 pb-12">
+      <button
+        type="button"
+        @click="loadMore"
+        class="px-8 py-3 rounded-full bg-slate-900/90 hover:bg-slate-800 text-sky-400 hover:text-white border border-slate-700/80 hover:border-sky-500/60 font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-sky-500/10 flex items-center gap-2.5 cursor-pointer active:scale-95"
+      >
+        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+        <span>טען עוד 30 תמונות</span>
+        <span class="text-xs font-normal text-slate-400">({{ visiblePhotos.length }} מתוך {{ filteredPhotos.length }})</span>
+      </button>
+    </div>
+    <div v-else-if="filteredPhotos.length > PAGE_SIZE" class="text-center py-8 text-xs text-slate-500">
+      ✓ הוצגו כל {{ filteredPhotos.length }} התמונות
+    </div>
 
     <!-- Lightbox Modal -->
     <Lightbox

@@ -44,17 +44,21 @@ const handleImageLoad = (id) => {
         v-for="photo in photos"
         :key="photo.id"
         class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800/80 shadow-lg hover:shadow-2xl hover:border-slate-700/80 transition-all duration-300 cursor-pointer"
+        style="content-visibility: auto; contain-intrinsic-size: auto 300px;"
         @click="emit('select-photo', photo)"
       >
-        <!-- Skeleton / placeholder loader background -->
-        <div class="w-full relative overflow-hidden bg-slate-950 min-h-[160px]">
+        <!-- Skeleton / placeholder loader background with preserved aspect ratio -->
+        <div
+          class="w-full relative overflow-hidden bg-slate-950"
+          :style="{ aspectRatio: photo.aspectRatio || '3/2' }"
+        >
           <!-- Image with lazy loading and fade-in -->
           <img
             :src="photo.thumbnail"
             :alt="photo.title"
             loading="lazy"
             decoding="async"
-            class="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-105"
+            class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
           />
         </div>
 

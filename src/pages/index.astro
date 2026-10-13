@@ -5,8 +5,8 @@ import PortfolioGallery from '../components/PortfolioGallery.vue';
 import photosData from '../data/photos.json';
 import '../styles/global.css';
 
-const pageTitle = "רועי גרינברג | צילום טבע, נוף ואסטרופוטוגרפיה";
-const pageDescription = "תיק עבודות צילום טבע ישראלי, ציפורים, נופים פראיים ומעמקי השמיים - גלריה אינטראקטיבית מהירה עם נתוני EXIF מלאים.";
+const pageTitle = "רועי גרינברג | צילום טבע ונוף";
+const pageDescription = "תיק עבודות צילום טבע ישראלי, ציפורים, חיות בר ונופי בראשית - גלריה אינטראקטיבית מהירה עם נתוני EXIF מלאים.";
 ---
 
 <!doctype html>
@@ -24,7 +24,7 @@ const pageDescription = "תיק עבודות צילום טבע ישראלי, צ�
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={pageDescription} />
-		<meta property="og:image" content={photosData[0].display} />
+		<meta property="og:image" content={photosData[0].display_url || photosData[0].paths?.display || ''} />
 
 		<!-- Hebrew Google Fonts: Heebo / Assistant -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,10 +51,10 @@ const pageDescription = "תיק עבודות צילום טבע ישראלי, צ�
 					תיק עבודות ואוסף תצלומים נבחר
 				</div>
 				<h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white drop-shadow-sm">
-					לוכד רגעים מן הטבע והיקום
+					לוכד רגעים מן הטבע הפראי
 				</h1>
 				<p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-400 font-normal leading-relaxed">
-					מגוון צילומים ברזולוציה גבוהה הכוללים מעוף ציפורים, נופי בראשית של המדבר, ומראות עמוקים מחלל שמי הלילה.
+					מגוון צילומים ברזולוציה גבוהה הכוללים מעוף ציפורים, חיות בר במקומן הטבעי, ונופי בראשית של הארץ.
 				</p>
 			</section>
 

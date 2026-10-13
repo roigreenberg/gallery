@@ -1344,7 +1344,7 @@
       "title": "פורטרט של ירח מלא",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "ירח",
@@ -1385,7 +1385,7 @@
       "title": "ירח מלא מעל העיר",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "זריחה"
       ],
@@ -1428,7 +1428,7 @@
       "title": "זריחת ירח מעל קו הרקיע",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "זריחה"
       ],
@@ -7199,7 +7199,7 @@
       "title": "פני הירח במלוא הדרם",
       "species_hebrew": "ירח",
       "species_latin": "Luna",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "ירח",
@@ -7241,7 +7241,7 @@
       "title": "ירח מלא מעל קו האופק",
       "species_hebrew": "ירח",
       "species_latin": "Luna",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "זריחה"
       ],
@@ -10658,7 +10658,7 @@
       "title": "כדור האש בשמי הערב",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "שמש",
@@ -13127,7 +13127,7 @@
       "title": "ציפורים מול ירח מלא",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "נדידה",
         "תעופה בלהקה"
@@ -14336,7 +14336,7 @@
       "title": "סהר בשמי הלילה",
       "species_hebrew": "ירח",
       "species_latin": "Luna",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "מופע ירח"
       ],
@@ -16341,7 +16341,7 @@
       "title": "ירח מעל היישוב",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "ירח",
@@ -31001,7 +31001,7 @@
       "title": "ירח מלא כתום",
       "species_hebrew": "ירח",
       "species_latin": "Luna",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "ירח",
@@ -31042,7 +31042,7 @@
       "title": "ירח מלא מעונן",
       "species_hebrew": "ירח",
       "species_latin": "Luna",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "תצפית אסטרונומית"
       ],
@@ -44659,7 +44659,7 @@
       "title": "אור בלילה",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "לילה",
@@ -46288,7 +46288,7 @@
       "title": "נתיב של כוכב נופל",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "תנועה מהירה",
         "התלקחות"
@@ -46333,7 +46333,7 @@
       "title": "שובל של מטאור",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "תנועה מהירה",
         "התלקחות"
@@ -46686,7 +46686,7 @@
       "title": "שובל של כוכב נופל",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "תנועה מהירה"
       ],
@@ -46729,7 +46729,7 @@
       "title": "מטאור חוצה את השמיים",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [
         "תנועה מהירה"
       ],
@@ -48238,7 +48238,7 @@
       "title": "חצי ירח זוהר",
       "species_hebrew": "",
       "species_latin": "",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "ירח",
@@ -51472,7 +51472,7 @@
       "title": "ירח מציץ מבעד לעננים",
       "species_hebrew": "ירח",
       "species_latin": "Luna",
-      "category": "astrophotography",
+      "category": "landscape",
       "behavior": [],
       "tags": [
         "אסטרונומיה",
