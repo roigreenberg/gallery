@@ -42,9 +42,10 @@ const shareCopied = ref(false);
 const handleShare = async () => {
   if (!props.photo || typeof window === 'undefined') return;
 
-  const url = new URL(window.location.href);
-  url.searchParams.set('photo', props.photo.id);
-  const shareUrl = url.toString();
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const origin = window.location.origin;
+  // Use dedicated static page for photo so WhatsApp extracts unique OpenGraph thumbnail & title
+  const shareUrl = `${origin}${base}/photo/${encodeURIComponent(props.photo.id)}/`;
 
   const shareData = {
     title: props.photo.title || 'צילום מאת רועי גרינברג',

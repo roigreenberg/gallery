@@ -19,10 +19,9 @@ const copied = ref(false);
 
 const getPhotoShareUrl = (photoId) => {
   if (typeof window === 'undefined') return '';
-  const url = new URL(window.location.href);
-  url.search = `?photo=${encodeURIComponent(photoId)}`;
-  url.hash = '';
-  return url.toString();
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const origin = window.location.origin;
+  return `${origin}${base}/photo/${encodeURIComponent(photoId)}/`;
 };
 
 // Generate formatted export text with direct photo URLs for WhatsApp

@@ -1,0 +1,66 @@
+---
+import photosData from '../../data/photos.json';
+
+export function getStaticPaths() {
+  return photosData.map(photo => ({
+    params: { id: photo.id },
+    props: { photo }
+  }));
+}
+
+const { photo } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteOrigin = "https://roigreenberg.github.io";
+const canonicalPath = `${base}/photo/${photo.id}/`;
+const targetGalleryUrl = `${base}/?photo=${photo.id}`;
+
+const rawImage = photo.display_url || photo.paths?.display || photo.thumb_url || '';
+// Ensure absolute URL for social crawlers (WhatsApp requires full https:// URL)
+const imageUrl = rawImage.startsWith('http') ? rawImage : `${siteOrigin}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
+
+const title = `${photo.ai?.title || photo.title || 'תמונת טבע'} | רועי גרינברג`;
+const speciesText = photo.ai?.species_hebrew || photo.species_he || '';
+const cameraText = photo.exif?.camera_model || photo.exif?.camera || '';
+const description = photo.ai?.description || photo.description || (speciesText ? `${speciesText} - צולם ב-${cameraText}` : 'צילום טבע ישראלי ונוף מאת רועי גרינברג');
+---
+
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph for WhatsApp, Facebook, iMessage, Telegram -->
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="רועי גרינברג | צילום טבע ונוף" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:secure_url" content={imageUrl} />
+    <meta property="og:url" content={`${siteOrigin}${canonicalPath}`} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <!-- Instant Redirect for Humans to open the photo in the full interactive gallery -->
+    <meta http-equiv="refresh" content={`0;url=${targetGalleryUrl}`} />
+    <script define:vars={{ targetGalleryUrl }}>
+      window.location.replace(targetGalleryUrl);
+    </script>
+  </head>
+  <body style="background:#090a0f;color:#94a3b8;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:1rem;">
+    <div style="max-width:400px;">
+      <h2 style="color:#fff;font-size:1.25rem;margin-bottom:0.5rem;">{photo.ai?.title || photo.title}</h2>
+      <p style="font-size:0.875rem;margin-bottom:1.5rem;">מעביר אותך לתצוגה המלאה בגלריה...</p>
+      <a href={targetGalleryUrl} style="display:inline-block;padding:0.6rem 1.25rem;background:#0284c7;color:#fff;border-radius:9999px;text-decoration:none;font-weight:600;font-size:0.875rem;">
+        פתח בגלריה
+      </a>
+    </div>
+  </body>
+</html>
