@@ -51,7 +51,10 @@ const description = photo.ai?.description || photo.description || (speciesText ?
     <!-- Instant Redirect for Humans to open the photo in the full interactive gallery -->
     <meta http-equiv="refresh" content={`0;url=${targetGalleryUrl}`} />
     <script define:vars={{ targetGalleryUrl }}>
-      window.location.replace(targetGalleryUrl);
+      const incomingSearch = window.location.search;
+      const cleanIncoming = incomingSearch.replace(/^\?/, '');
+      const finalUrl = cleanIncoming ? `${targetGalleryUrl}&${cleanIncoming}` : targetGalleryUrl;
+      window.location.replace(finalUrl);
     </script>
   </head>
   <body style="background:#090a0f;color:#94a3b8;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:1rem;">

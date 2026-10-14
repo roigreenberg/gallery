@@ -78,6 +78,16 @@ const normalizedPhotos = computed(() => {
     const behavior = Array.isArray(ai.behavior) ? ai.behavior : [];
     const allPhotoTags = Array.from(new Set([...tags, ...behavior])).filter(Boolean);
 
+    const rawHumor = (
+      ai.humorous_description ||
+      p.humorous_description ||
+      ai.humor ||
+      p.humor ||
+      ai.funny_caption ||
+      p.funny_caption ||
+      ''
+    ).trim();
+
     return {
       id: p.id || p.filename || String(Math.random()),
       title: ai.title || p.title || p.filename || 'תמונת טבע',
@@ -86,6 +96,8 @@ const normalizedPhotos = computed(() => {
       category: getCategoryHebrew(ai.category || p.category),
       is_featured: Boolean(p.is_featured),
       description: ai.description || p.description || '',
+      humorous_description: rawHumor,
+      has_humor: Boolean(rawHumor),
       thumbnail: fixUrl(rawThumb),
       display: fixUrl(rawDisplay),
       aspectRatio: p.dimensions?.aspect_ratio ? `${p.dimensions.aspect_ratio}` : (p.aspectRatio || '3/2'),
@@ -106,14 +118,31 @@ const normalizedPhotos = computed(() => {
   });
 });
 
-// Categories list in UI
-const categories = ['הכל', 'נבחרות ⭐', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
+// Categories list in UI - Featured photos is the default first category
+const categories = ['נבחרות ⭐', 'הכל', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
 
-// Active filter states
-const activeCategory = ref('הכל');
+// Active filter states - default to 'נבחרות ⭐'
+const activeCategory = ref('נבחרות ⭐');
 const searchQuery = ref('');
 const activeTag = ref(null);
 const activePhoto = ref(null);
+const isHumorMode = ref(false);
+
+const HUMOR_STORAGE_KEY = 'roigreenberg_humor_mode';
+
+const toggleHumorMode = () => {
+  isHumorMode.value = !isHumorMode.value;
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(HUMOR_STORAGE_KEY, String(isHumorMode.value));
+    } catch (e) {}
+  }
+};
+
+// Count of photos with humorous descriptions
+const humorCount = computed(() => {
+  return normalizedPhotos.value.filter(p => p.has_humor).length;
+});
 
 // Extract top tags from normalized photos
 const allTags = computed(() => {
@@ -133,6 +162,11 @@ const allTags = computed(() => {
 // Filtered photos computed property
 const filteredPhotos = computed(() => {
   return normalizedPhotos.value.filter(photo => {
+    // 0. Humor Mode check: in humor mode, strictly include only photos with humorous descriptions
+    if (isHumorMode.value && !photo.has_humor) {
+      return false;
+    }
+
     // 1. Category check
     if (activeCategory.value === 'נבחרות ⭐') {
       if (!photo.is_featured) return false;
@@ -145,17 +179,18 @@ const filteredPhotos = computed(() => {
       return false;
     }
 
-    // 3. Search query check (Hebrew species, Latin species, title, camera, lens, tags)
+    // 3. Search query check (Hebrew species, Latin species, title, humorous description, camera, lens, tags)
     const q = searchQuery.value.trim().toLowerCase();
     if (q) {
       const matchTitle = photo.title?.toLowerCase().includes(q);
+      const matchHumor = photo.humorous_description?.toLowerCase().includes(q);
       const matchSpeciesHe = photo.species_he?.toLowerCase().includes(q);
       const matchSpeciesLa = photo.species_la?.toLowerCase().includes(q);
       const matchCamera = photo.exif?.camera?.toLowerCase().includes(q);
       const matchLens = photo.exif?.lens?.toLowerCase().includes(q);
       const matchTags = (photo.tags || []).some(t => t.toLowerCase().includes(q));
 
-      if (!matchTitle && !matchSpeciesHe && !matchSpeciesLa && !matchCamera && !matchLens && !matchTags) {
+      if (!matchTitle && !matchHumor && !matchSpeciesHe && !matchSpeciesLa && !matchCamera && !matchLens && !matchTags) {
         return false;
       }
     }
@@ -172,8 +207,8 @@ const visibleCount = ref(PAGE_SIZE);
 const sentinelRef = ref(null);
 let observer = null;
 
-// Reset pagination whenever filters change
-watch([activeCategory, searchQuery, activeTag], () => {
+// Reset pagination whenever filters or humor mode change
+watch([activeCategory, searchQuery, activeTag, isHumorMode], () => {
   visibleCount.value = PAGE_SIZE;
 });
 
@@ -290,7 +325,9 @@ const syncStateFromUrl = () => {
     // 1. Category
     const cat = params.get('category');
     if (cat) {
-      if (cat === 'featured' || cat === 'נבחרות') {
+      if (cat === 'all' || cat === 'הכל') {
+        activeCategory.value = 'הכל';
+      } else if (cat === 'featured' || cat === 'נבחרות' || cat === 'נבחרות ⭐') {
         activeCategory.value = 'נבחרות ⭐';
       } else {
         const found = categories.find(c => c === cat || c.includes(cat));
@@ -300,21 +337,39 @@ const syncStateFromUrl = () => {
           activeCategory.value = categoryMap[cat];
         }
       }
+    } else {
+      // Default landing category is Featured Photos
+      activeCategory.value = 'נבחרות ⭐';
     }
 
-    // 2. Tag
+    // 2. Humor Mode
+    const humorParam = params.get('humor') || params.get('mode');
+    if (humorParam === '1' || humorParam === 'true' || humorParam === 'humor') {
+      isHumorMode.value = true;
+    } else if (humorParam === '0' || humorParam === 'false') {
+      isHumorMode.value = false;
+    } else if (typeof window !== 'undefined') {
+      try {
+        const savedHumor = localStorage.getItem(HUMOR_STORAGE_KEY);
+        if (savedHumor === 'true') {
+          isHumorMode.value = true;
+        }
+      } catch (e) {}
+    }
+
+    // 3. Tag
     const tag = params.get('tag');
     if (tag) {
       activeTag.value = tag;
     }
 
-    // 3. Search query
+    // 4. Search query
     const q = params.get('q');
     if (q) {
       searchQuery.value = q;
     }
 
-    // 4. Photo in lightbox
+    // 5. Photo in lightbox
     const photoId = params.get('photo');
     if (photoId) {
       const match = normalizedPhotos.value.find(p => p.id === photoId);
@@ -343,11 +398,18 @@ const updateUrl = (pushToHistory = false) => {
   const url = new URL(window.location.href);
   const params = url.searchParams;
 
-  // Category
-  if (activeCategory.value && activeCategory.value !== 'הכל') {
+  // Category (omitted when default 'נבחרות ⭐')
+  if (activeCategory.value && activeCategory.value !== 'נבחרות ⭐') {
     params.set('category', activeCategory.value);
   } else {
     params.delete('category');
+  }
+
+  // Humor Mode
+  if (isHumorMode.value) {
+    params.set('humor', '1');
+  } else {
+    params.delete('humor');
   }
 
   // Tag
@@ -390,7 +452,7 @@ onMounted(() => {
   window.addEventListener('popstate', syncStateFromUrl);
 });
 
-watch([activeCategory, searchQuery, activeTag], () => {
+watch([activeCategory, searchQuery, activeTag, isHumorMode], () => {
   updateUrl(false);
 });
 
@@ -422,9 +484,15 @@ const handleTagChange = (tag) => {
 };
 
 const resetFilters = () => {
-  activeCategory.value = 'הכל';
+  activeCategory.value = 'נבחרות ⭐';
   searchQuery.value = '';
   activeTag.value = null;
+  isHumorMode.value = false;
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem(HUMOR_STORAGE_KEY);
+    } catch (e) {}
+  }
 };
 
 const openPhoto = (photo) => {
@@ -463,16 +531,49 @@ const navigateToPhoto = (photo) => {
       :filteredCount="filteredPhotos.length"
       :totalCount="normalizedPhotos.length"
       :selectedCount="selectedPhotoIds.length"
+      :isHumorMode="isHumorMode"
+      :humorCount="humorCount"
       @update:category="handleCategoryChange"
       @update:search="handleSearchChange"
       @update:tag="handleTagChange"
+      @toggle-humor="toggleHumorMode"
       @reset-filters="resetFilters"
       @open-selection="openSelectionModal"
     />
 
+    <!-- Humor Mode Banner (when active) -->
+    <div
+      v-if="isHumorMode"
+      class="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/15 via-purple-950/30 to-slate-900/40 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 backdrop-blur-md shadow-lg"
+    >
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0 border border-amber-500/40 shadow-inner">
+          🎭
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="text-white font-bold text-base sm:text-lg">מצב הומוריסטי פעיל</h2>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
+              {{ filteredPhotos.length }} תמונות
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
+            מוצגות רק תמונות שזוהו כבעלות זווית משעשעת או הבעה מצחיקה, והתיאורים מוחלפים בכיתובים שנונים.
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        @click="toggleHumorMode"
+        class="self-start sm:self-auto px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 shrink-0 transition-colors cursor-pointer"
+      >
+        חזור למצב רגיל
+      </button>
+    </div>
+
     <!-- Featured Category Banner -->
     <div
-      v-if="activeCategory === 'נבחרות ⭐'"
+      v-else-if="activeCategory === 'נבחרות ⭐'"
       class="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-transparent p-4 sm:p-5 flex items-center justify-between gap-4 backdrop-blur-sm"
     >
       <div class="flex items-center gap-3">
@@ -501,6 +602,7 @@ const navigateToPhoto = (photo) => {
     <GalleryGrid
       :photos="visiblePhotos"
       :selectedIds="selectedPhotoIds"
+      :isHumorMode="isHumorMode"
       @select-photo="openPhoto"
       @toggle-select="togglePhotoSelection"
     />
@@ -562,6 +664,7 @@ const navigateToPhoto = (photo) => {
     <Lightbox
       :photo="activePhoto"
       :photosList="filteredPhotos"
+      :isHumorMode="isHumorMode"
       @close="closePhoto"
       @navigate="navigateToPhoto"
       @select-tag="selectTagFromLightbox"

@@ -34,13 +34,21 @@ const props = defineProps({
   selectedCount: {
     type: Number,
     default: 0
+  },
+  isHumorMode: {
+    type: Boolean,
+    default: false
+  },
+  humorCount: {
+    type: Number,
+    default: 0
   }
 });
 
-const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'reset-filters', 'open-selection']);
+const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'reset-filters', 'open-selection', 'toggle-humor']);
 
 const hasActiveFilters = computed(() => {
-  return props.activeCategory !== 'הכל' || props.searchQuery.trim() !== '' || Boolean(props.activeTag);
+  return props.activeCategory !== 'נבחרות ⭐' || props.searchQuery.trim() !== '' || Boolean(props.activeTag) || props.isHumorMode;
 });
 </script>
 
@@ -71,8 +79,8 @@ const hasActiveFilters = computed(() => {
         </button>
       </div>
 
-      <!-- Result Counter & Clear & Selection Action -->
-      <div class="flex items-center justify-between md:justify-end gap-3 text-xs sm:text-sm text-slate-400 flex-wrap">
+      <!-- Result Counter & Actions -->
+      <div class="flex items-center justify-between md:justify-end gap-2.5 sm:gap-3 text-xs sm:text-sm text-slate-400 flex-wrap">
         <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 border border-slate-800">
           <span class="inline-block w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
           <span>מוצגות </span>
@@ -80,6 +88,27 @@ const hasActiveFilters = computed(() => {
           <span> מתוך </span>
           <span>{{ totalCount }} תמונות</span>
         </div>
+
+        <!-- Humor Mode Toggle Button -->
+        <button
+          type="button"
+          @click="emit('toggle-humor')"
+          class="px-3.5 py-1.5 rounded-full border transition-all duration-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 select-none"
+          :class="isHumorMode
+            ? 'bg-gradient-to-r from-amber-500/25 via-purple-500/25 to-pink-500/20 border-amber-400 text-amber-200 ring-2 ring-amber-400/40 shadow-amber-500/20 font-bold scale-102'
+            : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:text-amber-300 hover:border-slate-700 hover:bg-slate-800/80'"
+          :title="isHumorMode ? 'בטל מצב הומוריסטי וחזור לתיאורים רגילים' : 'הפעל מצב הומוריסטי והצג כיתובים משעשעים'"
+        >
+          <span class="text-sm">🎭</span>
+          <span>מצב הומוריסטי</span>
+          <span
+            v-if="humorCount > 0"
+            class="px-1.5 py-0.2 rounded-full text-[10px] font-black"
+            :class="isHumorMode ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-400'"
+          >
+            {{ humorCount }}
+          </span>
+        </button>
 
         <!-- Chosen Photos Button -->
         <button
