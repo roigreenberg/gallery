@@ -89,6 +89,7 @@ PROJECT_ROOT: Path = Path(__file__).resolve().parent
 DEFAULT_DISPLAY_DIR: Path = PROJECT_ROOT / "public" / "photos" / "display"
 DEFAULT_THUMBS_DIR: Path = PROJECT_ROOT / "public" / "photos" / "thumbs"
 DEFAULT_DATA_FILE: Path = PROJECT_ROOT / "src" / "data" / "photos.json"
+DEFAULT_SPECIES_REGISTRY_FILE: Path = PROJECT_ROOT / "src" / "data" / "species_registry.json"
 
 # סיומות קבצים נתמכות
 SUPPORTED_EXTENSIONS: Set[str] = {".jpg", ".jpeg", ".png", ".tif", ".tiff"}
@@ -149,6 +150,26 @@ class PhotoAITags(BaseModel):
         default=None,
         description="תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי, אחרת מחרוזת ריקה"
     )
+    species_en: Optional[str] = Field(
+        default="",
+        description="שם המין הרשמי באנגלית (Standard international English common name)"
+    )
+    title_en: Optional[str] = Field(
+        default="",
+        description="כותרת קצרה, מרשימה וקולעת באנגלית"
+    )
+    description_en: Optional[str] = Field(
+        default="",
+        description="תיאור קצר במשפט אחד באנגלית"
+    )
+    humorous_description_en: Optional[str] = Field(
+        default="",
+        description="תיאור משעשע ושנון באנגלית רק אם יש תיאור הומוריסטי בעברית, אחרת מחרוזת ריקה"
+    )
+    tags_en: List[str] = Field(
+        default_factory=list,
+        description="3-6 תגיות רלוונטיות באנגלית לסינון וחיפוש"
+    )
 
 
 class BatchItemAITags(BaseModel):
@@ -157,6 +178,7 @@ class BatchItemAITags(BaseModel):
     title: str = Field(default="", description="כותרת קצרה וקולעת בעברית")
     species_hebrew: Optional[str] = Field(default="", description="שם המין המדויק בעברית")
     species_latin: Optional[str] = Field(default="", description="שם מדעי בלטינית")
+    species_en: Optional[str] = Field(default="", description="שם רשמי באנגלית")
     category: str = Field(default="wildlife", description="קטגוריה ראשית")
     behavior: List[str] = Field(default_factory=list, description="התנהגויות")
     tags: List[str] = Field(default_factory=list, description="3-6 תגיות בעברית")
@@ -165,6 +187,10 @@ class BatchItemAITags(BaseModel):
         default="",
         description="תיאור קצר ומבדר במשפט אחד בעברית רק אם יש הומור אותנטי, אחרת מחרוזת ריקה"
     )
+    title_en: Optional[str] = Field(default="", description="כותרת באנגלית")
+    description_en: Optional[str] = Field(default="", description="תיאור באנגלית")
+    humorous_description_en: Optional[str] = Field(default="", description="תיאור הומוריסטי באנגלית רק אם יש הומור בעברית")
+    tags_en: List[str] = Field(default_factory=list, description="תגיות באנגלית")
 
 
 class BatchPhotosAITags(BaseModel):
@@ -455,6 +481,8 @@ class AITagger:
         self.client: Optional[genai.Client] = None
         self._available = False
 
+        self.species_registry: Dict[str, dict] = self._load_registry()
+
         if not HAS_GOOGLE_GENAI:
             logger.warning("החבילה 'google-genai' אינה מותקנת. תיוג ה-AI יוחלף בברירות מחדל.")
             return
@@ -469,6 +497,31 @@ class AITagger:
             logger.info(f"Gemini API מאותחל בהצלחה (מודל: {self.model_name}).")
         except Exception as e:
             logger.warning(f"שגיאה באתחול Gemini Client: {e}")
+
+    def _load_registry(self) -> Dict[str, dict]:
+        """טעינת מאגר השמות הטקסונומי הרשמי species_registry.json."""
+        if not DEFAULT_SPECIES_REGISTRY_FILE.exists():
+            return {"by_latin": {}, "by_hebrew": {}}
+        try:
+            with open(DEFAULT_SPECIES_REGISTRY_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            return {
+                "by_latin": {k.lower().strip(): v for k, v in data.get("by_latin", {}).items()},
+                "by_hebrew": {k.strip(): v for k, v in data.get("by_hebrew", {}).items()},
+            }
+        except Exception as e:
+            logger.warning(f"שגיאה בטעינת מאגר השמות: {e}")
+            return {"by_latin": {}, "by_hebrew": {}}
+
+    def _resolve_species_en(self, species_latin: Optional[str], species_hebrew: Optional[str]) -> str:
+        """שליפת שם המין הרשמי באנגלית ממאגר השמות."""
+        la = (species_latin or "").strip().lower()
+        he = (species_hebrew or "").strip()
+        if la and la in self.species_registry.get("by_latin", {}):
+            return self.species_registry["by_latin"][la].get("english", "")
+        if he and he in self.species_registry.get("by_hebrew", {}):
+            return self.species_registry["by_hebrew"][he].get("english", "")
+        return ""
 
     @property
     def is_available(self) -> bool:
@@ -489,15 +542,20 @@ class AITagger:
 
         prompt = (
             "אתה מומחה לצילום טבע, צפרות, חיות בר, צילום נוף ומאקרו.\n"
-            "נתח את התמונה המצורפת וחלץ פרטים מדויקים בעברית:\n"
-            "1. title: כותרת קצרה, מרשימה וקולעת בעברית (למשל 'שלדג לבן-חזה על ענף', 'זריחה מעל ים המלח').\n"
-            "2. species_hebrew: שם המין המדויק בעברית אם זו חיה, ציפור, צמח, חרק או גרם שמיים. אם לא רלוונטי, השאר ריק.\n"
-            "3. species_latin: שם מדעי רשמי בלטינית (למשל 'Halcyon smyrnensis'). אם לא רלוונטי, השאר ריק.\n"
-            "4. category: קטגוריה ראשית אחת מתוך: wildlife, landscape, astrophotography, macro, portrait, urban, nature.\n"
-            "5. behavior: רשימת התנהגויות ייחודיות הנראות בתמונה (למשל: ['מעוף', 'ציד', 'האכלה', 'מנוחה', 'חיזור', 'צלילה']).\n"
-            "6. tags: 3 עד 6 תגיות רלוונטיות בעברית לסינון בגלריה (למשל: ['ציפורים', 'עופות מים', 'טבע ישראלי', 'שלדגים']).\n"
-            "7. description: תיאור קצר, מדויק ופואטי במשפט אחד בעברית.\n"
-            "8. humorous_description: תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי (למשל מחשבות פנימיות של החיה, כיתוב שנון). אם אין משהו משעשע באופן אותנטי (למשל תמונת נוף, תמונה שלווה או רצינית), השאר מחרוזת ריקה (\"\") - לא בכוח!\n"
+            "נתח את התמונה המצורפת וחלץ פרטים מדויקים בעברית ובאנגלית עבור גלריית צילום מקצועית:\n"
+            "1. title: כותרת קצרה, מרשימה וקולעת בעברית.\n"
+            "2. title_en: Evocative, engaging, and professional English title.\n"
+            "3. species_hebrew: שם המין המדויק בעברית (אם יש בעל חיים/צמח/גרם שמיים, אחרת מחרוזת ריקה).\n"
+            "4. species_latin: שם מדעי רשמי בלטינית (Binomial name, למשל 'Halcyon smyrnensis').\n"
+            "5. species_en: Official English common name (e.g. 'White-throated Kingfisher', 'Rock Hyrax').\n"
+            "6. category: wildlife, landscape, astrophotography, macro, portrait, urban, nature.\n"
+            "7. behavior: רשימת התנהגויות ייחודיות הנראות בתמונה.\n"
+            "8. tags: 3 עד 6 תגיות רלוונטיות בעברית לסינון בגלריה.\n"
+            "9. tags_en: 3 to 6 relevant lowercase English tags.\n"
+            "10. description: תיאור קצר, מדויק ופואטי במשפט אחד בעברית.\n"
+            "11. description_en: Descriptive, atmospheric English sentence capturing the scene and lighting.\n"
+            "12. humorous_description: תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי (למשל מחשבות פנימיות של החיה, כיתוב שנון). אם אין משהו משעשע באופן אותנטי, השאר מחרוזת ריקה (\"\") - לא בכוח!\n"
+            "13. humorous_description_en: Witty English caption ONLY if humorous_description exists. If no humor, MUST be empty (\"\")!\n"
             "החזר פלט מובנה התואם ל-Schema."
         )
 
@@ -523,29 +581,49 @@ class AITagger:
 
                 if response.parsed and isinstance(response.parsed, PhotoAITags):
                     p = response.parsed
+                    sp_he = sanitize_text(p.species_hebrew)
+                    sp_la = sanitize_text(p.species_latin)
+                    sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(p.species_en)
+                    h_he = sanitize_text(p.humorous_description)
+                    h_en = sanitize_text(p.humorous_description_en) if h_he else ""
                     return PhotoAITags(
                         title=sanitize_text(p.title),
-                        species_hebrew=sanitize_text(p.species_hebrew),
-                        species_latin=sanitize_text(p.species_latin),
+                        title_en=sanitize_text(p.title_en),
+                        species_hebrew=sp_he,
+                        species_latin=sp_la,
+                        species_en=sp_en,
                         category=sanitize_text(p.category) or "wildlife",
                         behavior=[sanitize_text(b) for b in p.behavior if sanitize_text(b)],
                         tags=[sanitize_text(t) for t in p.tags if sanitize_text(t)] or ["טבע"],
+                        tags_en=[sanitize_text(t).lower() for t in (p.tags_en or []) if sanitize_text(t)],
                         description=sanitize_text(p.description),
-                        humorous_description=sanitize_text(p.humorous_description),
+                        description_en=sanitize_text(p.description_en),
+                        humorous_description=h_he,
+                        humorous_description_en=h_en,
                     )
 
                 # גיבוי ניתוח JSON ידני
                 raw_text = response.text or "{}"
                 data = json.loads(raw_text)
+                sp_he = sanitize_text(data.get("species_hebrew"))
+                sp_la = sanitize_text(data.get("species_latin"))
+                sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(data.get("species_en"))
+                h_he = sanitize_text(data.get("humorous_description"))
+                h_en = sanitize_text(data.get("humorous_description_en")) if h_he else ""
                 return PhotoAITags(
                     title=sanitize_text(data.get("title")),
-                    species_hebrew=sanitize_text(data.get("species_hebrew")),
-                    species_latin=sanitize_text(data.get("species_latin")),
+                    title_en=sanitize_text(data.get("title_en")),
+                    species_hebrew=sp_he,
+                    species_latin=sp_la,
+                    species_en=sp_en,
                     category=sanitize_text(data.get("category")) or "wildlife",
                     behavior=[sanitize_text(b) for b in data.get("behavior", []) if sanitize_text(b)],
                     tags=[sanitize_text(t) for t in data.get("tags", ["טבע"]) if sanitize_text(t)] or ["טבע"],
+                    tags_en=[sanitize_text(t).lower() for t in data.get("tags_en", []) if sanitize_text(t)],
                     description=sanitize_text(data.get("description")),
-                    humorous_description=sanitize_text(data.get("humorous_description")),
+                    description_en=sanitize_text(data.get("description_en")),
+                    humorous_description=h_he,
+                    humorous_description_en=h_en,
                 )
 
             except Exception as e:
@@ -572,18 +650,23 @@ class AITagger:
             return [self.tag_image(items[0][0], items[0][1])]
 
         contents = [
-            "אתה מומחה לצילום טבע, צפרות, חיות בר, צילום נוף ומאקרו.\n"
+            "אתה מומחה בינלאומי לצילום טבע, צפרות, חיות בר, צילום נוף ומאקרו.\n"
             "לפניך קבוצה של מספר תמונות ממוספרות (תמונה 1, תמונה 2, וכו').\n"
-            "נתח כל תמונה בנפרד והחזר ברשימה את הניתוח עבור כל אינדקס (index) בהתאמה:\n"
+            "נתח כל תמונה בנפרד וחלץ פרטים בעברית ובאנגלית עבור כל אינדקס (index) בהתאמה:\n"
             "- index: מספר התמונה (1, 2, ...)\n"
-            "- title: כותרת קצרה, מרשימה וקולעת בעברית (ללא מרכאות)\n"
+            "- title: כותרת קצרה וקולעת בעברית (ללא מרכאות)\n"
+            "- title_en: Evocative, professional English title\n"
             "- species_hebrew: שם המין המדויק בעברית (אם יש בעל חיים/צמח/גרם שמיים, אחרת מחרוזת ריקה)\n"
-            "- species_latin: שם מדעי בלטינית (אם רלוונטי, אחרת מחרוזת ריקה)\n"
-            "- category: קטגוריה ראשית (wildlife, landscape, macro, astrophotography, portrait, nature)\n"
+            "- species_latin: שם מדעי רשמי בלטינית (Binomial name, למשל 'Halcyon smyrnensis')\n"
+            "- species_en: Official English common name (e.g. 'White-throated Kingfisher', 'Rock Hyrax')\n"
+            "- category: קטגוריה ראשית (wildlife, landscape, macro, astrophotography, portrait, urban, nature)\n"
             "- behavior: רשימת התנהגויות ייחודיות הנראות בתמונה\n"
             "- tags: 3 עד 6 תגיות רלוונטיות בעברית לסינון\n"
+            "- tags_en: 3 to 6 relevant lowercase English tags\n"
             "- description: תיאור קצר במשפט אחד בעברית\n"
-            "- humorous_description: תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי (למשל מחשבות פנימיות של החיה, כיתוב שנון). אם אין משהו משעשע באופן אותנטי (למשל תמונת נוף, תמונה שלווה או רגילה), השאר מחרוזת ריקה (\"\") - לא בכוח!\n"
+            "- description_en: Descriptive, atmospheric English sentence\n"
+            "- humorous_description: תיאור קצר ומשעשע בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי, אחרת מחרוזת ריקה (\"\") - לא בכוח!\n"
+            "- humorous_description_en: Witty English caption ONLY if humorous_description exists, else empty (\"\")!\n"
         ]
 
         for idx, (thumb_img, fn) in enumerate(items, 1):
@@ -609,30 +692,50 @@ class AITagger:
                 parsed_map = {}
                 if response.parsed and isinstance(response.parsed, BatchPhotosAITags):
                     for p in response.parsed.items:
+                        sp_he = sanitize_text(p.species_hebrew)
+                        sp_la = sanitize_text(p.species_latin)
+                        sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(p.species_en)
+                        h_he = sanitize_text(p.humorous_description)
+                        h_en = sanitize_text(p.humorous_description_en) if h_he else ""
                         parsed_map[p.index] = PhotoAITags(
                             title=sanitize_text(p.title),
-                            species_hebrew=sanitize_text(p.species_hebrew),
-                            species_latin=sanitize_text(p.species_latin),
+                            title_en=sanitize_text(p.title_en),
+                            species_hebrew=sp_he,
+                            species_latin=sp_la,
+                            species_en=sp_en,
                             category=sanitize_text(p.category) or "wildlife",
                             behavior=[sanitize_text(b) for b in (p.behavior or []) if sanitize_text(b)],
                             tags=[sanitize_text(t) for t in (p.tags or ["טבע"]) if sanitize_text(t)] or ["טבע"],
+                            tags_en=[sanitize_text(t).lower() for t in (p.tags_en or []) if sanitize_text(t)],
                             description=sanitize_text(p.description),
-                            humorous_description=sanitize_text(p.humorous_description),
+                            description_en=sanitize_text(p.description_en),
+                            humorous_description=h_he,
+                            humorous_description_en=h_en,
                         )
                 elif response.text:
                     raw_data = json.loads(response.text)
                     raw_items = raw_data.get("items", []) if isinstance(raw_data, dict) else raw_data
                     for p in raw_items:
                         idx = p.get("index", len(parsed_map) + 1)
+                        sp_he = sanitize_text(p.get("species_hebrew"))
+                        sp_la = sanitize_text(p.get("species_latin"))
+                        sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(p.get("species_en"))
+                        h_he = sanitize_text(p.get("humorous_description"))
+                        h_en = sanitize_text(p.get("humorous_description_en")) if h_he else ""
                         parsed_map[idx] = PhotoAITags(
                             title=sanitize_text(p.get("title")),
-                            species_hebrew=sanitize_text(p.get("species_hebrew")),
-                            species_latin=sanitize_text(p.get("species_latin")),
+                            title_en=sanitize_text(p.get("title_en")),
+                            species_hebrew=sp_he,
+                            species_latin=sp_la,
+                            species_en=sp_en,
                             category=sanitize_text(p.get("category")) or "wildlife",
                             behavior=[sanitize_text(b) for b in p.get("behavior", []) if sanitize_text(b)],
                             tags=[sanitize_text(t) for t in p.get("tags", ["טבע"]) if sanitize_text(t)] or ["טבע"],
+                            tags_en=[sanitize_text(t).lower() for t in p.get("tags_en", []) if sanitize_text(t)],
                             description=sanitize_text(p.get("description")),
-                            humorous_description=sanitize_text(p.get("humorous_description")),
+                            description_en=sanitize_text(p.get("description_en")),
+                            humorous_description=h_he,
+                            humorous_description_en=h_en,
                         )
 
                 results = []
@@ -739,13 +842,18 @@ class AITagger:
 
         return PhotoAITags(
             title=sanitize_text(clean_title) or "תמונה מהגלריה",
+            title_en=sanitize_text(clean_title) or "Gallery Photo",
             species_hebrew="",
             species_latin="",
+            species_en="",
             category="wildlife",
             behavior=[],
             tags=["גלריה", "טבע"],
+            tags_en=["gallery", "nature"],
             description="תמונה מאוסף הגלריה.",
+            description_en="A photograph from the gallery collection.",
             humorous_description="",
+            humorous_description_en="",
         )
 
 
