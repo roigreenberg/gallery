@@ -27,6 +27,10 @@ const props = defineProps({
   photosList: {
     type: Array,
     required: true
+  },
+  currentLang: {
+    type: String,
+    default: 'he'
   }
 });
 
@@ -47,9 +51,12 @@ const handleShare = async () => {
   // Use dedicated static page for photo so WhatsApp extracts unique OpenGraph thumbnail & title
   const shareUrl = `${origin}${base}/photo/${encodeURIComponent(props.photo.id)}/`;
 
+  const photoTitle = (props.currentLang === 'en' ? (props.photo.title_en || props.photo.title) : props.photo.title) || 'תמונת טבע';
+  const siteBrand = props.currentLang === 'en' ? 'Roi Greenberg Nature Photography' : 'גלריית הצילום של רועי גרינברג';
+
   const shareData = {
-    title: props.photo.title || 'צילום מאת רועי גרינברג',
-    text: `${props.photo.title || 'תמונת טבע'} | גלריית הצילום של רועי גרינברג`,
+    title: photoTitle,
+    text: `${photoTitle} | ${siteBrand}`,
     url: shareUrl
   };
 
@@ -360,9 +367,15 @@ const handleKeyDown = (e) => {
       handleClose();
     }
   } else if (e.key === 'ArrowRight') {
-    if (zoomScale.value <= 1.05) goPrev();
+    if (zoomScale.value <= 1.05) {
+      if (props.currentLang === 'en') goNext();
+      else goPrev();
+    }
   } else if (e.key === 'ArrowLeft') {
-    if (zoomScale.value <= 1.05) goNext();
+    if (zoomScale.value <= 1.05) {
+      if (props.currentLang === 'en') goPrev();
+      else goNext();
+    }
   }
 };
 
@@ -407,7 +420,7 @@ onUnmounted(() => {
             {{ currentIndex + 1 }} / {{ photosList.length }}
           </span>
           <h2 class="text-sm sm:text-base font-semibold text-slate-100 truncate max-w-[200px] sm:max-w-md">
-            {{ photo.title }}
+            {{ currentLang === 'en' ? (photo.title_en || photo.title) : photo.title }}
           </h2>
         </div>
 
@@ -422,22 +435,28 @@ onUnmounted(() => {
                 ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 ring-1 ring-sky-500/30'
                 : 'border-slate-800 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-700'
             ]"
-            :title="zoomScale > 1 ? 'אפס זום' : 'הגדל תמונה (זום)'"
+            :title="currentLang === 'en'
+              ? (zoomScale > 1 ? 'Reset zoom' : 'Zoom into photo')
+              : (zoomScale > 1 ? 'אפס זום' : 'הגדל תמונה (זום)')"
           >
             <ZoomOut v-if="zoomScale > 1" class="w-3.5 h-3.5 text-sky-400" />
             <ZoomIn v-else class="w-3.5 h-3.5" />
-            <span class="hidden sm:inline">{{ zoomScale > 1 ? 'אפס זום' : 'זום' }}</span>
+            <span class="hidden sm:inline">
+              {{ currentLang === 'en' ? (zoomScale > 1 ? 'Reset Zoom' : 'Zoom') : (zoomScale > 1 ? 'אפס זום' : 'זום') }}
+            </span>
           </button>
 
           <!-- Share Direct Link Button -->
           <button
             @click="handleShare"
             class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-slate-800 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-700 transition cursor-pointer"
-            title="שתף קישור ישיר לתמונה"
+            :title="currentLang === 'en' ? 'Share direct link to photo' : 'שתף קישור ישיר לתמונה'"
           >
             <Check v-if="shareCopied" class="w-3.5 h-3.5 text-emerald-400" />
             <Share2 v-else class="w-3.5 h-3.5" />
-            <span class="text-xs">{{ shareCopied ? 'הועתק!' : 'שתף' }}</span>
+            <span class="text-xs">
+              {{ currentLang === 'en' ? (shareCopied ? 'Copied!' : 'Share') : (shareCopied ? 'הועתק!' : 'שתף') }}
+            </span>
           </button>
 
           <!-- Toggle Metadata Drawer Button -->
@@ -449,17 +468,21 @@ onUnmounted(() => {
                 ? 'bg-sky-500/10 text-sky-400 border-sky-500/40'
                 : 'bg-slate-900 text-slate-400 hover:text-slate-200 border-slate-800'
             ]"
-            title="הצג / הסתר פרטי EXIF ומידע"
+            :title="currentLang === 'en' ? 'Show / hide photo info and EXIF' : 'הצג / הסתר פרטי EXIF ומידע'"
           >
             <Info class="w-3.5 h-3.5" />
-            <span class="hidden sm:inline">{{ showDrawer ? 'הסתר מידע' : 'פרטי תמונה' }}</span>
+            <span class="hidden sm:inline">
+              {{ currentLang === 'en'
+                ? (showDrawer ? 'Hide Info' : 'Photo Info')
+                : (showDrawer ? 'הסתר מידע' : 'פרטי תמונה') }}
+            </span>
           </button>
 
           <!-- Close Lightbox -->
           <button
             @click="handleClose"
             class="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/80 transition cursor-pointer"
-            aria-label="סגור תצוגה מוגדלת"
+            :aria-label="currentLang === 'en' ? 'Close viewer' : 'סגור תצוגה מוגדלת'"
           >
             <X class="w-5 h-5" />
           </button>
@@ -478,34 +501,40 @@ onUnmounted(() => {
             class="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-full bg-slate-950/85 text-white border border-white/20 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs pointer-events-auto"
           >
             <span class="text-sky-400 font-bold font-mono">{{ zoomScale.toFixed(1) }}x</span>
-            <span class="text-slate-300 text-[11px] hidden sm:inline">גרור להזזה • הקש פעמיים לאיפוס</span>
+            <span class="text-slate-300 text-[11px] hidden sm:inline">
+              {{ currentLang === 'en' ? 'Drag to pan • Double-click to reset' : 'גרור להזזה • הקש פעמיים לאיפוס' }}
+            </span>
             <button
               type="button"
               @click.stop="resetZoom"
               class="px-2.5 py-0.5 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition cursor-pointer"
             >
-              אפס גודל
+              {{ currentLang === 'en' ? 'Reset' : 'אפס גודל' }}
             </button>
           </div>
 
-          <!-- Navigation Arrow Right (Previous in RTL) - Hidden on mobile or when zoomed -->
+          <!-- Previous Arrow (Left in LTR, Right in RTL) -->
           <button
             v-if="hasPrev && zoomScale <= 1.05"
             @click.stop="goPrev"
-            class="hidden md:flex absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
-            aria-label="התמונה הקודמת"
+            class="hidden md:flex absolute top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
+            :class="currentLang === 'en' ? 'left-3 sm:left-6' : 'right-3 sm:right-6'"
+            :aria-label="currentLang === 'en' ? 'Previous photo' : 'התמונה הקודמת'"
           >
-            <ChevronRight class="w-6 h-6" />
+            <ChevronLeft v-if="currentLang === 'en'" class="w-6 h-6" />
+            <ChevronRight v-else class="w-6 h-6" />
           </button>
 
-          <!-- Navigation Arrow Left (Next in RTL) - Hidden on mobile or when zoomed -->
+          <!-- Next Arrow (Right in LTR, Left in RTL) -->
           <button
             v-if="hasNext && zoomScale <= 1.05"
             @click.stop="goNext"
-            class="hidden md:flex absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
-            aria-label="התמונה הבאה"
+            class="hidden md:flex absolute top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 shadow-xl backdrop-blur-md transition-transform hover:scale-110 active:scale-95 cursor-pointer items-center justify-center"
+            :class="currentLang === 'en' ? 'right-3 sm:right-6' : 'left-3 sm:left-6'"
+            :aria-label="currentLang === 'en' ? 'Next photo' : 'התמונה הבאה'"
           >
-            <ChevronLeft class="w-6 h-6" />
+            <ChevronRight v-if="currentLang === 'en'" class="w-6 h-6" />
+            <ChevronLeft v-else class="w-6 h-6" />
           </button>
 
           <!-- Image Container with Progressive Fade-in & Full Vertical/Horizontal Fit -->
@@ -531,7 +560,7 @@ onUnmounted(() => {
               <!-- Low-res thumbnail placeholder while display image loads (instant LQIP) -->
               <img
                 :src="photo.thumbnail"
-                :alt="photo.title"
+                :alt="currentLang === 'en' ? (photo.title_en || photo.title) : photo.title"
                 class="absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 filter select-none pointer-events-none"
                 :class="isHighResLoaded ? 'opacity-0 blur-0' : 'opacity-100 blur-sm'"
                 style="max-height: 100%; max-width: 100%; object-fit: contain;"
@@ -543,7 +572,7 @@ onUnmounted(() => {
               <!-- High-Res Display Image: strictly clamped to 100% stage height & width -->
               <img
                 :src="photo.display"
-                :alt="photo.title"
+                :alt="currentLang === 'en' ? (photo.title_en || photo.title) : photo.title"
                 @load="handleHighResLoad"
                 class="absolute inset-0 m-auto max-w-full max-h-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-opacity duration-300 select-none pointer-events-none"
                 :class="isHighResLoaded ? 'opacity-100' : 'opacity-0'"
@@ -568,7 +597,9 @@ onUnmounted(() => {
                 class="absolute bottom-4 z-20 px-4 py-1.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/10 shadow-xl flex items-center gap-2 pointer-events-none"
               >
                 <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-                <span class="text-xs text-slate-300 font-medium">טוען באיכות מלאה...</span>
+                <span class="text-xs text-slate-300 font-medium">
+                  {{ currentLang === 'en' ? 'Loading full resolution...' : 'טוען באיכות מלאה...' }}
+                </span>
               </div>
             </Transition>
           </div>
@@ -585,19 +616,24 @@ onUnmounted(() => {
         >
           <aside
             v-if="showDrawer"
-            class="w-full lg:w-96 shrink-0 max-h-[32vh] lg:max-h-full overflow-y-auto bg-slate-900/90 border-t lg:border-t-0 lg:border-r border-slate-800/90 backdrop-blur-2xl p-4 sm:p-6 space-y-5 text-right z-30 shadow-2xl"
+            class="w-full lg:w-96 shrink-0 max-h-[32vh] lg:max-h-full overflow-y-auto bg-slate-900/90 border-t lg:border-t-0 backdrop-blur-2xl p-4 sm:p-6 space-y-5 z-30 shadow-2xl"
+            :class="currentLang === 'en' ? 'text-left lg:border-l border-slate-800/90' : 'text-right lg:border-r border-slate-800/90'"
+            :dir="currentLang === 'en' ? 'ltr' : 'rtl'"
           >
             <!-- Title and taxonomy -->
             <div>
               <span class="inline-block px-2.5 py-1 text-xs font-medium text-sky-400 bg-sky-950/60 border border-sky-800/50 rounded-full mb-2">
-                {{ photo.category }}
+                {{ currentLang === 'en' ? (photo.categoryEn || photo.category) : (photo.categoryHe || photo.category) }}
               </span>
               <h3 class="text-xl font-bold text-white tracking-tight leading-snug">
-                {{ photo.title }}
+                {{ currentLang === 'en' ? (photo.title_en || photo.title) : photo.title }}
               </h3>
               <p class="text-sm text-sky-300 font-medium mt-1">
-                {{ photo.species_he }}
-                <span v-if="photo.species_la" class="text-slate-400 font-normal italic block text-xs">
+                {{ currentLang === 'en' ? (photo.species_en || photo.species_la || photo.species_he) : photo.species_he }}
+                <span v-if="photo.species_la && currentLang !== 'en'" class="text-slate-400 font-normal italic block text-xs">
+                  ({{ photo.species_la }})
+                </span>
+                <span v-else-if="photo.species_la && currentLang === 'en' && photo.species_en" class="text-slate-400 font-normal italic block text-xs">
                   ({{ photo.species_la }})
                 </span>
               </p>
@@ -605,20 +641,20 @@ onUnmounted(() => {
 
             <!-- Description -->
             <p
-              v-if="photo.description"
+              v-if="currentLang === 'en' ? (photo.description_en || photo.description) : photo.description"
               class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-950/40 p-3.5 rounded-xl border border-white/5"
             >
-              {{ photo.description }}
+              {{ currentLang === 'en' ? (photo.description_en || photo.description) : photo.description }}
             </p>
 
             <!-- Humorous Description (always shown if present, icon followed immediately by text) -->
             <div
-              v-if="photo.humorous_description"
+              v-if="currentLang === 'en' ? (photo.humorous_description_en || photo.humorous_description) : photo.humorous_description"
               class="text-xs sm:text-sm text-amber-100/95 leading-relaxed bg-amber-950/30 p-3.5 rounded-xl border border-amber-500/30 shadow-sm"
             >
               <p class="leading-relaxed">
-                <span class="text-base ml-1.5 select-none align-baseline">🎭</span>
-                <span class="italic font-medium align-baseline">"{{ photo.humorous_description }}"</span>
+                <span class="text-base select-none align-baseline" :class="currentLang === 'en' ? 'mr-1.5' : 'ml-1.5'">🎭</span>
+                <span class="italic font-medium align-baseline">"{{ currentLang === 'en' ? (photo.humorous_description_en || photo.humorous_description) : photo.humorous_description }}"</span>
               </p>
             </div>
 
@@ -626,43 +662,43 @@ onUnmounted(() => {
             <div class="space-y-3">
               <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <Camera class="w-3.5 h-3.5 text-sky-400" />
-                <span>נתוני חשיפה וציוד (EXIF)</span>
+                <span>{{ currentLang === 'en' ? 'Exposure & Gear (EXIF)' : 'נתוני חשיפה וציוד (EXIF)' }}</span>
               </h4>
 
               <div class="grid grid-cols-2 gap-2 text-xs">
                 <!-- Camera Model -->
                 <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80 col-span-2">
-                  <span class="text-slate-500 block text-[10px]">גוף מצלמה</span>
+                  <span class="text-slate-500 block text-[10px]">{{ currentLang === 'en' ? 'Camera Body' : 'גוף מצלמה' }}</span>
                   <span class="text-slate-200 font-medium truncate block">{{ photo.exif.camera }}</span>
                 </div>
 
                 <!-- Lens -->
                 <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80 col-span-2">
-                  <span class="text-slate-500 block text-[10px]">עדשה</span>
+                  <span class="text-slate-500 block text-[10px]">{{ currentLang === 'en' ? 'Lens' : 'עדשה' }}</span>
                   <span class="text-slate-200 font-medium truncate block">{{ photo.exif.lens }}</span>
                 </div>
 
                 <!-- Focal Length -->
                 <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80">
-                  <span class="text-slate-500 block text-[10px]">אורך מוקד</span>
+                  <span class="text-slate-500 block text-[10px]">{{ currentLang === 'en' ? 'Focal Length' : 'אורך מוקד' }}</span>
                   <span class="text-slate-200 font-mono">{{ photo.exif.focalLength }}</span>
                 </div>
 
                 <!-- Aperture -->
                 <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80">
-                  <span class="text-slate-500 block text-[10px]">צמצם</span>
+                  <span class="text-slate-500 block text-[10px]">{{ currentLang === 'en' ? 'Aperture' : 'צמצם' }}</span>
                   <span class="text-slate-200 font-mono">{{ photo.exif.aperture }}</span>
                 </div>
 
                 <!-- Shutter Speed -->
                 <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80">
-                  <span class="text-slate-500 block text-[10px]">מהירות תריס</span>
+                  <span class="text-slate-500 block text-[10px]">{{ currentLang === 'en' ? 'Shutter Speed' : 'מהירות תריס' }}</span>
                   <span class="text-slate-200 font-mono">{{ photo.exif.shutterSpeed }}</span>
                 </div>
 
                 <!-- ISO -->
                 <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800/80">
-                  <span class="text-slate-500 block text-[10px]">רגישות ISO</span>
+                  <span class="text-slate-500 block text-[10px]">{{ currentLang === 'en' ? 'ISO Sensitivity' : 'רגישות ISO' }}</span>
                   <span class="text-slate-200 font-mono">{{ photo.exif.iso }}</span>
                 </div>
 
@@ -684,15 +720,15 @@ onUnmounted(() => {
             <div class="space-y-2">
               <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <Tag class="w-3.5 h-3.5 text-sky-400" />
-                <span>תגיות והתנהגויות</span>
+                <span>{{ currentLang === 'en' ? 'Tags & Behaviors' : 'תגיות והתנהגויות' }}</span>
               </h4>
               <div class="flex flex-wrap gap-1.5">
                 <button
-                  v-for="t in photo.tags"
+                  v-for="t in (currentLang === 'en' && photo.tags_en && photo.tags_en.length ? photo.tags_en : photo.tags)"
                   :key="t"
                   @click="handleTagClick(t)"
                   class="px-2.5 py-1 text-xs rounded-lg bg-slate-800/90 text-slate-300 hover:bg-sky-500 hover:text-white transition duration-150 border border-slate-700/60 cursor-pointer"
-                  :title="'סנן גלריה לפי ' + t"
+                  :title="currentLang === 'en' ? ('Filter gallery by #' + t) : ('סנן גלריה לפי ' + t)"
                 >
                   #{{ t }}
                 </button>

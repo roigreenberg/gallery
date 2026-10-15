@@ -4,6 +4,7 @@ import FilterBar from './FilterBar.vue';
 import GalleryGrid from './GalleryGrid.vue';
 import Lightbox from './Lightbox.vue';
 import SelectionModal from './SelectionModal.vue';
+import { CATEGORIES, getCategoryLabel } from '../utils/i18n.js';
 
 const props = defineProps({
   initialPhotos: {
@@ -12,19 +13,24 @@ const props = defineProps({
   }
 });
 
-// Category mapping: Normalize English categories to Hebrew UI labels
-const categoryMap = {
-  'wildlife': 'טבע וציפורים',
-  'landscape': 'נוף',
-  'astrophotography': 'אסטרופוטוגרפיה',
-  'macro': 'מאקרו',
-  'nature': 'טבע וציפורים',
-  'portrait': 'טבע וציפורים',
-  'other': 'נוף'
+// Category mapping: Normalize categories to canonical keys & Hebrew/English labels
+const canonicalCategoryKeys = {
+  'wildlife': 'wildlife',
+  'landscape': 'landscape',
+  'astrophotography': 'astrophotography',
+  'macro': 'macro',
+  'nature': 'wildlife',
+  'portrait': 'wildlife',
+  'other': 'landscape',
+  'טבע וציפורים': 'wildlife',
+  'נוף': 'landscape',
+  'אסטרופוטוגרפיה': 'astrophotography',
+  'מאקרו': 'macro'
 };
 
 const getCategoryHebrew = (cat) => {
-  return categoryMap[cat] || cat || 'טבע וציפורים';
+  const key = canonicalCategoryKeys[cat] || 'wildlife';
+  return getCategoryLabel(key, 'he');
 };
 
 // Format any date or EXIF timestamp to DD/MM/YYYY while preserving time (HH:MM:SS)
@@ -59,6 +65,27 @@ const formatDateDDMMYYYY = (dateStr) => {
   return clean;
 };
 
+// Language state management (Hebrew by default, toggles to English)
+const currentLang = ref('he');
+const LANG_STORAGE_KEY = 'roigreenberg_lang';
+
+const setLang = (lang) => {
+  if (lang !== 'he' && lang !== 'en') return;
+  currentLang.value = lang;
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+    } catch (e) {}
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+    window.dispatchEvent(new CustomEvent('roigreenberg-lang-changed', { detail: { lang } }));
+  }
+};
+
+const toggleLang = () => {
+  setLang(currentLang.value === 'en' ? 'he' : 'en');
+};
+
 // Normalize raw photo records to standard flat format used by components
 const normalizedPhotos = computed(() => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -80,17 +107,26 @@ const normalizedPhotos = computed(() => {
       return `${base}${clean}`;
     };
 
-    const tags = Array.isArray(ai.tags) ? ai.tags : (Array.isArray(p.tags) ? p.tags : []);
-    const behavior = Array.isArray(ai.behavior) ? ai.behavior : [];
-    const allPhotoTags = Array.from(new Set([...tags, ...behavior])).filter(Boolean);
+    const tagsHe = Array.isArray(ai.tags) ? ai.tags : (Array.isArray(p.tags) ? p.tags : []);
+    const behaviorHe = Array.isArray(ai.behavior) ? ai.behavior : [];
+    const allPhotoTagsHe = Array.from(new Set([...tagsHe, ...behaviorHe])).filter(Boolean);
 
-    const rawHumor = (
+    const tagsEn = Array.isArray(ai.tags_en) ? ai.tags_en : (Array.isArray(p.tags_en) ? p.tags_en : []);
+    const allPhotoTagsEn = Array.from(new Set(tagsEn)).filter(Boolean);
+
+    const rawHumorHe = (
       ai.humorous_description ||
       p.humorous_description ||
       ai.humor ||
       p.humor ||
       ai.funny_caption ||
       p.funny_caption ||
+      ''
+    ).trim();
+
+    const rawHumorEn = (
+      ai.humorous_description_en ||
+      p.humorous_description_en ||
       ''
     ).trim();
 
@@ -108,28 +144,59 @@ const normalizedPhotos = computed(() => {
       }
     }
 
-    const animalName = (ai.species_hebrew || p.species_he || ai.title || p.title || '').trim();
+    const speciesHe = (ai.species_hebrew || p.species_he || '').trim();
+    const speciesLa = (ai.species_latin || p.species_la || '').trim();
+    const speciesEn = (ai.species_en || p.species_en || '').trim();
+
+    const titleHe = ai.title || p.title || p.filename || 'תמונת טבע';
+    const titleEn = ai.title_en || p.title_en || '';
+
+    const descHe = ai.description || p.description || '';
+    const descEn = ai.description_en || p.description_en || '';
+
+    const animalName = (speciesHe || titleHe).trim();
+    const animalNameEn = (speciesEn || speciesLa || titleEn || animalName).trim();
     const addedTs = p.processed_at || '';
+
+    // Canonical category determination
+    const rawCat = (ai.category || p.category || 'wildlife').toLowerCase();
+    let categoryKey = 'wildlife';
+    if (rawCat.includes('land') || rawCat.includes('נוף') || rawCat === 'other') categoryKey = 'landscape';
+    else if (rawCat.includes('astro') || rawCat.includes('אסטרו')) categoryKey = 'astrophotography';
+    else if (rawCat.includes('macro') || rawCat.includes('מאקרו')) categoryKey = 'macro';
+    else categoryKey = 'wildlife';
+
+    const categoryHe = getCategoryLabel(categoryKey, 'he');
+    const categoryEn = getCategoryLabel(categoryKey, 'en');
 
     return {
       id: p.id || p.filename || String(Math.random()),
-      title: ai.title || p.title || p.filename || 'תמונת טבע',
-      species_he: ai.species_hebrew || p.species_he || '',
-      species_la: ai.species_latin || p.species_la || '',
-      category: getCategoryHebrew(ai.category || p.category),
+      title: titleHe,
+      title_en: titleEn,
+      species_he: speciesHe,
+      species_la: speciesLa,
+      species_en: speciesEn,
+      categoryKey,
+      categoryHe,
+      categoryEn,
+      category: categoryHe,
       is_featured: Boolean(p.is_featured),
-      description: ai.description || p.description || '',
-      humorous_description: rawHumor,
-      has_humor: Boolean(rawHumor),
+      description: descHe,
+      description_en: descEn,
+      humorous_description: rawHumorHe,
+      humorous_description_en: rawHumorEn,
+      has_humor: Boolean(rawHumorHe || rawHumorEn),
       captureTs,
       animalName,
+      animalNameEn,
       addedTs,
       thumbnail: fixUrl(rawThumb),
       display: fixUrl(rawDisplay),
       aspectRatio: p.dimensions?.aspect_ratio ? `${p.dimensions.aspect_ratio}` : (p.aspectRatio || '3/2'),
       width: p.dimensions?.width || p.width || 2048,
       height: p.dimensions?.height || p.height || 1366,
-      tags: allPhotoTags,
+      tags: allPhotoTagsHe,
+      tags_en: allPhotoTagsEn.length > 0 ? allPhotoTagsEn : allPhotoTagsHe,
       exif: {
         camera: exif.camera_model || exif.camera || 'Canon EOS',
         lens: exif.lens_model || exif.lens || '',
@@ -144,21 +211,38 @@ const normalizedPhotos = computed(() => {
   });
 });
 
-// Categories list in UI - Featured photos is the default first category
-const categories = ['נבחרות ⭐', 'הכל', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
+// Categories list in UI (reactive based on language)
+const categories = computed(() => {
+  return CATEGORIES.map(c => ({
+    key: c.key,
+    label: currentLang.value === 'en' ? c.en : c.he
+  }));
+});
 
-// Sorting options
-const sortOptions = [
-  { value: 'capture_desc', label: 'תאריך צילום (מהחדש לישן)' },
-  { value: 'capture_asc', label: 'תאריך צילום (מהישן לחדש)' },
-  { value: 'animal_asc', label: 'שם החיה (א׳ עד ת׳)' },
-  { value: 'animal_desc', label: 'שם החיה (ת׳ עד א׳)' },
-  { value: 'added_desc', label: 'תאריך הוספה (מהחדש לישן)' },
-  { value: 'added_asc', label: 'תאריך הוספה (מהישן לחדש)' },
-];
+// Sorting options (reactive based on language)
+const sortOptions = computed(() => {
+  if (currentLang.value === 'en') {
+    return [
+      { value: 'capture_desc', label: 'Date taken (Newest first)' },
+      { value: 'capture_asc', label: 'Date taken (Oldest first)' },
+      { value: 'animal_asc', label: 'Species name (A to Z)' },
+      { value: 'animal_desc', label: 'Species name (Z to A)' },
+      { value: 'added_desc', label: 'Date added (Newest first)' },
+      { value: 'added_asc', label: 'Date added (Oldest first)' },
+    ];
+  }
+  return [
+    { value: 'capture_desc', label: 'תאריך צילום (מהחדש לישן)' },
+    { value: 'capture_asc', label: 'תאריך צילום (מהישן לחדש)' },
+    { value: 'animal_asc', label: 'שם החיה (א׳ עד ת׳)' },
+    { value: 'animal_desc', label: 'שם החיה (ת׳ עד א׳)' },
+    { value: 'added_desc', label: 'תאריך הוספה (מהחדש לישן)' },
+    { value: 'added_asc', label: 'תאריך הוספה (מהישן לחדש)' },
+  ];
+});
 
 // Active filter & sort states
-const activeCategory = ref('נבחרות ⭐');
+const activeCategory = ref('featured');
 const searchQuery = ref('');
 const activeTag = ref(null);
 const activePhoto = ref(null);
@@ -179,8 +263,10 @@ const toggleCaptions = () => {
 // Extract top tags from normalized photos
 const allTags = computed(() => {
   const counts = {};
+  const isEn = currentLang.value === 'en';
   normalizedPhotos.value.forEach(p => {
-    (p.tags || []).forEach(t => {
+    const list = isEn && p.tags_en && p.tags_en.length ? p.tags_en : (p.tags || []);
+    list.forEach(t => {
       if (t && t.length > 1 && !t.includes('אסטרונומ')) {
         counts[t] = (counts[t] || 0) + 1;
       }
@@ -193,31 +279,48 @@ const allTags = computed(() => {
 
 // Filtered photos computed property (category, tag, search query)
 const filteredPhotos = computed(() => {
+  const isFeatured = activeCategory.value === 'featured' || activeCategory.value === 'נבחרות ⭐' || activeCategory.value === 'Featured ⭐';
+  const isAll = activeCategory.value === 'all' || activeCategory.value === 'הכל' || activeCategory.value === 'All';
+
   return normalizedPhotos.value.filter(photo => {
     // 1. Category check
-    if (activeCategory.value === 'נבחרות ⭐') {
+    if (isFeatured) {
       if (!photo.is_featured) return false;
-    } else if (activeCategory.value !== 'הכל' && photo.category !== activeCategory.value) {
-      return false;
+    } else if (!isAll) {
+      const matchCat = (
+        photo.categoryKey === activeCategory.value ||
+        photo.categoryHe === activeCategory.value ||
+        photo.categoryEn === activeCategory.value ||
+        photo.category === activeCategory.value
+      );
+      if (!matchCat) return false;
     }
 
     // 2. Tag check
-    if (activeTag.value && !(photo.tags || []).includes(activeTag.value)) {
-      return false;
+    if (activeTag.value) {
+      const matchTagHe = (photo.tags || []).includes(activeTag.value);
+      const matchTagEn = (photo.tags_en || []).includes(activeTag.value);
+      if (!matchTagHe && !matchTagEn) return false;
     }
 
-    // 3. Search query check (Hebrew species, Latin species, title, humorous description, camera, lens, tags)
+    // 3. Search query check
     const q = searchQuery.value.trim().toLowerCase();
     if (q) {
-      const matchTitle = photo.title?.toLowerCase().includes(q);
-      const matchHumor = photo.humorous_description?.toLowerCase().includes(q);
+      const matchTitleHe = photo.title?.toLowerCase().includes(q);
+      const matchTitleEn = photo.title_en?.toLowerCase().includes(q);
+      const matchHumorHe = photo.humorous_description?.toLowerCase().includes(q);
+      const matchHumorEn = photo.humorous_description_en?.toLowerCase().includes(q);
       const matchSpeciesHe = photo.species_he?.toLowerCase().includes(q);
+      const matchSpeciesEn = photo.species_en?.toLowerCase().includes(q);
       const matchSpeciesLa = photo.species_la?.toLowerCase().includes(q);
       const matchCamera = photo.exif?.camera?.toLowerCase().includes(q);
       const matchLens = photo.exif?.lens?.toLowerCase().includes(q);
-      const matchTags = (photo.tags || []).some(t => t.toLowerCase().includes(q));
+      const matchTagsHe = (photo.tags || []).some(t => t.toLowerCase().includes(q));
+      const matchTagsEn = (photo.tags_en || []).some(t => t.toLowerCase().includes(q));
 
-      if (!matchTitle && !matchHumor && !matchSpeciesHe && !matchSpeciesLa && !matchCamera && !matchLens && !matchTags) {
+      if (!matchTitleHe && !matchTitleEn && !matchHumorHe && !matchHumorEn &&
+          !matchSpeciesHe && !matchSpeciesEn && !matchSpeciesLa &&
+          !matchCamera && !matchLens && !matchTagsHe && !matchTagsEn) {
         return false;
       }
     }
@@ -235,9 +338,19 @@ const sortedPhotos = computed(() => {
     case 'capture_asc':
       return list.sort((a, b) => a.captureTs.localeCompare(b.captureTs) || a.id.localeCompare(b.id));
     case 'animal_asc':
-      return list.sort((a, b) => a.animalName.localeCompare(b.animalName, 'he') || b.captureTs.localeCompare(a.captureTs));
+      return list.sort((a, b) => {
+        const isEn = currentLang.value === 'en';
+        const nameA = isEn ? (a.animalNameEn || a.animalName) : a.animalName;
+        const nameB = isEn ? (b.animalNameEn || b.animalName) : b.animalName;
+        return nameA.localeCompare(nameB, isEn ? 'en' : 'he') || b.captureTs.localeCompare(a.captureTs);
+      });
     case 'animal_desc':
-      return list.sort((a, b) => b.animalName.localeCompare(a.animalName, 'he') || b.captureTs.localeCompare(a.captureTs));
+      return list.sort((a, b) => {
+        const isEn = currentLang.value === 'en';
+        const nameA = isEn ? (a.animalNameEn || a.animalName) : a.animalName;
+        const nameB = isEn ? (b.animalNameEn || b.animalName) : b.animalName;
+        return nameB.localeCompare(nameA, isEn ? 'en' : 'he') || b.captureTs.localeCompare(a.captureTs);
+      });
     case 'added_desc':
       return list.sort((a, b) => (b.addedTs || '').localeCompare(a.addedTs || '') || b.captureTs.localeCompare(a.captureTs));
     case 'added_asc':
@@ -370,28 +483,41 @@ const syncStateFromUrl = () => {
   try {
     const params = new URLSearchParams(window.location.search);
 
+    // 0. Language from URL or localStorage
+    const urlLang = params.get('lang');
+    if (urlLang === 'en' || urlLang === 'he') {
+      setLang(urlLang);
+    } else {
+      try {
+        const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+        if (savedLang === 'en' || savedLang === 'he') {
+          currentLang.value = savedLang;
+        }
+      } catch (e) {}
+    }
+
     // 1. Category
     const cat = params.get('category');
     if (cat) {
-      if (cat === 'all' || cat === 'הכל') {
-        activeCategory.value = 'הכל';
-      } else if (cat === 'featured' || cat === 'נבחרות' || cat === 'נבחרות ⭐') {
-        activeCategory.value = 'נבחרות ⭐';
+      if (cat === 'all' || cat === 'הכל' || cat === 'All') {
+        activeCategory.value = 'all';
+      } else if (cat === 'featured' || cat === 'נבחרות' || cat === 'נבחרות ⭐' || cat === 'Featured ⭐') {
+        activeCategory.value = 'featured';
       } else {
-        const found = categories.find(c => c === cat || c.includes(cat));
+        const found = CATEGORIES.find(c => c.key === cat || c.he === cat || c.en === cat || c.key === canonicalCategoryKeys[cat]);
         if (found) {
-          activeCategory.value = found;
-        } else if (categoryMap[cat]) {
-          activeCategory.value = categoryMap[cat];
+          activeCategory.value = found.key;
+        } else {
+          activeCategory.value = cat;
         }
       }
     } else {
-      activeCategory.value = 'נבחרות ⭐';
+      activeCategory.value = 'featured';
     }
 
     // 2. Sort option
     const sort = params.get('sort');
-    if (sort && sortOptions.some(o => o.value === sort)) {
+    if (sort && sortOptions.value.some(o => o.value === sort)) {
       sortBy.value = sort;
     }
 
@@ -436,8 +562,15 @@ const updateUrl = (pushToHistory = false) => {
   const url = new URL(window.location.href);
   const params = url.searchParams;
 
-  // Category (omitted when default 'נבחרות ⭐')
-  if (activeCategory.value && activeCategory.value !== 'נבחרות ⭐') {
+  // Language (keep param if EN)
+  if (currentLang.value === 'en') {
+    params.set('lang', 'en');
+  } else {
+    params.delete('lang');
+  }
+
+  // Category (omitted when default 'featured')
+  if (activeCategory.value && activeCategory.value !== 'featured' && activeCategory.value !== 'נבחרות ⭐') {
     params.set('category', activeCategory.value);
   } else {
     params.delete('category');
@@ -483,11 +616,18 @@ const updateUrl = (pushToHistory = false) => {
   }
 };
 
+const handleExternalLang = (e) => {
+  if (e.detail?.lang && (e.detail.lang === 'en' || e.detail.lang === 'he')) {
+    currentLang.value = e.detail.lang;
+  }
+};
+
 onMounted(() => {
   setupObserver();
   loadSavedSelections();
   syncStateFromUrl();
   window.addEventListener('popstate', syncStateFromUrl);
+  window.addEventListener('roigreenberg-lang-changed', handleExternalLang);
   try {
     const savedCaptions = localStorage.getItem(CAPTIONS_STORAGE_KEY);
     if (savedCaptions === 'true') {
@@ -496,7 +636,7 @@ onMounted(() => {
   } catch (e) {}
 });
 
-watch([activeCategory, searchQuery, activeTag, sortBy], () => {
+watch([activeCategory, searchQuery, activeTag, sortBy, currentLang], () => {
   updateUrl(false);
 });
 
@@ -512,6 +652,7 @@ onUnmounted(() => {
   }
   if (typeof window !== 'undefined') {
     window.removeEventListener('popstate', syncStateFromUrl);
+    window.removeEventListener('roigreenberg-lang-changed', handleExternalLang);
   }
 });
 
@@ -532,7 +673,7 @@ const handleTagChange = (tag) => {
 };
 
 const resetFilters = () => {
-  activeCategory.value = 'נבחרות ⭐';
+  activeCategory.value = 'featured';
   searchQuery.value = '';
   activeTag.value = null;
   sortBy.value = 'capture_desc';
@@ -577,18 +718,20 @@ const navigateToPhoto = (photo) => {
       :sortBy="sortBy"
       :sortOptions="sortOptions"
       :showCaptions="showCaptions"
+      :currentLang="currentLang"
       @update:category="handleCategoryChange"
       @update:sort="handleSortChange"
       @update:search="handleSearchChange"
       @update:tag="handleTagChange"
       @toggle-captions="toggleCaptions"
+      @toggle-lang="toggleLang"
       @reset-filters="resetFilters"
       @open-selection="openSelectionModal"
     />
 
     <!-- Featured Category Banner -->
     <div
-      v-if="activeCategory === 'נבחרות ⭐'"
+      v-if="activeCategory === 'featured' || activeCategory === 'נבחרות ⭐' || activeCategory === 'Featured ⭐'"
       class="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-transparent p-4 sm:p-5 flex items-center justify-between gap-4 backdrop-blur-sm"
     >
       <div class="flex items-center gap-3">
@@ -596,9 +739,13 @@ const navigateToPhoto = (photo) => {
           ⭐
         </div>
         <div>
-          <h2 class="text-white font-bold text-base sm:text-lg">תמונות נבחרות מהפורטפוליו</h2>
+          <h2 class="text-white font-bold text-base sm:text-lg">
+            {{ currentLang === 'en' ? 'Featured Portfolio Works' : 'תמונות נבחרות מהפורטפוליו' }}
+          </h2>
           <p class="text-xs sm:text-sm text-slate-400">
-            אוסף הצילומים המובחרים. ניתן לסמן תמונות ב-➕ וללחוץ על ״תמונות שבחרתי״ לשליחת הרשימה בוואטסאפ.
+            {{ currentLang === 'en'
+              ? 'Curated collection. You can select photos with ➕ and click "My Selection" to share or inquire via WhatsApp.'
+              : 'אוסף הצילומים המובחרים. ניתן לסמן תמונות ב-➕ וללחוץ על ״תמונות שבחרתי״ לשליחת הרשימה בוואטסאפ.' }}
           </p>
         </div>
       </div>
@@ -608,7 +755,7 @@ const navigateToPhoto = (photo) => {
         @click="openSelectionModal"
         class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shrink-0 transition-colors cursor-pointer"
       >
-        <span>צפה בבחירה</span>
+        <span>{{ currentLang === 'en' ? 'View Selection' : 'צפה בבחירה' }}</span>
         <span class="bg-black/20 px-2 py-0.5 rounded-full text-[11px]">{{ selectedPhotoIds.length }}</span>
       </button>
     </div>
@@ -618,6 +765,7 @@ const navigateToPhoto = (photo) => {
       :photos="visiblePhotos"
       :selectedIds="selectedPhotoIds"
       :showCaptions="showCaptions"
+      :currentLang="currentLang"
       @select-photo="openPhoto"
       @toggle-select="togglePhotoSelection"
     />
@@ -633,12 +781,14 @@ const navigateToPhoto = (photo) => {
         class="px-8 py-3 rounded-full bg-slate-900/90 hover:bg-slate-800 text-sky-400 hover:text-white border border-slate-700/80 hover:border-sky-500/60 font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-sky-500/10 flex items-center gap-2.5 cursor-pointer active:scale-95"
       >
         <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-        <span>טען עוד 30 תמונות</span>
-        <span class="text-xs font-normal text-slate-400">({{ visiblePhotos.length }} מתוך {{ filteredPhotos.length }})</span>
+        <span>{{ currentLang === 'en' ? 'Load 30 more photos' : 'טען עוד 30 תמונות' }}</span>
+        <span class="text-xs font-normal text-slate-400">
+          {{ currentLang === 'en' ? `(${visiblePhotos.length} of ${filteredPhotos.length})` : `(${visiblePhotos.length} מתוך ${filteredPhotos.length})` }}
+        </span>
       </button>
     </div>
     <div v-else-if="filteredPhotos.length > PAGE_SIZE" class="text-center py-8 text-xs text-slate-500">
-      ✓ הוצגו כל {{ filteredPhotos.length }} התמונות
+      {{ currentLang === 'en' ? `✓ Displayed all ${filteredPhotos.length} photos` : `✓ הוצגו כל ${filteredPhotos.length} התמונות` }}
     </div>
 
     <!-- Floating Selection Pill when photos are selected -->
@@ -652,7 +802,8 @@ const navigateToPhoto = (photo) => {
     >
       <div
         v-if="selectedPhotoIds.length > 0"
-        class="fixed bottom-6 right-6 z-40 flex items-center shadow-2xl"
+        class="fixed bottom-6 z-40 flex items-center shadow-2xl"
+        :class="currentLang === 'en' ? 'left-6' : 'right-6'"
       >
         <button
           type="button"
@@ -660,8 +811,12 @@ const navigateToPhoto = (photo) => {
           class="px-5 py-3 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm flex items-center gap-3 shadow-lg shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
         >
           <span class="text-base">📋</span>
-          <span>נבחרו {{ selectedPhotoIds.length }} תמונות</span>
-          <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full font-mono">פתח</span>
+          <span>
+            {{ currentLang === 'en' ? `${selectedPhotoIds.length} photos selected` : `נבחרו ${selectedPhotoIds.length} תמונות` }}
+          </span>
+          <span class="bg-black/20 text-xs px-2.5 py-0.5 rounded-full font-mono">
+            {{ currentLang === 'en' ? 'Open' : 'פתח' }}
+          </span>
         </button>
       </div>
     </transition>
@@ -670,6 +825,7 @@ const navigateToPhoto = (photo) => {
     <SelectionModal
       :isOpen="isSelectionModalOpen"
       :selectedPhotos="selectedPhotos"
+      :currentLang="currentLang"
       @close="closeSelectionModal"
       @remove="removePhotoSelection"
       @clear="clearPhotoSelection"
@@ -679,6 +835,7 @@ const navigateToPhoto = (photo) => {
     <Lightbox
       :photo="activePhoto"
       :photosList="sortedPhotos"
+      :currentLang="currentLang"
       @close="closePhoto"
       @navigate="navigateToPhoto"
       @select-tag="selectTagFromLightbox"

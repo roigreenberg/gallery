@@ -33,3 +33,12 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #333b52;
 }
+
+/* Internationalization visibility rules */
+html[lang="he"] [data-lang="en"] {
+  display: none !important;
+}
+html[lang="en"] [data-lang="he"] {
+  display: none !important;
+}
+

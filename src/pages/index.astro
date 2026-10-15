@@ -31,6 +31,20 @@ const pageDescription = "תיק עבודות צילום טבע ישראלי, צ�
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+		<!-- Initialize language before paint to avoid flash -->
+		<script is:inline>
+			(function () {
+				try {
+					const params = new URLSearchParams(window.location.search);
+					const urlLang = params.get('lang');
+					const savedLang = urlLang || localStorage.getItem('roigreenberg_lang') || 'he';
+					const lang = (savedLang === 'en' || savedLang === 'he') ? savedLang : 'he';
+					document.documentElement.lang = lang;
+					document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+				} catch (e) {}
+			})();
+		</script>
+
 		<style>
 			body {
 				font-family: 'Assistant', system-ui, -apple-system, sans-serif;
@@ -48,13 +62,16 @@ const pageDescription = "תיק עבודות צילום טבע ישראלי, צ�
 			<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 text-center space-y-3">
 				<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/40 border border-sky-800/40 text-xs font-medium text-sky-400">
 					<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
-					תיק עבודות ואוסף תצלומים נבחר
+					<span data-lang="he">תיק עבודות ואוסף תצלומים נבחר</span>
+					<span data-lang="en">Portfolio & Selected Works</span>
 				</div>
 				<h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white drop-shadow-sm">
-					לוכד רגעים מן הטבע הפראי
+					<span data-lang="he">לוכד רגעים מן הטבע הפראי</span>
+					<span data-lang="en">Capturing Moments in the Wild</span>
 				</h1>
 				<p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-400 font-normal leading-relaxed">
-					מגוון צילומים ברזולוציה גבוהה הכוללים מעוף ציפורים, חיות בר במקומן הטבעי, ונופי בראשית של הארץ.
+					<span data-lang="he">מגוון צילומים ברזולוציה גבוהה הכוללים מעוף ציפורים, חיות בר במקומן הטבעי, ונופי בראשית של הארץ.</span>
+					<span data-lang="en">High-resolution fine art photography featuring birds in flight, wildlife in natural habitats, and untouched wilderness.</span>
 				</p>
 			</section>
 

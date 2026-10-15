@@ -10,6 +10,10 @@ const props = defineProps({
   selectedPhotos: {
     type: Array,
     required: true
+  },
+  currentLang: {
+    type: String,
+    default: 'he'
   }
 });
 
@@ -27,13 +31,15 @@ const getPhotoShareUrl = (photoId) => {
 // Generate formatted export text with direct photo URLs for WhatsApp
 const formattedText = computed(() => {
   if (props.selectedPhotos.length === 0) return '';
-  const lines = ['בחרתי את התמונות הבאות:'];
+  const intro = props.currentLang === 'en' ? 'I selected the following photos:' : 'בחרתי את התמונות הבאות:';
+  const lines = [intro];
   props.selectedPhotos.forEach(p => {
     const link = getPhotoShareUrl(p.id);
+    const title = (props.currentLang === 'en' ? (p.title_en || p.title) : p.title) || p.title;
     if (link) {
-      lines.push(`• ${p.title}\n  ${link}`);
+      lines.push(`• ${title}\n  ${link}`);
     } else {
-      lines.push(`• ${p.title} (מזהה: ${p.id})`);
+      lines.push(`• ${title} (${props.currentLang === 'en' ? 'ID' : 'מזהה'}: ${p.id})`);
     }
   });
   return lines.join('\n');
@@ -86,17 +92,20 @@ const openWhatsApp = () => {
 
     <!-- Modal Card Content -->
     <div
-      class="relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] z-10 animate-scale-in text-right"
-      dir="rtl"
+      class="relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] z-10 animate-scale-in"
+      :dir="currentLang === 'en' ? 'ltr' : 'rtl'"
+      :class="currentLang === 'en' ? 'text-left' : 'text-right'"
     >
       <!-- Header -->
       <div class="px-6 py-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2.5">
           <span class="text-xl">📋</span>
           <div>
-            <h3 class="text-base font-bold text-white">רשימת תמונות שבחרת</h3>
+            <h3 class="text-base font-bold text-white">
+              {{ currentLang === 'en' ? 'Your Selected Photos' : 'רשימת תמונות שבחרת' }}
+            </h3>
             <p class="text-xs text-slate-400">
-              {{ selectedPhotos.length }} תמונות נבחרו
+              {{ currentLang === 'en' ? `${selectedPhotos.length} photos selected` : `${selectedPhotos.length} תמונות נבחרו` }}
             </p>
           </div>
         </div>
@@ -105,7 +114,7 @@ const openWhatsApp = () => {
           type="button"
           @click="emit('close')"
           class="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer"
-          aria-label="סגור חלון"
+          :aria-label="currentLang === 'en' ? 'Close dialog' : 'סגור חלון'"
         >
           <X class="w-4 h-4" />
         </button>
@@ -113,7 +122,12 @@ const openWhatsApp = () => {
 
       <!-- Explanation banner -->
       <div class="px-6 py-3 bg-sky-950/30 border-b border-sky-800/30 text-xs text-sky-200/90 leading-relaxed">
-        💡 <strong>איך זה עובד?</strong> לאחר שסימנת את התמונות שאהבת, לחץ על <strong>העתק רשימה</strong> והדבק אותה בהודעה לרועי בוואטסאפ לבירור, הדפסה או רכישה.
+        <template v-if="currentLang === 'en'">
+          💡 <strong>How it works:</strong> Once you've selected your favorite photos, click <strong>Copy List</strong> or <strong>WhatsApp</strong> to contact Roi directly for inquiries, prints, or licensing.
+        </template>
+        <template v-else>
+          💡 <strong>איך זה עובד?</strong> לאחר שסימנת את התמונות שאהבת, לחץ על <strong>העתק רשימה</strong> או <strong>וואטסאפ</strong> לפנייה ישירה לרועי לבירור, הדפסה או רכישה.
+        </template>
       </div>
 
       <!-- Modal Body (Scrollable) -->
@@ -127,16 +141,18 @@ const openWhatsApp = () => {
           <div class="w-14 h-14 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-500 text-2xl">
             🖼️
           </div>
-          <h4 class="text-sm font-semibold text-slate-300">עדיין לא בחרת תמונות</h4>
+          <h4 class="text-sm font-semibold text-slate-300">
+            {{ currentLang === 'en' ? 'No photos selected yet' : 'עדיין לא בחרת תמונות' }}
+          </h4>
           <p class="text-xs text-slate-400 max-w-xs mx-auto">
-            לחץ על כפתור הסימון (+) בפינת כל תמונה בגלריה כדי להוסיף אותה לרשימה שלך.
+            {{ currentLang === 'en' ? 'Click the select button (+) on any photo in the gallery to add it to your selection.' : 'לחץ על כפתור הסימון (+) בפינת כל תמונה בגלריה כדי להוסיף אותה לרשימה שלך.' }}
           </p>
         </div>
 
         <!-- Selected Photos List -->
         <div v-else class="space-y-4">
           <!-- Items List -->
-          <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
+          <div class="space-y-2 max-h-56 overflow-y-auto" :class="currentLang === 'en' ? 'pl-1' : 'pr-1'">
             <div
               v-for="photo in selectedPhotos"
               :key="photo.id"
@@ -145,12 +161,16 @@ const openWhatsApp = () => {
               <div class="flex items-center gap-3 min-w-0">
                 <img
                   :src="photo.thumbnail"
-                  :alt="photo.title"
+                  :alt="currentLang === 'en' ? (photo.title_en || photo.title) : photo.title"
                   class="w-11 h-11 rounded-lg object-cover bg-slate-900 border border-slate-700/50 shrink-0"
                 />
                 <div class="min-w-0">
-                  <h5 class="text-xs font-semibold text-white truncate">{{ photo.title }}</h5>
-                  <p class="text-[11px] text-slate-400 truncate">{{ photo.species_he || photo.category }}</p>
+                  <h5 class="text-xs font-semibold text-white truncate">
+                    {{ currentLang === 'en' ? (photo.title_en || photo.title) : photo.title }}
+                  </h5>
+                  <p class="text-[11px] text-slate-400 truncate">
+                    {{ currentLang === 'en' ? (photo.species_en || photo.species_la || photo.categoryEn || photo.species_he) : (photo.species_he || photo.category) }}
+                  </p>
                 </div>
               </div>
 
@@ -158,7 +178,7 @@ const openWhatsApp = () => {
                 type="button"
                 @click="emit('remove', photo.id)"
                 class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-950/30 transition cursor-pointer shrink-0"
-                title="הסר מרשימת הבחירה"
+                :title="currentLang === 'en' ? 'Remove from selection' : 'הסר מרשימת הבחירה'"
               >
                 <Trash2 class="w-4 h-4" />
               </button>
@@ -167,7 +187,9 @@ const openWhatsApp = () => {
 
           <!-- Text Preview Box -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-slate-400">תצוגה מקדימה של ההודעה שתועתק:</label>
+            <label class="text-xs font-medium text-slate-400">
+              {{ currentLang === 'en' ? 'Message preview to be copied:' : 'תצוגה מקדימה של ההודעה שתועתק:' }}
+            </label>
             <pre class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 whitespace-pre-wrap font-sans max-h-36 overflow-y-auto leading-relaxed select-all">{{ formattedText }}</pre>
           </div>
         </div>
@@ -185,7 +207,7 @@ const openWhatsApp = () => {
           class="text-xs text-slate-400 hover:text-rose-400 transition cursor-pointer flex items-center gap-1"
         >
           <Trash2 class="w-3.5 h-3.5" />
-          <span>נקה בחירה</span>
+          <span>{{ currentLang === 'en' ? 'Clear All' : 'נקה בחירה' }}</span>
         </button>
         <div v-else></div>
 
@@ -196,10 +218,10 @@ const openWhatsApp = () => {
             type="button"
             @click="openWhatsApp"
             class="px-3.5 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-600/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
-            title="פתח שיחה בוואטסאפ"
+            :title="currentLang === 'en' ? 'Open WhatsApp conversation' : 'פתח שיחה בוואטסאפ'"
           >
             <MessageCircle class="w-3.5 h-3.5" />
-            <span>וואטסאפ</span>
+            <span>{{ currentLang === 'en' ? 'WhatsApp' : 'וואטסאפ' }}</span>
           </button>
 
           <button
@@ -211,7 +233,8 @@ const openWhatsApp = () => {
           >
             <Check v-if="copied" class="w-4 h-4" />
             <Copy v-else class="w-4 h-4" />
-            <span>{{ copied ? '✓ הועתק בהצלחה!' : 'העתק רשימה' }}</span>
+            <span v-if="currentLang === 'en'">{{ copied ? '✓ Copied Successfully!' : 'Copy List' }}</span>
+            <span v-else>{{ copied ? '✓ הועתק בהצלחה!' : 'העתק רשימה' }}</span>
           </button>
         </div>
 

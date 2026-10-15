@@ -1,0 +1,8180 @@
+{
+  "_metadata": {
+    "version": "1.0.0",
+    "description": "Canonical species registry with official English & Hebrew names for Roi Greenberg Gallery",
+    "total_species": 240
+  },
+  "by_latin": {
+    "vulpes vulpes": {
+      "key": "Vulpes vulpes",
+      "latin": "Vulpes vulpes",
+      "hebrew": "שועל מצוי",
+      "english": "Red Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "שועל מצוי"
+      ]
+    },
+    "athene noctua": {
+      "key": "Athene noctua",
+      "latin": "Athene noctua",
+      "hebrew": "כוס החורבות",
+      "english": "Little Owl",
+      "group": "birds",
+      "aliases_he": [
+        "כוס חורבות",
+        "כוס החורבות"
+      ]
+    },
+    "falco tinnunculus": {
+      "key": "Falco tinnunculus",
+      "latin": "Falco tinnunculus",
+      "hebrew": "בז מצוי",
+      "english": "Common Kestrel",
+      "group": "birds",
+      "aliases_he": [
+        "בז מצוי"
+      ]
+    },
+    "canis aureus": {
+      "key": "Canis aureus",
+      "latin": "Canis aureus",
+      "hebrew": "תן זהוב",
+      "english": "Golden Jackal",
+      "group": "mammals",
+      "aliases_he": [
+        "תן זהוב",
+        "תאן זהוב"
+      ]
+    },
+    "gazella gazella": {
+      "key": "Gazella gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי"
+      ]
+    },
+    "lanius nubicus": {
+      "key": "Lanius nubicus",
+      "latin": "Lanius nubicus",
+      "hebrew": "חנקן נובי",
+      "english": "Masked Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן נובי"
+      ]
+    },
+    "merops apiaster": {
+      "key": "Merops apiaster",
+      "latin": "Merops apiaster",
+      "hebrew": "שרקרק מצוי",
+      "english": "European Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק מצוי"
+      ]
+    },
+    "procavia capensis": {
+      "key": "Procavia capensis",
+      "latin": "Procavia capensis",
+      "hebrew": "שפן סלעים",
+      "english": "Rock Hyrax",
+      "group": "mammals",
+      "aliases_he": [
+        "שפן סלעים",
+        "שפן סלע"
+      ]
+    },
+    "accipiter nisus": {
+      "key": "Accipiter nisus",
+      "latin": "Accipiter nisus",
+      "hebrew": "נץ מצוי",
+      "english": "Eurasian Sparrowhawk",
+      "group": "birds",
+      "aliases_he": [
+        "נץ מצוי"
+      ]
+    },
+    "cinnyris osea": {
+      "key": "Cinnyris osea",
+      "latin": "Cinnyris osea",
+      "hebrew": "צופית",
+      "english": "Palestine Sunbird",
+      "group": "birds",
+      "aliases_he": [
+        "צופית",
+        "צופית בוהקת",
+        "צופית ססגונית"
+      ]
+    },
+    "halcyon smyrnensis": {
+      "key": "Halcyon smyrnensis",
+      "latin": "Halcyon smyrnensis",
+      "hebrew": "שלדג לבן-חזה",
+      "english": "White-throated Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג לבן-חזה"
+      ]
+    },
+    "saxicola rubicola": {
+      "key": "Saxicola rubicola",
+      "latin": "Saxicola rubicola",
+      "hebrew": "דוחל חום-גרון",
+      "english": "European Stonechat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל חום-גרון",
+        "דוחל שחור-גרון"
+      ]
+    },
+    "corvus cornix": {
+      "key": "Corvus cornix",
+      "latin": "Corvus cornix",
+      "hebrew": "עורב אפור",
+      "english": "Hooded Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורב אפור"
+      ]
+    },
+    "alcedo atthis": {
+      "key": "Alcedo atthis",
+      "latin": "Alcedo atthis",
+      "hebrew": "שלדג גמדי",
+      "english": "Common Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג גמדי"
+      ]
+    },
+    "fringilla coelebs": {
+      "key": "Fringilla coelebs",
+      "latin": "Fringilla coelebs",
+      "hebrew": "פרוש מצוי",
+      "english": "Common Chaffinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש מצוי"
+      ]
+    },
+    "merops orientalis": {
+      "key": "Merops orientalis",
+      "latin": "Merops orientalis",
+      "hebrew": "שרקרק ירוק",
+      "english": "Green Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק ירוק",
+        "שרקרק גמדי"
+      ]
+    },
+    "coracias garrulus": {
+      "key": "Coracias garrulus",
+      "latin": "Coracias garrulus",
+      "hebrew": "כחל מצוי",
+      "english": "European Roller",
+      "group": "birds",
+      "aliases_he": [
+        "כחל מצוי",
+        "כחל"
+      ]
+    },
+    "egretta garzetta": {
+      "key": "Egretta garzetta",
+      "latin": "Egretta garzetta",
+      "hebrew": "לבנית קטנה",
+      "english": "Little Egret",
+      "group": "birds",
+      "aliases_he": [
+        "לבנית קטנה"
+      ]
+    },
+    "grus grus": {
+      "key": "Grus grus",
+      "latin": "Grus grus",
+      "hebrew": "עגור אפור",
+      "english": "Common Crane",
+      "group": "birds",
+      "aliases_he": [
+        "עגור אפור"
+      ]
+    },
+    "curruca melanocephala": {
+      "key": "Sylvia melanocephala",
+      "latin": "Curruca melanocephala",
+      "hebrew": "סבכי שחור-עין",
+      "english": "Sardinian Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-עין"
+      ]
+    },
+    "clanga clanga": {
+      "key": "Clanga clanga",
+      "latin": "Clanga clanga",
+      "hebrew": "עיט צפרדעים",
+      "english": "Greater Spotted Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט צפרדעים"
+      ]
+    },
+    "alectoris chukar": {
+      "key": "Alectoris chukar",
+      "latin": "Alectoris chukar",
+      "hebrew": "חוגלה",
+      "english": "Chukar Partridge",
+      "group": "birds",
+      "aliases_he": [
+        "חוגלה",
+        "חוגלת סלעים",
+        "חוגלת האבן"
+      ]
+    },
+    "nycticorax nycticorax": {
+      "key": "Nycticorax nycticorax",
+      "latin": "Nycticorax nycticorax",
+      "hebrew": "אנפת לילה",
+      "english": "Black-crowned Night Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפת לילה",
+        "אנפית לילה"
+      ]
+    },
+    "acridotheres tristis": {
+      "key": "Acridotheres tristis",
+      "latin": "Acridotheres tristis",
+      "hebrew": "מיינה מצויה",
+      "english": "Common Myna",
+      "group": "birds",
+      "aliases_he": [
+        "מיינה מצויה"
+      ]
+    },
+    "ceryle rudis": {
+      "key": "Ceryle rudis",
+      "latin": "Ceryle rudis",
+      "hebrew": "פרפור עקוד",
+      "english": "Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד",
+        "פרפור נחלים"
+      ]
+    },
+    "gyps fulvus": {
+      "key": "Gyps fulvus",
+      "latin": "Gyps fulvus",
+      "hebrew": "נשר מקראי",
+      "english": "Griffon Vulture",
+      "group": "birds",
+      "aliases_he": [
+        "נשר מקראי"
+      ]
+    },
+    "lanius collurio": {
+      "key": "Lanius collurio",
+      "latin": "Lanius collurio",
+      "hebrew": "חנקן אדום-גב",
+      "english": "Red-backed Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-גב",
+        "חנקן אדום ראש"
+      ]
+    },
+    "ardea cinerea": {
+      "key": "Ardea cinerea",
+      "latin": "Ardea cinerea",
+      "hebrew": "אנפה אפורה",
+      "english": "Grey Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה אפורה"
+      ]
+    },
+    "pelecanus onocrotalus": {
+      "key": "Pelecanus onocrotalus",
+      "latin": "Pelecanus onocrotalus",
+      "hebrew": "שקנאי מצוי",
+      "english": "Great White Pelican",
+      "group": "birds",
+      "aliases_he": [
+        "שקנאי מצוי"
+      ]
+    },
+    "mantodea": {
+      "key": "Mantodea",
+      "latin": "Mantodea",
+      "hebrew": "גמל שלמה",
+      "english": "Praying Mantis",
+      "group": "invertebrates",
+      "aliases_he": [
+        "גמל שלמה"
+      ]
+    },
+    "saxicola rubetra": {
+      "key": "Saxicola rubetra",
+      "latin": "Saxicola rubetra",
+      "hebrew": "דוחל חום-גרון",
+      "english": "Whinchat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל חום-גרון",
+        "דחליל שדות"
+      ]
+    },
+    "columba livia": {
+      "key": "Columba livia",
+      "latin": "Columba livia",
+      "hebrew": "יונת סלע",
+      "english": "Rock Dove",
+      "group": "birds",
+      "aliases_he": [
+        "יונת סלע"
+      ]
+    },
+    "bubulcus ibis": {
+      "key": "Bubulcus ibis",
+      "latin": "Bubulcus ibis",
+      "hebrew": "אנפית בקר",
+      "english": "Cattle Egret",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית בקר",
+        "לבנית בקר"
+      ]
+    },
+    "erithacus rubecula": {
+      "key": "Erithacus rubecula",
+      "latin": "Erithacus rubecula",
+      "hebrew": "אדום-חזה",
+      "english": "European Robin",
+      "group": "birds",
+      "aliases_he": [
+        "אדום-חזה",
+        "אדום-חזה אירופי"
+      ]
+    },
+    "emberiza calandra": {
+      "key": "Emberiza calandra",
+      "latin": "Emberiza calandra",
+      "hebrew": "גבתון עפרוני",
+      "english": "Corn Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון מצוי",
+        "גבתון עפרוני"
+      ]
+    },
+    "gallinula chloropus": {
+      "key": "Gallinula chloropus",
+      "latin": "Gallinula chloropus",
+      "hebrew": "סופית מצויה",
+      "english": "Common Moorhen",
+      "group": "birds",
+      "aliases_he": [
+        "סופית",
+        "סופנית מצויה",
+        "סופית מצויה"
+      ]
+    },
+    "hirundo rustica": {
+      "key": "Hirundo rustica",
+      "latin": "Hirundo rustica",
+      "hebrew": "סנונית רפתות",
+      "english": "Barn Swallow",
+      "group": "birds",
+      "aliases_he": [
+        "סנונית רפתות"
+      ]
+    },
+    "turdus merula": {
+      "key": "Turdus merula",
+      "latin": "Turdus merula",
+      "hebrew": "שחרור מצוי",
+      "english": "Common Blackbird",
+      "group": "birds",
+      "aliases_he": [
+        "שחרור מצוי",
+        "שחרור"
+      ]
+    },
+    "anas platyrhynchos": {
+      "key": "Anas platyrhynchos",
+      "latin": "Anas platyrhynchos",
+      "hebrew": "ברכייה",
+      "english": "Mallard",
+      "group": "birds",
+      "aliases_he": [
+        "ברכייה"
+      ]
+    },
+    "anisoptera": {
+      "key": "Anisoptera",
+      "latin": "Anisoptera",
+      "hebrew": "שפירית",
+      "english": "Dragonfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שפירית"
+      ]
+    },
+    "sylvia atricapilla": {
+      "key": "Sylvia atricapilla",
+      "latin": "Sylvia atricapilla",
+      "hebrew": "סבכי שחור-כיפה",
+      "english": "Eurasian Blackcap",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-כיפה"
+      ]
+    },
+    "asio otus": {
+      "key": "Asio otus",
+      "latin": "Asio otus",
+      "hebrew": "ינשוף עצים",
+      "english": "Long-eared Owl",
+      "group": "birds",
+      "aliases_he": [
+        "ינשוף עצים"
+      ]
+    },
+    "garrulus glandarius": {
+      "key": "Garrulus glandarius atricapillus",
+      "latin": "Garrulus glandarius",
+      "hebrew": "עורבני שחור-כיפה",
+      "english": "Eurasian Jay",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור-כיפה"
+      ]
+    },
+    "lanius excubitor": {
+      "key": "Lanius excubitor",
+      "latin": "Lanius excubitor",
+      "hebrew": "חנקן גדול",
+      "english": "Great Grey Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן גדול"
+      ]
+    },
+    "tyto alba": {
+      "key": "Tyto alba",
+      "latin": "Tyto alba",
+      "hebrew": "תנשמת לבנה",
+      "english": "Western Barn Owl",
+      "group": "birds",
+      "aliases_he": [
+        "תנשמת לבנה"
+      ]
+    },
+    "chloris chloris": {
+      "key": "Chloris chloris",
+      "latin": "Chloris chloris",
+      "hebrew": "ירקון מצוי",
+      "english": "European Greenfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש ירוק",
+        "חוחית ירוקה",
+        "ירקון מצוי",
+        "ירקון"
+      ]
+    },
+    "sylvia nana": {
+      "key": "Sylvia nana",
+      "latin": "Sylvia nana",
+      "hebrew": "סבכי מדבר",
+      "english": "Desert Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי מדבר"
+      ]
+    },
+    "prinia gracilis": {
+      "key": "Prinia gracilis",
+      "latin": "Prinia gracilis",
+      "hebrew": "פשוש",
+      "english": "Graceful Prinia",
+      "group": "birds",
+      "aliases_he": [
+        "תפרית עדינה",
+        "פשוש"
+      ]
+    },
+    "plegadis falcinellus": {
+      "key": "Plegadis falcinellus",
+      "latin": "Plegadis falcinellus",
+      "hebrew": "מגלן חום",
+      "english": "Glossy Ibis",
+      "group": "birds",
+      "aliases_he": [
+        "מגלן חום"
+      ]
+    },
+    "laudakia stellio": {
+      "key": "Laudakia stellio",
+      "latin": "Laudakia stellio",
+      "hebrew": "חרדון מצוי",
+      "english": "Starred Agama",
+      "group": "reptiles",
+      "aliases_he": [
+        "חרדון מצוי"
+      ]
+    },
+    "argiope bruennichi": {
+      "key": "Argiope bruennichi",
+      "latin": "Argiope bruennichi",
+      "hebrew": "ארגיופית ברוניך",
+      "english": "Wasp Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "ארגיופית ברוניך",
+        "ארגיופ מצוי"
+      ]
+    },
+    "buteo rufinus": {
+      "key": "Buteo rufinus",
+      "latin": "Buteo rufinus",
+      "hebrew": "עקב עיטי",
+      "english": "Long-legged Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "עקב עיטי"
+      ]
+    },
+    "phylloscopus collybita": {
+      "key": "Phylloscopus collybita",
+      "latin": "Phylloscopus collybita",
+      "hebrew": "עלווית אפורה",
+      "english": "Common Chiffchaff",
+      "group": "birds",
+      "aliases_he": [
+        "עלווית אפורה",
+        "עלעלת",
+        "עלביון",
+        "עלעל"
+      ]
+    },
+    "phoenicurus ochruros": {
+      "key": "Phoenicurus ochruros",
+      "latin": "Phoenicurus ochruros",
+      "hebrew": "חכלילית סלעים",
+      "english": "Black Redstart",
+      "group": "birds",
+      "aliases_he": [
+        "חכלילית סלעים"
+      ]
+    },
+    "streptopelia turtur": {
+      "key": "Streptopelia turtur",
+      "latin": "Streptopelia turtur",
+      "hebrew": "תור מצוי",
+      "english": "European Turtle Dove",
+      "group": "birds",
+      "aliases_he": [
+        "תור מצוי"
+      ]
+    },
+    "vulpes rueppellii": {
+      "key": "Vulpes rueppellii",
+      "latin": "Vulpes rueppellii",
+      "hebrew": "שועל חולות",
+      "english": "Rüppell's Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "שועל חולות"
+      ]
+    },
+    "lanius senator": {
+      "key": "Lanius senator",
+      "latin": "Lanius senator",
+      "hebrew": "חנקן אדום-ראש",
+      "english": "Woodchat Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-ראש"
+      ]
+    },
+    "luna": {
+      "key": "Luna",
+      "latin": "Luna",
+      "hebrew": "ירח",
+      "english": "Moon",
+      "group": "astronomy",
+      "aliases_he": [
+        "ירח"
+      ]
+    },
+    "emberiza caesia": {
+      "key": "Emberiza caesia",
+      "latin": "Emberiza caesia",
+      "hebrew": "גיבתון אדום-מקור",
+      "english": "Cretzschmar's Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-מקור",
+        "גיבתון עפרוני"
+      ]
+    },
+    "parus major": {
+      "key": "Parus major",
+      "latin": "Parus major",
+      "hebrew": "ירגזי מצוי",
+      "english": "Great Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי מצוי",
+        "קבצן מצוי",
+        "יקנתן מצוי"
+      ]
+    },
+    "emberiza bruniceps": {
+      "key": "Emberiza bruniceps",
+      "latin": "Emberiza bruniceps",
+      "hebrew": "גיבתון אדום-ראש",
+      "english": "Red-headed Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-ראש",
+        "חמרי אדום-ראש"
+      ]
+    },
+    "alopochen aegyptiaca": {
+      "key": "Alopochen aegyptiaca",
+      "latin": "Alopochen aegyptiaca",
+      "hebrew": "יאורית מצרית",
+      "english": "Egyptian Goose",
+      "group": "birds",
+      "aliases_he": [
+        "יאורית מצרית",
+        "יסעור מצוי"
+      ]
+    },
+    "ardeola ralloides": {
+      "key": "Ardeola ralloides",
+      "latin": "Ardeola ralloides",
+      "hebrew": "אנפית סוף",
+      "english": "Squacco Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית סוף",
+        "אנפית סופיות"
+      ]
+    },
+    "milvus migrans": {
+      "key": "Milvus migrans",
+      "latin": "Milvus migrans",
+      "hebrew": "דיה שחורה",
+      "english": "Black Kite",
+      "group": "birds",
+      "aliases_he": [
+        "דיה שחורה"
+      ]
+    },
+    "phoenicurus phoenicurus": {
+      "key": "Phoenicurus phoenicurus",
+      "latin": "Phoenicurus phoenicurus",
+      "hebrew": "חכלילית עצים",
+      "english": "Common Redstart",
+      "group": "birds",
+      "aliases_he": [
+        "חכלילית עצים"
+      ]
+    },
+    "apis mellifera": {
+      "key": "Apis mellifera",
+      "latin": "Apis mellifera",
+      "hebrew": "דבורת דבש",
+      "english": "Western Honey Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת דבש",
+        "דבורת הדבש",
+        "דבורת-דבש מערבית"
+      ]
+    },
+    "himantopus himantopus": {
+      "key": "Himantopus himantopus",
+      "latin": "Himantopus himantopus",
+      "hebrew": "תמירון מצוי",
+      "english": "Black-winged Stilt",
+      "group": "birds",
+      "aliases_he": [
+        "סייפן",
+        "תמינון",
+        "תמירון מצוי"
+      ]
+    },
+    "lepidoptera": {
+      "key": "פרפר",
+      "latin": "Lepidoptera",
+      "hebrew": "פרפר",
+      "english": "Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "פרפר"
+      ]
+    },
+    "dendrocopos syriacus": {
+      "key": "Dendrocopos syriacus",
+      "latin": "Dendrocopos syriacus",
+      "hebrew": "נקר סורי",
+      "english": "Syrian Woodpecker",
+      "group": "birds",
+      "aliases_he": [
+        "נקר סורי"
+      ]
+    },
+    "motacilla alba": {
+      "key": "Motacilla alba",
+      "latin": "Motacilla alba",
+      "hebrew": "נחליאלי לבן",
+      "english": "White Wagtail",
+      "group": "birds",
+      "aliases_he": [
+        "נחליאלי לבן"
+      ]
+    },
+    "pastor roseus": {
+      "key": "Pastor roseus",
+      "latin": "Pastor roseus",
+      "hebrew": "זרזיר ורדרד",
+      "english": "Rosy Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר ורדרד",
+        "זרזיר ברומזי",
+        "זרזיר אפור"
+      ]
+    },
+    "apus apus": {
+      "key": "Apus apus",
+      "latin": "Apus apus",
+      "hebrew": "סיס חומות",
+      "english": "Common Swift",
+      "group": "birds",
+      "aliases_he": [
+        "סיס חומות"
+      ]
+    },
+    "anemone coronaria": {
+      "key": "Anemone coronaria",
+      "latin": "Anemone coronaria",
+      "hebrew": "כלנית מצויה",
+      "english": "Anemone",
+      "group": "flora",
+      "aliases_he": [
+        "כלנית מצויה"
+      ]
+    },
+    "anthus cervinus": {
+      "key": "Anthus cervinus",
+      "latin": "Anthus cervinus",
+      "hebrew": "פיפיון אדום-גרון",
+      "english": "Red-throated Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון אדום-גרון",
+        "פיפיון אדום-גרון"
+      ]
+    },
+    "opuntia ficus-indica": {
+      "key": "Opuntia ficus-indica",
+      "latin": "Opuntia ficus-indica",
+      "hebrew": "צבר מצוי",
+      "english": "Prickly Pear",
+      "group": "flora",
+      "aliases_he": [
+        "צבר מצוי"
+      ]
+    },
+    "vitis vinifera": {
+      "key": "Vitis vinifera",
+      "latin": "Vitis vinifera",
+      "hebrew": "גפן",
+      "english": "Common Grape Vine",
+      "group": "flora",
+      "aliases_he": [
+        "גפן",
+        "גפן היין"
+      ]
+    },
+    "corvus monedula": {
+      "key": "Corvus monedula",
+      "latin": "Corvus monedula",
+      "hebrew": "קאק",
+      "english": "Western Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-כיפה",
+        "קאק"
+      ]
+    },
+    "oenanthe": {
+      "key": "Oenanthe",
+      "latin": "Oenanthe",
+      "hebrew": "סלעית",
+      "english": "Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית"
+      ]
+    },
+    "belenois aurota": {
+      "key": "Belenois aurota",
+      "latin": "Belenois aurota",
+      "hebrew": "לבנין הצלף",
+      "english": "Pioneer White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    "galerida cristata": {
+      "key": "Galerida cristata",
+      "latin": "Galerida cristata",
+      "hebrew": "עפרוני מצויץ",
+      "english": "Crested Lark",
+      "group": "birds",
+      "aliases_he": [
+        "עפרוני מצויץ",
+        "עפרוני מצוייץ",
+        "עקרונן מצויץ"
+      ]
+    },
+    "papilio machaon": {
+      "key": "Papilio machaon",
+      "latin": "Papilio machaon",
+      "hebrew": "זנב-סנונית נאה",
+      "english": "Old World Swallowtail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זנב-סנונית נאה",
+        "זנב סנונית נאה"
+      ]
+    },
+    "luscinia luscinia": {
+      "key": "Luscinia luscinia",
+      "latin": "Luscinia luscinia",
+      "hebrew": "זמיר מנומר",
+      "english": "Thrush Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומר"
+      ]
+    },
+    "prunus dulcis": {
+      "key": "Prunus dulcis",
+      "latin": "Prunus dulcis",
+      "hebrew": "שקד מצוי",
+      "english": "Almond",
+      "group": "flora",
+      "aliases_he": [
+        "שקד מצוי"
+      ]
+    },
+    "tachybaptus ruficollis": {
+      "key": "Tachybaptus ruficollis",
+      "latin": "Tachybaptus ruficollis",
+      "hebrew": "טבלן גמדי",
+      "english": "Little Grebe",
+      "group": "birds",
+      "aliases_he": [
+        "טבלן גמדי"
+      ]
+    },
+    "sciurus vulgaris": {
+      "key": "Sciurus vulgaris",
+      "latin": "Sciurus vulgaris",
+      "hebrew": "סנאי אדום",
+      "english": "Red Squirrel",
+      "group": "mammals",
+      "aliases_he": [
+        "סנאי אדום"
+      ]
+    },
+    "motacilla flava": {
+      "key": "Motacilla flava",
+      "latin": "Motacilla flava",
+      "hebrew": "נחליאלי צהוב",
+      "english": "Western Yellow Wagtail",
+      "group": "birds",
+      "aliases_he": [
+        "נחליאלי צהוב"
+      ]
+    },
+    "oenanthe oenanthe": {
+      "key": "Oenanthe oenanthe",
+      "latin": "Oenanthe oenanthe",
+      "hebrew": "סלעית אירופית",
+      "english": "Northern Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית אירופית"
+      ]
+    },
+    "oenanthe leucopyga": {
+      "key": "Oenanthe leucopyga",
+      "latin": "Oenanthe leucopyga",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "White-crowned Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן",
+        "סלעית לבנת-כנף"
+      ]
+    },
+    "corvus ruficollis": {
+      "key": "Corvus ruficollis",
+      "latin": "Corvus ruficollis",
+      "hebrew": "עורב חום-עורף",
+      "english": "Brown-necked Raven",
+      "group": "birds",
+      "aliases_he": [
+        "עורב חום-עורף"
+      ]
+    },
+    "glareola pratincola": {
+      "key": "Glareola pratincola",
+      "latin": "Glareola pratincola",
+      "hebrew": "שדמית אדומת-כנף",
+      "english": "Collared Pratincole",
+      "group": "birds",
+      "aliases_he": [
+        "שדמית אדומת-כנף"
+      ]
+    },
+    "butorides striata": {
+      "key": "Butorides striata",
+      "latin": "Butorides striata",
+      "hebrew": "אנפית סוף",
+      "english": "Striated Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית סוף"
+      ]
+    },
+    "thomisidae": {
+      "key": "Thomisidae",
+      "latin": "Thomisidae",
+      "hebrew": "עכביש סרטן",
+      "english": "Crab Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש סרטן"
+      ]
+    },
+    "anaphaeis aurota": {
+      "key": "Anaphaeis aurota",
+      "latin": "Anaphaeis aurota",
+      "hebrew": "לבנין הצלף",
+      "english": "Pioneer White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    "carduelis carduelis": {
+      "key": "Carduelis carduelis",
+      "latin": "Carduelis carduelis",
+      "hebrew": "חוחית",
+      "english": "European Goldfinch",
+      "group": "birds",
+      "aliases_he": [
+        "חוחית",
+        "חוחיות"
+      ]
+    },
+    "bubo bubo": {
+      "key": "Bubo bubo",
+      "latin": "Bubo bubo",
+      "hebrew": "אוח מצוי",
+      "english": "Eurasian Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מצוי",
+        "אווח מצוי",
+        "אוח עיטי"
+      ]
+    },
+    "coccinella septempunctata": {
+      "key": "Coccinella septempunctata",
+      "latin": "Coccinella septempunctata",
+      "hebrew": "מושית השבע",
+      "english": "Seven-spot Ladybird",
+      "group": "invertebrates",
+      "aliases_he": [
+        "מושית השבע",
+        "פרת משה רבנו"
+      ]
+    },
+    "passer domesticus": {
+      "key": "Passer domesticus",
+      "latin": "Passer domesticus",
+      "hebrew": "דרור הבית",
+      "english": "House Sparrow",
+      "group": "birds",
+      "aliases_he": [
+        "דרור הבית"
+      ]
+    },
+    "aporia crataegi": {
+      "key": "Aporia crataegi",
+      "latin": "Aporia crataegi",
+      "hebrew": "לבנין העריוז",
+      "english": "Black-veined White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבני העיס",
+        "לבנין האציל",
+        "עצבק לבן",
+        "לבנין העריוז"
+      ]
+    },
+    "myiopsitta monachus": {
+      "key": "Myiopsitta monachus",
+      "latin": "Myiopsitta monachus",
+      "hebrew": "תוכי נזירי",
+      "english": "Monk Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכי נזירי"
+      ]
+    },
+    "bucanetes githagineus": {
+      "key": "Bucanetes githagineus",
+      "latin": "Bucanetes githagineus",
+      "hebrew": "חצוצרן מדבר",
+      "english": "Trumpeter Finch",
+      "group": "birds",
+      "aliases_he": [
+        "חצוצרן מדבר"
+      ]
+    },
+    "gallinago gallinago": {
+      "key": "Gallinago gallinago",
+      "latin": "Gallinago gallinago",
+      "hebrew": "חרטומן ביצות",
+      "english": "Common Snipe",
+      "group": "birds",
+      "aliases_he": [
+        "חרטומן ביצות",
+        "חרטומית ביצות"
+      ]
+    },
+    "rousettus aegyptiacus": {
+      "key": "Rousettus aegyptiacus",
+      "latin": "Rousettus aegyptiacus",
+      "hebrew": "עטלף פירות מצוי",
+      "english": "Egyptian Fruit Bat",
+      "group": "mammals",
+      "aliases_he": [
+        "עטלף פירות מצוי"
+      ]
+    },
+    "anas crecca": {
+      "key": "Anas crecca",
+      "latin": "Anas crecca",
+      "hebrew": "שרשיר",
+      "english": "Common Teal",
+      "group": "birds",
+      "aliases_he": [
+        "שרשיר"
+      ]
+    },
+    "spilopelia senegalensis": {
+      "key": "Spilopelia senegalensis",
+      "latin": "Spilopelia senegalensis",
+      "hebrew": "צוצלת",
+      "english": "Laughing Dove",
+      "group": "birds",
+      "aliases_he": [
+        "צוצלת"
+      ]
+    },
+    "acrocephalus melanopogon": {
+      "key": "Acrocephalus melanopogon",
+      "latin": "Acrocephalus melanopogon",
+      "hebrew": "קנית פסים",
+      "english": "Moustached Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "קנית פסים"
+      ]
+    },
+    "pernis apivorus": {
+      "key": "Pernis apivorus",
+      "latin": "Pernis apivorus",
+      "hebrew": "איית צרעים",
+      "english": "European Honey Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "איית צרעים"
+      ]
+    },
+    "passer hispaniolensis": {
+      "key": "Passer hispaniolensis",
+      "latin": "Passer hispaniolensis",
+      "hebrew": "דרור ספרדי",
+      "english": "Spanish Sparrow",
+      "group": "birds",
+      "aliases_he": [
+        "דרור ספרדי"
+      ]
+    },
+    "cichlidae": {
+      "key": "Cichlidae",
+      "latin": "Cichlidae",
+      "hebrew": "אמנון",
+      "english": "Cichlid",
+      "group": "other",
+      "aliases_he": [
+        "אמנון"
+      ]
+    },
+    "sternula albifrons": {
+      "key": "Sternula albifrons",
+      "latin": "Sternula albifrons",
+      "hebrew": "שחפית גמדית",
+      "english": "Little Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית גמדית"
+      ]
+    },
+    "chlidonias hybrida": {
+      "key": "Chlidonias hybrida",
+      "latin": "Chlidonias hybrida",
+      "hebrew": "שחפית לבנת-לחי",
+      "english": "Whiskered Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית לבנת-לחי"
+      ]
+    },
+    "ixobrychus minutus": {
+      "key": "Ixobrychus minutus",
+      "latin": "Ixobrychus minutus",
+      "hebrew": "אנפית גמדית",
+      "english": "Little Bittern",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית גמדית"
+      ]
+    },
+    "sus scrofa": {
+      "key": "Sus scrofa",
+      "latin": "Sus scrofa",
+      "hebrew": "חזיר בר",
+      "english": "Wild Boar",
+      "group": "mammals",
+      "aliases_he": [
+        "חזיר בר"
+      ]
+    },
+    "mauremys caspica": {
+      "key": "Mauremys caspica",
+      "latin": "Mauremys caspica",
+      "hebrew": "צב ביצה מצוי",
+      "english": "Caspian Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצה מצוי",
+        "צב מים מצוי"
+      ]
+    },
+    "myocastor coypus": {
+      "key": "Myocastor coypus",
+      "latin": "Myocastor coypus",
+      "hebrew": "נוטריה",
+      "english": "Coypu",
+      "group": "mammals",
+      "aliases_he": [
+        "נוטריה"
+      ]
+    },
+    "emys orbicularis": {
+      "key": "Emys orbicularis",
+      "latin": "Emys orbicularis",
+      "hebrew": "צב ביצות",
+      "english": "European Pond Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצות",
+        "צב ביצות משוחר"
+      ]
+    },
+    "stellagama stellio": {
+      "key": "Stellagama stellio",
+      "latin": "Stellagama stellio",
+      "hebrew": "חרדון מצוי",
+      "english": "Starred Agama",
+      "group": "reptiles",
+      "aliases_he": [
+        "חרדון מצוי"
+      ]
+    },
+    "psittacula krameri": {
+      "key": "Psittacula krameri",
+      "latin": "Psittacula krameri",
+      "hebrew": "דררה מצויה",
+      "english": "Rose-ringed Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "דררה מצויה",
+        "דררה"
+      ]
+    },
+    "sylvia cantillans": {
+      "key": "Sylvia cantillans",
+      "latin": "Sylvia cantillans",
+      "hebrew": "סבכי קוצים",
+      "english": "Subalpine Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי קוצים"
+      ]
+    },
+    "otus scops": {
+      "key": "Otus scops",
+      "latin": "Otus scops",
+      "hebrew": "שעיר מצוי",
+      "english": "Common Scops Owl",
+      "group": "birds",
+      "aliases_he": [
+        "יערון מצוי",
+        "שעיר מצוי"
+      ]
+    },
+    "cyclamen persicum": {
+      "key": "Cyclamen persicum",
+      "latin": "Cyclamen persicum",
+      "hebrew": "רקפת מצויה",
+      "english": "Persian Cyclamen",
+      "group": "flora",
+      "aliases_he": [
+        "רקפת מצויה"
+      ]
+    },
+    "elanus caeruleus": {
+      "key": "Elanus caeruleus",
+      "latin": "Elanus caeruleus",
+      "hebrew": "דאה שחורת-כתף",
+      "english": "Black-winged Kite",
+      "group": "birds",
+      "aliases_he": [
+        "דאה שחורת-כתף"
+      ]
+    },
+    "linaria cannabina": {
+      "key": "Linaria cannabina",
+      "latin": "Linaria cannabina",
+      "hebrew": "תוכיפז",
+      "english": "Common Linnet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכיפז",
+        "קנרית",
+        "פרוש הרים"
+      ]
+    },
+    "microcarbo pygmaeus": {
+      "key": "Microcarbo pygmaeus",
+      "latin": "Microcarbo pygmaeus",
+      "hebrew": "קורמורן גמדי",
+      "english": "Pygmy Cormorant",
+      "group": "birds",
+      "aliases_he": [
+        "קורמורן גמדי"
+      ]
+    },
+    "hesperiidae": {
+      "key": "Hesperiidae",
+      "latin": "Hesperiidae",
+      "hebrew": "הספרית",
+      "english": "Skipper",
+      "group": "invertebrates",
+      "aliases_he": [
+        "הספרית"
+      ]
+    },
+    "caprimulgus europaeus": {
+      "key": "Caprimulgus europaeus",
+      "latin": "Caprimulgus europaeus",
+      "hebrew": "תחמס מצוי",
+      "english": "European Nightjar",
+      "group": "birds",
+      "aliases_he": [
+        "תחמס מצוי"
+      ]
+    },
+    "oenanthe melanura": {
+      "key": "Oenanthe melanura",
+      "latin": "Oenanthe melanura",
+      "hebrew": "שחור-זנב",
+      "english": "Blackstart",
+      "group": "birds",
+      "aliases_he": [
+        "שחור-זנב"
+      ]
+    },
+    "ciconia ciconia": {
+      "key": "Ciconia ciconia",
+      "latin": "Ciconia ciconia",
+      "hebrew": "חסידה לבנה",
+      "english": "White Stork",
+      "group": "birds",
+      "aliases_he": [
+        "חסידה לבנה"
+      ]
+    },
+    "araneae": {
+      "key": "Araneae",
+      "latin": "Araneae",
+      "hebrew": "עכביש",
+      "english": "Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש"
+      ]
+    },
+    "vespa orientalis": {
+      "key": "Vespa orientalis",
+      "latin": "Vespa orientalis",
+      "hebrew": "צרעה מזרחית",
+      "english": "Oriental Hornet",
+      "group": "invertebrates",
+      "aliases_he": [
+        "צרעה מזרחית"
+      ]
+    },
+    "natrix tessellata": {
+      "key": "Natrix tessellata",
+      "latin": "Natrix tessellata",
+      "hebrew": "נחש מים",
+      "english": "Dice Snake",
+      "group": "reptiles",
+      "aliases_he": [
+        "נחש מים"
+      ]
+    },
+    "pycnonotus xanthopygos": {
+      "key": "Pycnonotus capensis",
+      "latin": "Pycnonotus xanthopygos",
+      "hebrew": "בולבול",
+      "english": "White-spectacled Bulbul",
+      "group": "birds",
+      "aliases_he": [
+        "בולבול"
+      ]
+    },
+    "butorides virescens": {
+      "key": "Butorides virescens",
+      "latin": "Butorides virescens",
+      "hebrew": "אנפה ירוקה",
+      "english": "Green Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה ירוקה"
+      ]
+    },
+    "falco subbuteo": {
+      "key": "Falco subbuteo",
+      "latin": "Falco subbuteo",
+      "hebrew": "בז עצים",
+      "english": "Eurasian Hobby",
+      "group": "birds",
+      "aliases_he": [
+        "בז עצים"
+      ]
+    },
+    "diptera": {
+      "key": "Diptera",
+      "latin": "Diptera",
+      "hebrew": "זבוב",
+      "english": "Fly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זבוב"
+      ]
+    },
+    "syrphidae": {
+      "key": "Syrphidae",
+      "latin": "Syrphidae",
+      "hebrew": "רחפניים",
+      "english": "Hoverfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זובוב רחף",
+        "רחף"
+      ]
+    },
+    "curruca curruca": {
+      "key": "Sylvia curruca",
+      "latin": "Curruca curruca",
+      "hebrew": "סבכי טוחנים",
+      "english": "Lesser Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי קטן",
+        "סבכי טוחנים"
+      ]
+    },
+    "luscinia megarhynchos": {
+      "key": "Luscinia megarhynchos",
+      "latin": "Luscinia megarhynchos",
+      "hebrew": "זמיר מנומנם",
+      "english": "Common Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומנם",
+        "זמיר ירדן"
+      ]
+    },
+    "emberiza cirlus": {
+      "key": "Emberiza cirlus",
+      "latin": "Emberiza cirlus",
+      "hebrew": "גיבתון עצה",
+      "english": "Cirl Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון עציצים",
+        "גיבתון עצה"
+      ]
+    },
+    "clanga pomarina": {
+      "key": "Clanga pomarina",
+      "latin": "Clanga pomarina",
+      "hebrew": "עיט חורש",
+      "english": "Lesser Spotted Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט חורש"
+      ]
+    },
+    "pandion haliaetus": {
+      "key": "Pandion haliaetus",
+      "latin": "Pandion haliaetus",
+      "hebrew": "שלך",
+      "english": "Osprey",
+      "group": "birds",
+      "aliases_he": [
+        "שלת אלעזרי",
+        "שלّالك"
+      ]
+    },
+    "aquila": {
+      "key": "Aquila",
+      "latin": "Aquila",
+      "hebrew": "עיט",
+      "english": "Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט"
+      ]
+    },
+    "jynx torquilla": {
+      "key": "Jynx torquilla",
+      "latin": "Jynx torquilla",
+      "hebrew": "סבראש",
+      "english": "Eurasian Wryneck",
+      "group": "birds",
+      "aliases_he": [
+        "צווארון",
+        "סבראש"
+      ]
+    },
+    "erinaceus concolor": {
+      "key": "Erinaceus concolor",
+      "latin": "Erinaceus concolor",
+      "hebrew": "קיפוד מצוי",
+      "english": "Southern White-breasted Hedgehog",
+      "group": "mammals",
+      "aliases_he": [
+        "קיפוד מצוי"
+      ]
+    },
+    "ceryle rudis / halcyon smyrnensis": {
+      "key": "Ceryle rudis / Halcyon smyrnensis",
+      "latin": "Ceryle rudis / Halcyon smyrnensis",
+      "hebrew": "פרפור עקוד ושלדג לבן-חזה",
+      "english": "Pied Kingfisher and White-throated Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד ושלדג לבן-חזה"
+      ]
+    },
+    "oenanthe lugens": {
+      "key": "Oenanthe lugens",
+      "latin": "Oenanthe lugens",
+      "hebrew": "סלעית לבנת-כנף",
+      "english": "Mourning Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית לבנת-כנף"
+      ]
+    },
+    "ardea alba": {
+      "key": "Ardea alba",
+      "latin": "Ardea alba",
+      "hebrew": "לבנית גדולה",
+      "english": "Great Egret",
+      "group": "birds",
+      "aliases_he": [
+        "לבנית גדולה"
+      ]
+    },
+    "platalea leucorodia": {
+      "key": "Platalea leucorodia",
+      "latin": "Platalea leucorodia",
+      "hebrew": "כפן לבן",
+      "english": "Eurasian Spoonbill",
+      "group": "birds",
+      "aliases_he": [
+        "כפתן",
+        "כפן לבן"
+      ]
+    },
+    "capra nubiana": {
+      "key": "Capra nubiana",
+      "latin": "Capra nubiana",
+      "hebrew": "יעל נובי",
+      "english": "Nubian Ibex",
+      "group": "mammals",
+      "aliases_he": [
+        "יעל נובי"
+      ]
+    },
+    "sitta europaea": {
+      "key": "Sitta europaea",
+      "latin": "Sitta europaea",
+      "hebrew": "חסידן",
+      "english": "Eurasian Nuthatch",
+      "group": "birds",
+      "aliases_he": [
+        "חッית עצים",
+        "חסידן"
+      ]
+    },
+    "emberiza": {
+      "key": "Emberiza",
+      "latin": "Emberiza",
+      "hebrew": "גיבתון",
+      "english": "Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "דוחן"
+      ]
+    },
+    "charadriidae": {
+      "key": "Charadriidae",
+      "latin": "Charadriidae",
+      "hebrew": "חופמיים",
+      "english": "Plover",
+      "group": "birds",
+      "aliases_he": [
+        "חופמי"
+      ]
+    },
+    "emberiza hortulana": {
+      "key": "Emberiza hortulana",
+      "latin": "Emberiza hortulana",
+      "hebrew": "גיבתון גנים",
+      "english": "Ortolan Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון גנים"
+      ]
+    },
+    "tringa ochropus": {
+      "key": "Tringa ochropus",
+      "latin": "Tringa ochropus",
+      "hebrew": "ביצנית לבנת-כנף",
+      "english": "Green Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "ביצנית לבנת-כנף"
+      ]
+    },
+    "silybum marianum": {
+      "key": "Silybum marianum",
+      "latin": "Silybum marianum",
+      "hebrew": "גדילן מצוי",
+      "english": "Milk Thistle",
+      "group": "flora",
+      "aliases_he": [
+        "גדילן"
+      ]
+    },
+    "oenanthe leucura": {
+      "key": "Oenanthe leucura",
+      "latin": "Oenanthe leucura",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Black Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    "camelus dromedarius": {
+      "key": "Camelus dromedarius",
+      "latin": "Camelus dromedarius",
+      "hebrew": "גמל חד-דבשתי",
+      "english": "Dromedary Camel",
+      "group": "mammals",
+      "aliases_he": [
+        "גמל חד-דבשתי"
+      ]
+    },
+    "phoenix dactylifera": {
+      "key": "Phoenix dactylifera",
+      "latin": "Phoenix dactylifera",
+      "hebrew": "תמר מצוי",
+      "english": "Date Palm",
+      "group": "flora",
+      "aliases_he": [
+        "תמר מצוי"
+      ]
+    },
+    "streptopelia decaocto": {
+      "key": "Streptopelia decaocto",
+      "latin": "Streptopelia decaocto",
+      "hebrew": "תור צווארון",
+      "english": "Eurasian Collared Dove",
+      "group": "birds",
+      "aliases_he": [
+        "תור צווארון"
+      ]
+    },
+    "sterna hirundo": {
+      "key": "Sterna hirundo",
+      "latin": "Sterna hirundo",
+      "hebrew": "שחפית ים",
+      "english": "Common Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית ים"
+      ]
+    },
+    "actitis hypoleucos": {
+      "key": "Actitis hypoleucos",
+      "latin": "Actitis hypoleucos",
+      "hebrew": "ביצנית מנוקדת",
+      "english": "Common Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "ביצנית מנוקדת"
+      ]
+    },
+    "himantopus himantopus / tringa sp.": {
+      "key": "Himantopus himantopus / Tringa sp.",
+      "latin": "Himantopus himantopus / Tringa sp.",
+      "hebrew": "תמירון מצוי וביצנית",
+      "english": "Black-winged Stilt and Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "תמירון מצוי וביצנית"
+      ]
+    },
+    "circaetus gallicus": {
+      "key": "Circaetus gallicus",
+      "latin": "Circaetus gallicus",
+      "hebrew": "חיוויאי",
+      "english": "Short-toed Snake Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "חיוויאי"
+      ]
+    },
+    "pinus": {
+      "key": "Pinus",
+      "latin": "Pinus",
+      "hebrew": "אורן",
+      "english": "Pine",
+      "group": "flora",
+      "aliases_he": [
+        "אורן"
+      ]
+    },
+    "columba livia domestica": {
+      "key": "Columba livia domestica",
+      "latin": "Columba livia domestica",
+      "hebrew": "יונת הבית",
+      "english": "Feral Pigeon",
+      "group": "birds",
+      "aliases_he": [
+        "יונת הבית"
+      ]
+    },
+    "lasiocampidae": {
+      "key": "Lasiocampidae",
+      "latin": "Lasiocampidae",
+      "hebrew": "טוואיים",
+      "english": "Lasiocampid Moth",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל של טוואי"
+      ]
+    },
+    "unknown": {
+      "key": "לא ידוע",
+      "latin": "Unknown",
+      "hebrew": "לא ידוע",
+      "english": "Unknown",
+      "group": "other",
+      "aliases_he": [
+        "לא ידוע"
+      ]
+    },
+    "scincidae": {
+      "key": "Scincidae",
+      "latin": "Scincidae",
+      "hebrew": "חומטיים",
+      "english": "Skink",
+      "group": "reptiles",
+      "aliases_he": [
+        "חומט"
+      ]
+    },
+    "anthophila": {
+      "key": "Anthophila",
+      "latin": "Anthophila",
+      "hebrew": "דבוראים",
+      "english": "Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורה"
+      ]
+    },
+    "oreochromis": {
+      "key": "Oreochromis",
+      "latin": "Oreochromis",
+      "hebrew": "אמנון",
+      "english": "Tilapia",
+      "group": "other",
+      "aliases_he": [
+        "אמנון"
+      ]
+    },
+    "argiope": {
+      "key": "Argiope",
+      "latin": "Argiope",
+      "hebrew": "אריגנית",
+      "english": "Argiope Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "אריגנית"
+      ]
+    },
+    "curculionidae": {
+      "key": "Curculionidae",
+      "latin": "Curculionidae",
+      "hebrew": "חדקונית",
+      "english": "Weevil",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חדקונית"
+      ]
+    },
+    "lycaenidae": {
+      "key": "Lycaenidae",
+      "latin": "Lycaenidae",
+      "hebrew": "כחליליים",
+      "english": "Lycaenid Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כחליל"
+      ]
+    },
+    "colotis fausta": {
+      "key": "Colotis fausta",
+      "latin": "Colotis fausta",
+      "hebrew": "לבנין הצלף",
+      "english": "Salmon Arab",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    "dama mesopotamica": {
+      "key": "Dama mesopotamica",
+      "latin": "Dama mesopotamica",
+      "hebrew": "יחמור פרסי",
+      "english": "Persian Fallow Deer",
+      "group": "mammals",
+      "aliases_he": [
+        "יחמור פרסי"
+      ]
+    },
+    "centaurea": {
+      "key": "Centaurea",
+      "latin": "Centaurea",
+      "hebrew": "דרדר",
+      "english": "Centaury",
+      "group": "flora",
+      "aliases_he": [
+        "דרדר"
+      ]
+    },
+    "vulpes zerda": {
+      "key": "Vulpes zerda",
+      "latin": "Vulpes zerda",
+      "hebrew": "פנק",
+      "english": "Fennec Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "פנק"
+      ]
+    },
+    "felis catus": {
+      "key": "Felis catus",
+      "latin": "Felis catus",
+      "hebrew": "חתול בית",
+      "english": "Domestic Cat",
+      "group": "mammals",
+      "aliases_he": [
+        "חתול בית"
+      ]
+    },
+    "bubo ascalaphus": {
+      "key": "Bubo ascalaphus",
+      "latin": "Bubo ascalaphus",
+      "hebrew": "אוח מדבר",
+      "english": "Pharaoh Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מדבר"
+      ]
+    },
+    "cantharidae": {
+      "key": "Cantharidae",
+      "latin": "Cantharidae",
+      "hebrew": "קנתיריים",
+      "english": "Soldier Beetle",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חיפושית"
+      ]
+    },
+    "pontia daplidice": {
+      "key": "Pontia daplidice",
+      "latin": "Pontia daplidice",
+      "hebrew": "לבנין המכמשת",
+      "english": "Bath White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין המכמשת"
+      ]
+    },
+    "bombus": {
+      "key": "Bombus",
+      "latin": "Bombus",
+      "hebrew": "בומבוס",
+      "english": "Bumblebee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "בומבוס"
+      ]
+    },
+    "pieris rapae": {
+      "key": "Pieris rapae",
+      "latin": "Pieris rapae",
+      "hebrew": "לבנין",
+      "english": "Small White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין"
+      ]
+    },
+    "melanargia galathea": {
+      "key": "Melanargia galathea",
+      "latin": "Melanargia galathea",
+      "hebrew": "שחמטית",
+      "english": "Marbled White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שחמטית"
+      ]
+    },
+    "testudo graeca": {
+      "key": "Testudo graeca",
+      "latin": "Testudo graeca",
+      "hebrew": "צב יבשה מצוי",
+      "english": "Greek Tortoise",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב יבשה מצוי"
+      ]
+    },
+    "vanessa cardui": {
+      "key": "Vanessa cardui",
+      "latin": "Vanessa cardui",
+      "hebrew": "נימפית הסרפד",
+      "english": "Painted Lady",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נימפית הסרפד"
+      ]
+    },
+    "coccinellidae": {
+      "key": "Coccinellidae",
+      "latin": "Coccinellidae",
+      "hebrew": "פרת משה רבנו",
+      "english": "Ladybug",
+      "group": "invertebrates",
+      "aliases_he": [
+        "פרת משה רבנו"
+      ]
+    },
+    "xylocopa violacea": {
+      "key": "Xylocopa violacea",
+      "latin": "Xylocopa violacea",
+      "hebrew": "דבורת-עץ סגולה",
+      "english": "Violet Carpenter Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת-עץ סגולה"
+      ]
+    },
+    "colias croceus": {
+      "key": "Colias croceus",
+      "latin": "Colias croceus",
+      "hebrew": "לבנין",
+      "english": "Clouded Yellow",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין"
+      ]
+    },
+    "bos taurus": {
+      "key": "Bos taurus",
+      "latin": "Bos taurus",
+      "hebrew": "פרה",
+      "english": "Cattle",
+      "group": "mammals",
+      "aliases_he": [
+        "פרה הבית"
+      ]
+    },
+    "gastropoda": {
+      "key": "Gastropoda",
+      "latin": "Gastropoda",
+      "hebrew": "חילזון",
+      "english": "Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חילזון"
+      ]
+    },
+    "xylocopa": {
+      "key": "Xylocopa",
+      "latin": "Xylocopa",
+      "hebrew": "דבורת עץ",
+      "english": "Carpenter Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת עץ"
+      ]
+    },
+    "odonata": {
+      "key": "Odonata",
+      "latin": "Odonata",
+      "hebrew": "שפירית",
+      "english": "Dragonfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שפירית"
+      ]
+    },
+    "nymphaea alba": {
+      "key": "Nymphaea alba",
+      "latin": "Nymphaea alba",
+      "hebrew": "נימפאה לבנה",
+      "english": "European White Waterlily",
+      "group": "flora",
+      "aliases_he": [
+        "נימפאה לבנה"
+      ]
+    },
+    "libythea celtis": {
+      "key": "Libythea celtis",
+      "latin": "Libythea celtis",
+      "hebrew": "נימפית הקטלב",
+      "english": "European Beak",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נימפית הקטלב"
+      ]
+    },
+    "kerodon rupestris": {
+      "key": "Kerodon rupestris",
+      "latin": "Kerodon rupestris",
+      "hebrew": "שרקן סלעים",
+      "english": "Rock Cavy",
+      "group": "mammals",
+      "aliases_he": [
+        "שרקן סלעים"
+      ]
+    },
+    "curruca communis": {
+      "key": "Curruca communis",
+      "latin": "Curruca communis",
+      "hebrew": "סבכי טוחנים",
+      "english": "Greater Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי טוחנים"
+      ]
+    },
+    "corvus": {
+      "key": "Corvus",
+      "latin": "Corvus",
+      "hebrew": "עורב",
+      "english": "Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור"
+      ]
+    },
+    "ficedula hypoleuca": {
+      "key": "Ficedula hypoleuca",
+      "latin": "Ficedula hypoleuca",
+      "hebrew": "חטפית שחורה",
+      "english": "European Pied Flycatcher",
+      "group": "birds",
+      "aliases_he": [
+        "חטפית שחורה"
+      ]
+    },
+    "anthus campestris": {
+      "key": "Anthus campestris",
+      "latin": "Anthus campestris",
+      "hebrew": "פיפרון",
+      "english": "Tawny Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פיפרון"
+      ]
+    },
+    "oenanthe pleschanka": {
+      "key": "Oenanthe pleschanka",
+      "latin": "Oenanthe pleschanka",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Pied Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    "emberiza cia": {
+      "key": "Emberiza cia",
+      "latin": "Emberiza cia",
+      "hebrew": "גיבתון סלעים",
+      "english": "Rock Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון סלעים"
+      ]
+    },
+    "coloeus monedula": {
+      "key": "Coloeus monedula",
+      "latin": "Coloeus monedula",
+      "hebrew": "זרון",
+      "english": "Eurasian Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "זרון"
+      ]
+    },
+    "euchloe ausonia": {
+      "key": "Euchloe ausonia",
+      "latin": "Euchloe ausonia",
+      "hebrew": "לבנין המרווח",
+      "english": "Eastern Dappled White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין המרווח"
+      ]
+    },
+    "senecio": {
+      "key": "Senecio",
+      "latin": "Senecio",
+      "hebrew": "סביון",
+      "english": "Groundsel",
+      "group": "flora",
+      "aliases_he": [
+        "סביון"
+      ]
+    },
+    "oenanthe finschii": {
+      "key": "Oenanthe finschii",
+      "latin": "Oenanthe finschii",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Finsch's Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    "anacamptis papilionacea": {
+      "key": "Anacamptis papilionacea",
+      "latin": "Anacamptis papilionacea",
+      "hebrew": "סחלב פרפרני",
+      "english": "Butterfly Orchid",
+      "group": "flora",
+      "aliases_he": [
+        "סחלב פרפרני"
+      ]
+    },
+    "aquila heliaca": {
+      "key": "Aquila heliaca",
+      "latin": "Aquila heliaca",
+      "hebrew": "עיט שמש",
+      "english": "Eastern Imperial Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט שמש"
+      ]
+    },
+    "helicidae": {
+      "key": "Helicidae",
+      "latin": "Helicidae",
+      "hebrew": "שבלוליים",
+      "english": "Helicid Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שבלול"
+      ]
+    },
+    "cuculus canorus": {
+      "key": "Cuculus canorus",
+      "latin": "Cuculus canorus",
+      "hebrew": "קוקייה אירופית",
+      "english": "Common Cuckoo",
+      "group": "birds",
+      "aliases_he": [
+        "קוקייה אירופית"
+      ]
+    },
+    "anthus pratensis": {
+      "key": "Anthus pratensis",
+      "latin": "Anthus pratensis",
+      "hebrew": "פפיון שדות",
+      "english": "Meadow Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון שדות"
+      ]
+    },
+    "pinus halepensis": {
+      "key": "Pinus halepensis",
+      "latin": "Pinus halepensis",
+      "hebrew": "אורן ירושלים",
+      "english": "Aleppo Pine",
+      "group": "flora",
+      "aliases_he": [
+        "אורן ירושלים"
+      ]
+    },
+    "aquila chrysaetos": {
+      "key": "Aquila chrysaetos",
+      "latin": "Aquila chrysaetos",
+      "hebrew": "עיט זהב",
+      "english": "Golden Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט זהב"
+      ]
+    },
+    "punica granatum": {
+      "key": "Punica granatum",
+      "latin": "Punica granatum",
+      "hebrew": "רימון מצוי",
+      "english": "Pomegranate",
+      "group": "flora",
+      "aliases_he": [
+        "רימון מצוי"
+      ]
+    },
+    "coccothraustes coccothraustes": {
+      "key": "Coccothraustes coccothraustes",
+      "latin": "Coccothraustes coccothraustes",
+      "hebrew": "פצחן",
+      "english": "Hawfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פצחן"
+      ]
+    },
+    "saxicola torquatus": {
+      "key": "Saxicola torquatus",
+      "latin": "Saxicola torquatus",
+      "hebrew": "דוחל שחור-גרון",
+      "english": "African Stonechat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל שחור-גרון"
+      ]
+    },
+    "upupa epops": {
+      "key": "Upupa epops",
+      "latin": "Upupa epops",
+      "hebrew": "דוכיפת",
+      "english": "Eurasian Hoopoe",
+      "group": "birds",
+      "aliases_he": [
+        "דוכיפת"
+      ]
+    },
+    "ardea cinerea, phalacrocoracidae": {
+      "key": "Ardea cinerea, Phalacrocoracidae",
+      "latin": "Ardea cinerea, Phalacrocoracidae",
+      "hebrew": "אנפה אפורה וקורמורן",
+      "english": "Grey Heron and Cormorant",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה אפורה וקורמורן"
+      ]
+    },
+    "caelifera": {
+      "key": "Caelifera",
+      "latin": "Caelifera",
+      "hebrew": "חגב",
+      "english": "Grasshopper",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חגב"
+      ]
+    },
+    "halcyon smyrnensis, ceryle rudis": {
+      "key": "Halcyon smyrnensis, Ceryle rudis",
+      "latin": "Halcyon smyrnensis, Ceryle rudis",
+      "hebrew": "שלדג לבן-חזה ופרפור עקוד",
+      "english": "White-throated Kingfisher and Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג לבן-חזה ופרפור עקוד"
+      ]
+    },
+    "homo sapiens": {
+      "key": "Homo sapiens",
+      "latin": "Homo sapiens",
+      "hebrew": "אדם",
+      "english": "Human",
+      "group": "mammals",
+      "aliases_he": [
+        "אדם"
+      ]
+    },
+    "fungi": {
+      "key": "פטרייה",
+      "latin": "Fungi",
+      "hebrew": "פטרייה",
+      "english": "Fungus",
+      "group": "flora",
+      "aliases_he": [
+        "פטרייה"
+      ]
+    },
+    "acer": {
+      "key": "Acer",
+      "latin": "Acer",
+      "hebrew": "אדר",
+      "english": "Maple",
+      "group": "flora",
+      "aliases_he": [
+        "עץ אדר"
+      ]
+    },
+    "chroicocephalus ridibundus": {
+      "key": "Chroicocephalus ridibundus",
+      "latin": "Chroicocephalus ridibundus",
+      "hebrew": "שחף אגמים",
+      "english": "Black-headed Gull",
+      "group": "birds",
+      "aliases_he": [
+        "שחף אגמים"
+      ]
+    },
+    "cyanistes caeruleus": {
+      "key": "Cyanistes caeruleus",
+      "latin": "Cyanistes caeruleus",
+      "hebrew": "ירגזי כחול",
+      "english": "Eurasian Blue Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי כחול"
+      ]
+    },
+    "danaus chrysippus": {
+      "key": "Danaus chrysippus",
+      "latin": "Danaus chrysippus",
+      "hebrew": "דנאית הדורה",
+      "english": "Plain Tiger",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דנאית הדורה"
+      ]
+    },
+    "gekkonidae": {
+      "key": "Gekkonidae",
+      "latin": "Gekkonidae",
+      "hebrew": "שממית",
+      "english": "Gecko",
+      "group": "reptiles",
+      "aliases_he": [
+        "שממית"
+      ]
+    },
+    "curruca cantillans": {
+      "key": "Curruca cantillans",
+      "latin": "Curruca cantillans",
+      "hebrew": "סבכי ערמוני-גרון",
+      "english": "Subalpine Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי ערמוני-גרון"
+      ]
+    },
+    "turdus philomelos": {
+      "key": "Turdus philomelos",
+      "latin": "Turdus philomelos",
+      "hebrew": "קיכלי רונן",
+      "english": "Song Thrush",
+      "group": "birds",
+      "aliases_he": [
+        "קיכלי רונן"
+      ]
+    },
+    "sturnus vulgaris": {
+      "key": "Sturnus vulgaris",
+      "latin": "Sturnus vulgaris",
+      "hebrew": "זרזיר מצוי",
+      "english": "Common Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר מצוי"
+      ]
+    },
+    "luscinia svecica": {
+      "key": "Luscinia svecica",
+      "latin": "Luscinia svecica",
+      "hebrew": "כחול-חזה",
+      "english": "Bluethroat",
+      "group": "birds",
+      "aliases_he": [
+        "כחול-חזה"
+      ]
+    },
+    "argiope lobata": {
+      "key": "Argiope lobata",
+      "latin": "Argiope lobata",
+      "hebrew": "כסופי ענק",
+      "english": "Lobed Argiope",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כסופי ענק"
+      ]
+    },
+    "theridiidae": {
+      "key": "Theridiidae",
+      "latin": "Theridiidae",
+      "hebrew": "כדורניים",
+      "english": "Cobweb Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש רכן"
+      ]
+    },
+    "protaetia cuprea": {
+      "key": "Protaetia cuprea",
+      "latin": "Protaetia cuprea",
+      "hebrew": "נחושתית הקוצים",
+      "english": "Copper Rose Chafer",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נחושתית הקוצים"
+      ]
+    }
+  },
+  "by_hebrew": {
+    "שועל מצוי": {
+      "key": "Vulpes vulpes",
+      "latin": "Vulpes vulpes",
+      "hebrew": "שועל מצוי",
+      "english": "Red Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "שועל מצוי"
+      ]
+    },
+    "כוס החורבות": {
+      "key": "Athene noctua",
+      "latin": "Athene noctua",
+      "hebrew": "כוס החורבות",
+      "english": "Little Owl",
+      "group": "birds",
+      "aliases_he": [
+        "כוס חורבות",
+        "כוס החורבות"
+      ]
+    },
+    "כוס חורבות": {
+      "key": "Athene noctua",
+      "latin": "Athene noctua",
+      "hebrew": "כוס החורבות",
+      "english": "Little Owl",
+      "group": "birds",
+      "aliases_he": [
+        "כוס חורבות",
+        "כוס החורבות"
+      ]
+    },
+    "בז מצוי": {
+      "key": "Falco tinnunculus",
+      "latin": "Falco tinnunculus",
+      "hebrew": "בז מצוי",
+      "english": "Common Kestrel",
+      "group": "birds",
+      "aliases_he": [
+        "בז מצוי"
+      ]
+    },
+    "תן זהוב": {
+      "key": "Canis aureus",
+      "latin": "Canis aureus",
+      "hebrew": "תן זהוב",
+      "english": "Golden Jackal",
+      "group": "mammals",
+      "aliases_he": [
+        "תן זהוב",
+        "תאן זהוב"
+      ]
+    },
+    "תאן זהוב": {
+      "key": "Canis aureus",
+      "latin": "Canis aureus",
+      "hebrew": "תן זהוב",
+      "english": "Golden Jackal",
+      "group": "mammals",
+      "aliases_he": [
+        "תן זהוב",
+        "תאן זהוב"
+      ]
+    },
+    "צבי ישראלי": {
+      "key": "Gazella gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי"
+      ]
+    },
+    "צבי ארץ-ישראלי": {
+      "key": "Gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי",
+        "צבי ארץ-ישראלי",
+        "צבי ארצישראלי",
+        "צבי ארץ ישראלי"
+      ]
+    },
+    "צבי ארצישראלי": {
+      "key": "Gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי",
+        "צבי ארץ-ישראלי",
+        "צבי ארצישראלי",
+        "צבי ארץ ישראלי"
+      ]
+    },
+    "צבי ארץ ישראלי": {
+      "key": "Gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי",
+        "צבי ארץ-ישראלי",
+        "צבי ארצישראלי",
+        "צבי ארץ ישראלי"
+      ]
+    },
+    "חנקן נובי": {
+      "key": "Lanius nubicus",
+      "latin": "Lanius nubicus",
+      "hebrew": "חנקן נובי",
+      "english": "Masked Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן נובי"
+      ]
+    },
+    "שרקרק מצוי": {
+      "key": "Merops apiaster",
+      "latin": "Merops apiaster",
+      "hebrew": "שרקרק מצוי",
+      "english": "European Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק מצוי"
+      ]
+    },
+    "שפן סלעים": {
+      "key": "Procavia capensis",
+      "latin": "Procavia capensis",
+      "hebrew": "שפן סלעים",
+      "english": "Rock Hyrax",
+      "group": "mammals",
+      "aliases_he": [
+        "שפן סלעים",
+        "שפן סלע"
+      ]
+    },
+    "שפן סלע": {
+      "key": "Procavia capensis",
+      "latin": "Procavia capensis",
+      "hebrew": "שפן סלעים",
+      "english": "Rock Hyrax",
+      "group": "mammals",
+      "aliases_he": [
+        "שפן סלעים",
+        "שפן סלע"
+      ]
+    },
+    "נץ מצוי": {
+      "key": "Accipiter nisus",
+      "latin": "Accipiter nisus",
+      "hebrew": "נץ מצוי",
+      "english": "Eurasian Sparrowhawk",
+      "group": "birds",
+      "aliases_he": [
+        "נץ מצוי"
+      ]
+    },
+    "צופית": {
+      "key": "Cinnyris osea",
+      "latin": "Cinnyris osea",
+      "hebrew": "צופית",
+      "english": "Palestine Sunbird",
+      "group": "birds",
+      "aliases_he": [
+        "צופית",
+        "צופית בוהקת",
+        "צופית ססגונית"
+      ]
+    },
+    "צופית בוהקת": {
+      "key": "Cinnyris osea",
+      "latin": "Cinnyris osea",
+      "hebrew": "צופית",
+      "english": "Palestine Sunbird",
+      "group": "birds",
+      "aliases_he": [
+        "צופית",
+        "צופית בוהקת",
+        "צופית ססגונית"
+      ]
+    },
+    "צופית ססגונית": {
+      "key": "Cinnyris osea",
+      "latin": "Cinnyris osea",
+      "hebrew": "צופית",
+      "english": "Palestine Sunbird",
+      "group": "birds",
+      "aliases_he": [
+        "צופית",
+        "צופית בוהקת",
+        "צופית ססגונית"
+      ]
+    },
+    "שלדג לבן-חזה": {
+      "key": "Halcyon smyrnensis",
+      "latin": "Halcyon smyrnensis",
+      "hebrew": "שלדג לבן-חזה",
+      "english": "White-throated Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג לבן-חזה"
+      ]
+    },
+    "דוחל חום-גרון": {
+      "key": "Saxicola rubetra",
+      "latin": "Saxicola rubetra",
+      "hebrew": "דוחל חום-גרון",
+      "english": "Whinchat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל חום-גרון",
+        "דחליל שדות"
+      ]
+    },
+    "דוחל שחור-גרון": {
+      "key": "Saxicola torquatus",
+      "latin": "Saxicola torquatus",
+      "hebrew": "דוחל שחור-גרון",
+      "english": "African Stonechat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל שחור-גרון"
+      ]
+    },
+    "עורב אפור": {
+      "key": "Corvus cornix",
+      "latin": "Corvus cornix",
+      "hebrew": "עורב אפור",
+      "english": "Hooded Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורב אפור"
+      ]
+    },
+    "שלדג גמדי": {
+      "key": "Alcedo atthis",
+      "latin": "Alcedo atthis",
+      "hebrew": "שלדג גמדי",
+      "english": "Common Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג גמדי"
+      ]
+    },
+    "פרוש מצוי": {
+      "key": "Fringilla coelebs",
+      "latin": "Fringilla coelebs",
+      "hebrew": "פרוש מצוי",
+      "english": "Common Chaffinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש מצוי"
+      ]
+    },
+    "שרקרק ירוק": {
+      "key": "Merops orientalis",
+      "latin": "Merops orientalis",
+      "hebrew": "שרקרק ירוק",
+      "english": "Green Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק ירוק",
+        "שרקרק גמדי"
+      ]
+    },
+    "שרקרק גמדי": {
+      "key": "Merops orientalis",
+      "latin": "Merops orientalis",
+      "hebrew": "שרקרק ירוק",
+      "english": "Green Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק ירוק",
+        "שרקרק גמדי"
+      ]
+    },
+    "כחל מצוי": {
+      "key": "Coracias garrulus",
+      "latin": "Coracias garrulus",
+      "hebrew": "כחל מצוי",
+      "english": "European Roller",
+      "group": "birds",
+      "aliases_he": [
+        "כחל מצוי",
+        "כחל"
+      ]
+    },
+    "כחל": {
+      "key": "Coracias garrulus",
+      "latin": "Coracias garrulus",
+      "hebrew": "כחל מצוי",
+      "english": "European Roller",
+      "group": "birds",
+      "aliases_he": [
+        "כחל מצוי",
+        "כחל"
+      ]
+    },
+    "לבנית קטנה": {
+      "key": "Egretta garzetta",
+      "latin": "Egretta garzetta",
+      "hebrew": "לבנית קטנה",
+      "english": "Little Egret",
+      "group": "birds",
+      "aliases_he": [
+        "לבנית קטנה"
+      ]
+    },
+    "עגור אפור": {
+      "key": "Grus grus",
+      "latin": "Grus grus",
+      "hebrew": "עגור אפור",
+      "english": "Common Crane",
+      "group": "birds",
+      "aliases_he": [
+        "עגור אפור"
+      ]
+    },
+    "סבכי שחור-ראש": {
+      "key": "Curruca melanocephala",
+      "latin": "Curruca melanocephala",
+      "hebrew": "סבכי שחור-ראש",
+      "english": "Sardinian Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-ראש"
+      ]
+    },
+    "עיט צפרדעים": {
+      "key": "Clanga clanga",
+      "latin": "Clanga clanga",
+      "hebrew": "עיט צפרדעים",
+      "english": "Greater Spotted Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט צפרדעים"
+      ]
+    },
+    "חוגלה": {
+      "key": "Alectoris chukar",
+      "latin": "Alectoris chukar",
+      "hebrew": "חוגלה",
+      "english": "Chukar Partridge",
+      "group": "birds",
+      "aliases_he": [
+        "חוגלה",
+        "חוגלת סלעים",
+        "חוגלת האבן"
+      ]
+    },
+    "חוגלת סלעים": {
+      "key": "Alectoris chukar",
+      "latin": "Alectoris chukar",
+      "hebrew": "חוגלה",
+      "english": "Chukar Partridge",
+      "group": "birds",
+      "aliases_he": [
+        "חוגלה",
+        "חוגלת סלעים",
+        "חוגלת האבן"
+      ]
+    },
+    "חוגלת האבן": {
+      "key": "Alectoris chukar",
+      "latin": "Alectoris chukar",
+      "hebrew": "חוגלה",
+      "english": "Chukar Partridge",
+      "group": "birds",
+      "aliases_he": [
+        "חוגלה",
+        "חוגלת סלעים",
+        "חוגלת האבן"
+      ]
+    },
+    "אנפת לילה": {
+      "key": "Nycticorax nycticorax",
+      "latin": "Nycticorax nycticorax",
+      "hebrew": "אנפת לילה",
+      "english": "Black-crowned Night Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפת לילה",
+        "אנפית לילה"
+      ]
+    },
+    "אנפית לילה": {
+      "key": "Nycticorax nycticorax",
+      "latin": "Nycticorax nycticorax",
+      "hebrew": "אנפת לילה",
+      "english": "Black-crowned Night Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפת לילה",
+        "אנפית לילה"
+      ]
+    },
+    "מיינה מצויה": {
+      "key": "Acridotheres tristis",
+      "latin": "Acridotheres tristis",
+      "hebrew": "מיינה מצויה",
+      "english": "Common Myna",
+      "group": "birds",
+      "aliases_he": [
+        "מיינה מצויה"
+      ]
+    },
+    "פרפור עקוד": {
+      "key": "Ceryle rudis",
+      "latin": "Ceryle rudis",
+      "hebrew": "פרפור עקוד",
+      "english": "Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד",
+        "פרפור נחלים"
+      ]
+    },
+    "פרפור נחלים": {
+      "key": "Ceryle rudis",
+      "latin": "Ceryle rudis",
+      "hebrew": "פרפור עקוד",
+      "english": "Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד",
+        "פרפור נחלים"
+      ]
+    },
+    "נשר מקראי": {
+      "key": "Gyps fulvus",
+      "latin": "Gyps fulvus",
+      "hebrew": "נשר מקראי",
+      "english": "Griffon Vulture",
+      "group": "birds",
+      "aliases_he": [
+        "נשר מקראי"
+      ]
+    },
+    "חנקן אדום-גב": {
+      "key": "Lanius collurio",
+      "latin": "Lanius collurio",
+      "hebrew": "חנקן אדום-גב",
+      "english": "Red-backed Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-גב",
+        "חנקן אדום ראש"
+      ]
+    },
+    "חנקן אדום ראש": {
+      "key": "Lanius collurio",
+      "latin": "Lanius collurio",
+      "hebrew": "חנקן אדום-גב",
+      "english": "Red-backed Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-גב",
+        "חנקן אדום ראש"
+      ]
+    },
+    "אנפה אפורה": {
+      "key": "Ardea cinerea",
+      "latin": "Ardea cinerea",
+      "hebrew": "אנפה אפורה",
+      "english": "Grey Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה אפורה"
+      ]
+    },
+    "שקנאי מצוי": {
+      "key": "Pelecanus onocrotalus",
+      "latin": "Pelecanus onocrotalus",
+      "hebrew": "שקנאי מצוי",
+      "english": "Great White Pelican",
+      "group": "birds",
+      "aliases_he": [
+        "שקנאי מצוי"
+      ]
+    },
+    "גמל שלמה": {
+      "key": "Mantodea",
+      "latin": "Mantodea",
+      "hebrew": "גמל שלמה",
+      "english": "Praying Mantis",
+      "group": "invertebrates",
+      "aliases_he": [
+        "גמל שלמה"
+      ]
+    },
+    "דחליל שדות": {
+      "key": "Saxicola rubetra",
+      "latin": "Saxicola rubetra",
+      "hebrew": "דוחל חום-גרון",
+      "english": "Whinchat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל חום-גרון",
+        "דחליל שדות"
+      ]
+    },
+    "יונת סלע": {
+      "key": "Columba livia",
+      "latin": "Columba livia",
+      "hebrew": "יונת סלע",
+      "english": "Rock Dove",
+      "group": "birds",
+      "aliases_he": [
+        "יונת סלע"
+      ]
+    },
+    "אנפית בקר": {
+      "key": "Bubulcus ibis",
+      "latin": "Bubulcus ibis",
+      "hebrew": "אנפית בקר",
+      "english": "Cattle Egret",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית בקר",
+        "לבנית בקר"
+      ]
+    },
+    "לבנית בקר": {
+      "key": "Bubulcus ibis",
+      "latin": "Bubulcus ibis",
+      "hebrew": "אנפית בקר",
+      "english": "Cattle Egret",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית בקר",
+        "לבנית בקר"
+      ]
+    },
+    "אדום-חזה": {
+      "key": "Erithacus rubecula",
+      "latin": "Erithacus rubecula",
+      "hebrew": "אדום-חזה",
+      "english": "European Robin",
+      "group": "birds",
+      "aliases_he": [
+        "אדום-חזה",
+        "אדום-חזה אירופי"
+      ]
+    },
+    "אדום-חזה אירופי": {
+      "key": "Erithacus rubecula",
+      "latin": "Erithacus rubecula",
+      "hebrew": "אדום-חזה",
+      "english": "European Robin",
+      "group": "birds",
+      "aliases_he": [
+        "אדום-חזה",
+        "אדום-חזה אירופי"
+      ]
+    },
+    "גבתון עפרוני": {
+      "key": "Emberiza calandra",
+      "latin": "Emberiza calandra",
+      "hebrew": "גבתון עפרוני",
+      "english": "Corn Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון מצוי",
+        "גבתון עפרוני"
+      ]
+    },
+    "גבתון מצוי": {
+      "key": "Emberiza calandra",
+      "latin": "Emberiza calandra",
+      "hebrew": "גבתון עפרוני",
+      "english": "Corn Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון מצוי",
+        "גבתון עפרוני"
+      ]
+    },
+    "סופית מצויה": {
+      "key": "Gallinula chloropus",
+      "latin": "Gallinula chloropus",
+      "hebrew": "סופית מצויה",
+      "english": "Common Moorhen",
+      "group": "birds",
+      "aliases_he": [
+        "סופית",
+        "סופנית מצויה",
+        "סופית מצויה"
+      ]
+    },
+    "סופית": {
+      "key": "Gallinula chloropus",
+      "latin": "Gallinula chloropus",
+      "hebrew": "סופית מצויה",
+      "english": "Common Moorhen",
+      "group": "birds",
+      "aliases_he": [
+        "סופית",
+        "סופנית מצויה",
+        "סופית מצויה"
+      ]
+    },
+    "סופנית מצויה": {
+      "key": "Gallinula chloropus",
+      "latin": "Gallinula chloropus",
+      "hebrew": "סופית מצויה",
+      "english": "Common Moorhen",
+      "group": "birds",
+      "aliases_he": [
+        "סופית",
+        "סופנית מצויה",
+        "סופית מצויה"
+      ]
+    },
+    "סנונית רפתות": {
+      "key": "Hirundo rustica",
+      "latin": "Hirundo rustica",
+      "hebrew": "סנונית רפתות",
+      "english": "Barn Swallow",
+      "group": "birds",
+      "aliases_he": [
+        "סנונית רפתות"
+      ]
+    },
+    "שחרור מצוי": {
+      "key": "Turdus merula",
+      "latin": "Turdus merula",
+      "hebrew": "שחרור מצוי",
+      "english": "Common Blackbird",
+      "group": "birds",
+      "aliases_he": [
+        "שחרור מצוי",
+        "שחרור"
+      ]
+    },
+    "שחרור": {
+      "key": "Turdus merula",
+      "latin": "Turdus merula",
+      "hebrew": "שחרור מצוי",
+      "english": "Common Blackbird",
+      "group": "birds",
+      "aliases_he": [
+        "שחרור מצוי",
+        "שחרור"
+      ]
+    },
+    "ברכייה": {
+      "key": "Anas platyrhynchos",
+      "latin": "Anas platyrhynchos",
+      "hebrew": "ברכייה",
+      "english": "Mallard",
+      "group": "birds",
+      "aliases_he": [
+        "ברכייה"
+      ]
+    },
+    "שפירית": {
+      "key": "Odonata",
+      "latin": "Odonata",
+      "hebrew": "שפירית",
+      "english": "Dragonfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שפירית"
+      ]
+    },
+    "סבכי שחור-כיפה": {
+      "key": "Corvus monedula",
+      "latin": "Corvus monedula",
+      "hebrew": "קאק",
+      "english": "Western Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-כיפה",
+        "קאק"
+      ]
+    },
+    "ינשוף עצים": {
+      "key": "Asio otus",
+      "latin": "Asio otus",
+      "hebrew": "ינשוף עצים",
+      "english": "Long-eared Owl",
+      "group": "birds",
+      "aliases_he": [
+        "ינשוף עצים"
+      ]
+    },
+    "עורבני": {
+      "key": "Garrulus glandarius",
+      "latin": "Garrulus glandarius",
+      "hebrew": "עורבני",
+      "english": "Eurasian Jay",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני",
+        "עקצן",
+        "עורבני שחור-כיפה"
+      ]
+    },
+    "עקצן": {
+      "key": "Garrulus glandarius",
+      "latin": "Garrulus glandarius",
+      "hebrew": "עורבני",
+      "english": "Eurasian Jay",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני",
+        "עקצן",
+        "עורבני שחור-כיפה"
+      ]
+    },
+    "עורבני שחור-כיפה": {
+      "key": "Garrulus glandarius atricapillus",
+      "latin": "Garrulus glandarius",
+      "hebrew": "עורבני שחור-כיפה",
+      "english": "Eurasian Jay",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור-כיפה"
+      ]
+    },
+    "חנקן גדול": {
+      "key": "Lanius excubitor",
+      "latin": "Lanius excubitor",
+      "hebrew": "חנקן גדול",
+      "english": "Great Grey Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן גדול"
+      ]
+    },
+    "תנשמת לבנה": {
+      "key": "Tyto alba",
+      "latin": "Tyto alba",
+      "hebrew": "תנשמת לבנה",
+      "english": "Western Barn Owl",
+      "group": "birds",
+      "aliases_he": [
+        "תנשמת לבנה"
+      ]
+    },
+    "ירקון מצוי": {
+      "key": "Chloris chloris",
+      "latin": "Chloris chloris",
+      "hebrew": "ירקון מצוי",
+      "english": "European Greenfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש ירוק",
+        "חוחית ירוקה",
+        "ירקון מצוי",
+        "ירקון"
+      ]
+    },
+    "פרוש ירוק": {
+      "key": "Chloris chloris",
+      "latin": "Chloris chloris",
+      "hebrew": "ירקון מצוי",
+      "english": "European Greenfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש ירוק",
+        "חוחית ירוקה",
+        "ירקון מצוי",
+        "ירקון"
+      ]
+    },
+    "חוחית ירוקה": {
+      "key": "Chloris chloris",
+      "latin": "Chloris chloris",
+      "hebrew": "ירקון מצוי",
+      "english": "European Greenfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש ירוק",
+        "חוחית ירוקה",
+        "ירקון מצוי",
+        "ירקון"
+      ]
+    },
+    "ירקון": {
+      "key": "Chloris chloris",
+      "latin": "Chloris chloris",
+      "hebrew": "ירקון מצוי",
+      "english": "European Greenfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש ירוק",
+        "חוחית ירוקה",
+        "ירקון מצוי",
+        "ירקון"
+      ]
+    },
+    "סבכי מדבר": {
+      "key": "Sylvia nana",
+      "latin": "Sylvia nana",
+      "hebrew": "סבכי מדבר",
+      "english": "Desert Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי מדבר"
+      ]
+    },
+    "פשוש": {
+      "key": "Prinia gracilis",
+      "latin": "Prinia gracilis",
+      "hebrew": "פשוש",
+      "english": "Graceful Prinia",
+      "group": "birds",
+      "aliases_he": [
+        "תפרית עדינה",
+        "פשוש"
+      ]
+    },
+    "תפרית עדינה": {
+      "key": "Prinia gracilis",
+      "latin": "Prinia gracilis",
+      "hebrew": "פשוש",
+      "english": "Graceful Prinia",
+      "group": "birds",
+      "aliases_he": [
+        "תפרית עדינה",
+        "פשוש"
+      ]
+    },
+    "מגלן חום": {
+      "key": "Plegadis falcinellus",
+      "latin": "Plegadis falcinellus",
+      "hebrew": "מגלן חום",
+      "english": "Glossy Ibis",
+      "group": "birds",
+      "aliases_he": [
+        "מגלן חום"
+      ]
+    },
+    "חרדון מצוי": {
+      "key": "Stellagama stellio",
+      "latin": "Stellagama stellio",
+      "hebrew": "חרדון מצוי",
+      "english": "Starred Agama",
+      "group": "reptiles",
+      "aliases_he": [
+        "חרדון מצוי"
+      ]
+    },
+    "ארגיופית ברוניך": {
+      "key": "Argiope bruennichi",
+      "latin": "Argiope bruennichi",
+      "hebrew": "ארגיופית ברוניך",
+      "english": "Wasp Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "ארגיופית ברוניך",
+        "ארגיופ מצוי"
+      ]
+    },
+    "ארגיופ מצוי": {
+      "key": "Argiope bruennichi",
+      "latin": "Argiope bruennichi",
+      "hebrew": "ארגיופית ברוניך",
+      "english": "Wasp Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "ארגיופית ברוניך",
+        "ארגיופ מצוי"
+      ]
+    },
+    "עקב עיטי": {
+      "key": "Buteo rufinus",
+      "latin": "Buteo rufinus",
+      "hebrew": "עקב עיטי",
+      "english": "Long-legged Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "עקב עיטי"
+      ]
+    },
+    "עלווית אפורה": {
+      "key": "Phylloscopus collybita",
+      "latin": "Phylloscopus collybita",
+      "hebrew": "עלווית אפורה",
+      "english": "Common Chiffchaff",
+      "group": "birds",
+      "aliases_he": [
+        "עלווית אפורה",
+        "עלעלת",
+        "עלביון",
+        "עלעל"
+      ]
+    },
+    "עלעלת": {
+      "key": "Phylloscopus collybita",
+      "latin": "Phylloscopus collybita",
+      "hebrew": "עלווית אפורה",
+      "english": "Common Chiffchaff",
+      "group": "birds",
+      "aliases_he": [
+        "עלווית אפורה",
+        "עלעלת",
+        "עלביון",
+        "עלעל"
+      ]
+    },
+    "עלביון": {
+      "key": "Phylloscopus collybita",
+      "latin": "Phylloscopus collybita",
+      "hebrew": "עלווית אפורה",
+      "english": "Common Chiffchaff",
+      "group": "birds",
+      "aliases_he": [
+        "עלווית אפורה",
+        "עלעלת",
+        "עלביון",
+        "עלעל"
+      ]
+    },
+    "עלעל": {
+      "key": "Phylloscopus collybita",
+      "latin": "Phylloscopus collybita",
+      "hebrew": "עלווית אפורה",
+      "english": "Common Chiffchaff",
+      "group": "birds",
+      "aliases_he": [
+        "עלווית אפורה",
+        "עלעלת",
+        "עלביון",
+        "עלעל"
+      ]
+    },
+    "חכלילית סלעים": {
+      "key": "Phoenicurus ochruros",
+      "latin": "Phoenicurus ochruros",
+      "hebrew": "חכלילית סלעים",
+      "english": "Black Redstart",
+      "group": "birds",
+      "aliases_he": [
+        "חכלילית סלעים"
+      ]
+    },
+    "תור מצוי": {
+      "key": "Streptopelia turtur",
+      "latin": "Streptopelia turtur",
+      "hebrew": "תור מצוי",
+      "english": "European Turtle Dove",
+      "group": "birds",
+      "aliases_he": [
+        "תור מצוי"
+      ]
+    },
+    "שועל חולות": {
+      "key": "Vulpes rueppellii",
+      "latin": "Vulpes rueppellii",
+      "hebrew": "שועל חולות",
+      "english": "Rüppell's Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "שועל חולות"
+      ]
+    },
+    "חנקן אדום-ראש": {
+      "key": "Lanius senator",
+      "latin": "Lanius senator",
+      "hebrew": "חנקן אדום-ראש",
+      "english": "Woodchat Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-ראש"
+      ]
+    },
+    "ירח": {
+      "key": "Luna",
+      "latin": "Luna",
+      "hebrew": "ירח",
+      "english": "Moon",
+      "group": "astronomy",
+      "aliases_he": [
+        "ירח"
+      ]
+    },
+    "גיבתון אדום-מקור": {
+      "key": "Emberiza caesia",
+      "latin": "Emberiza caesia",
+      "hebrew": "גיבתון אדום-מקור",
+      "english": "Cretzschmar's Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-מקור",
+        "גיבתון עפרוני"
+      ]
+    },
+    "גיבתון עפרוני": {
+      "key": "Emberiza caesia",
+      "latin": "Emberiza caesia",
+      "hebrew": "גיבתון אדום-מקור",
+      "english": "Cretzschmar's Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-מקור",
+        "גיבתון עפרוני"
+      ]
+    },
+    "ירגזי מצוי": {
+      "key": "Parus major",
+      "latin": "Parus major",
+      "hebrew": "ירגזי מצוי",
+      "english": "Great Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי מצוי",
+        "קבצן מצוי",
+        "יקנתן מצוי"
+      ]
+    },
+    "קבצן מצוי": {
+      "key": "Parus major",
+      "latin": "Parus major",
+      "hebrew": "ירגזי מצוי",
+      "english": "Great Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי מצוי",
+        "קבצן מצוי",
+        "יקנתן מצוי"
+      ]
+    },
+    "יקנתן מצוי": {
+      "key": "Parus major",
+      "latin": "Parus major",
+      "hebrew": "ירגזי מצוי",
+      "english": "Great Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי מצוי",
+        "קבצן מצוי",
+        "יקנתן מצוי"
+      ]
+    },
+    "גיבתון אדום-ראש": {
+      "key": "Emberiza bruniceps",
+      "latin": "Emberiza bruniceps",
+      "hebrew": "גיבתון אדום-ראש",
+      "english": "Red-headed Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-ראש",
+        "חמרי אדום-ראש"
+      ]
+    },
+    "חמרי אדום-ראש": {
+      "key": "Emberiza bruniceps",
+      "latin": "Emberiza bruniceps",
+      "hebrew": "גיבתון אדום-ראש",
+      "english": "Red-headed Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-ראש",
+        "חמרי אדום-ראש"
+      ]
+    },
+    "יאורית מצרית": {
+      "key": "Alopochen aegyptiaca",
+      "latin": "Alopochen aegyptiaca",
+      "hebrew": "יאורית מצרית",
+      "english": "Egyptian Goose",
+      "group": "birds",
+      "aliases_he": [
+        "יאורית מצרית",
+        "יסעור מצוי"
+      ]
+    },
+    "יסעור מצוי": {
+      "key": "Alopochen aegyptiaca",
+      "latin": "Alopochen aegyptiaca",
+      "hebrew": "יאורית מצרית",
+      "english": "Egyptian Goose",
+      "group": "birds",
+      "aliases_he": [
+        "יאורית מצרית",
+        "יסעור מצוי"
+      ]
+    },
+    "אנפית סוף": {
+      "key": "Butorides striata",
+      "latin": "Butorides striata",
+      "hebrew": "אנפית סוף",
+      "english": "Striated Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית סוף"
+      ]
+    },
+    "אנפית סופיות": {
+      "key": "Ardeola ralloides",
+      "latin": "Ardeola ralloides",
+      "hebrew": "אנפית סוף",
+      "english": "Squacco Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית סוף",
+        "אנפית סופיות"
+      ]
+    },
+    "דיה שחורה": {
+      "key": "Milvus migrans",
+      "latin": "Milvus migrans",
+      "hebrew": "דיה שחורה",
+      "english": "Black Kite",
+      "group": "birds",
+      "aliases_he": [
+        "דיה שחורה"
+      ]
+    },
+    "חכלילית עצים": {
+      "key": "Phoenicurus phoenicurus",
+      "latin": "Phoenicurus phoenicurus",
+      "hebrew": "חכלילית עצים",
+      "english": "Common Redstart",
+      "group": "birds",
+      "aliases_he": [
+        "חכלילית עצים"
+      ]
+    },
+    "דבורת דבש": {
+      "key": "Apis mellifera",
+      "latin": "Apis mellifera",
+      "hebrew": "דבורת דבש",
+      "english": "Western Honey Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת דבש",
+        "דבורת הדבש",
+        "דבורת-דבש מערבית"
+      ]
+    },
+    "דבורת הדבש": {
+      "key": "Apis mellifera",
+      "latin": "Apis mellifera",
+      "hebrew": "דבורת דבש",
+      "english": "Western Honey Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת דבש",
+        "דבורת הדבש",
+        "דבורת-דבש מערבית"
+      ]
+    },
+    "דבורת-דבש מערבית": {
+      "key": "Apis mellifera",
+      "latin": "Apis mellifera",
+      "hebrew": "דבורת דבש",
+      "english": "Western Honey Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת דבש",
+        "דבורת הדבש",
+        "דבורת-דבש מערבית"
+      ]
+    },
+    "תמירון מצוי": {
+      "key": "Himantopus himantopus",
+      "latin": "Himantopus himantopus",
+      "hebrew": "תמירון מצוי",
+      "english": "Black-winged Stilt",
+      "group": "birds",
+      "aliases_he": [
+        "סייפן",
+        "תמינון",
+        "תמירון מצוי"
+      ]
+    },
+    "סייפן": {
+      "key": "Himantopus himantopus",
+      "latin": "Himantopus himantopus",
+      "hebrew": "תמירון מצוי",
+      "english": "Black-winged Stilt",
+      "group": "birds",
+      "aliases_he": [
+        "סייפן",
+        "תמינון",
+        "תמירון מצוי"
+      ]
+    },
+    "תמינון": {
+      "key": "Himantopus himantopus",
+      "latin": "Himantopus himantopus",
+      "hebrew": "תמירון מצוי",
+      "english": "Black-winged Stilt",
+      "group": "birds",
+      "aliases_he": [
+        "סייפן",
+        "תמינון",
+        "תמירון מצוי"
+      ]
+    },
+    "זחל": {
+      "key": "זחל",
+      "latin": "Lepidoptera",
+      "hebrew": "זחל",
+      "english": "Caterpillar",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל"
+      ]
+    },
+    "נקר סורי": {
+      "key": "Dendrocopos syriacus",
+      "latin": "Dendrocopos syriacus",
+      "hebrew": "נקר סורי",
+      "english": "Syrian Woodpecker",
+      "group": "birds",
+      "aliases_he": [
+        "נקר סורי"
+      ]
+    },
+    "נחליאלי לבן": {
+      "key": "Motacilla alba",
+      "latin": "Motacilla alba",
+      "hebrew": "נחליאלי לבן",
+      "english": "White Wagtail",
+      "group": "birds",
+      "aliases_he": [
+        "נחליאלי לבן"
+      ]
+    },
+    "זרזיר ורדרד": {
+      "key": "Pastor roseus",
+      "latin": "Pastor roseus",
+      "hebrew": "זרזיר ורדרד",
+      "english": "Rosy Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר ורדרד",
+        "זרזיר ברומזי",
+        "זרזיר אפור"
+      ]
+    },
+    "זרזיר ברומזי": {
+      "key": "Pastor roseus",
+      "latin": "Pastor roseus",
+      "hebrew": "זרזיר ורדרד",
+      "english": "Rosy Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר ורדרד",
+        "זרזיר ברומזי",
+        "זרזיר אפור"
+      ]
+    },
+    "זרזיר אפור": {
+      "key": "Pastor roseus",
+      "latin": "Pastor roseus",
+      "hebrew": "זרזיר ורדרד",
+      "english": "Rosy Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר ורדרד",
+        "זרזיר ברומזי",
+        "זרזיר אפור"
+      ]
+    },
+    "סיס חומות": {
+      "key": "Apus apus",
+      "latin": "Apus apus",
+      "hebrew": "סיס חומות",
+      "english": "Common Swift",
+      "group": "birds",
+      "aliases_he": [
+        "סיס חומות"
+      ]
+    },
+    "כלנית מצויה": {
+      "key": "Anemone coronaria",
+      "latin": "Anemone coronaria",
+      "hebrew": "כלנית מצויה",
+      "english": "Anemone",
+      "group": "flora",
+      "aliases_he": [
+        "כלנית מצויה"
+      ]
+    },
+    "פיפיון אדום-גרון": {
+      "key": "Anthus cervinus",
+      "latin": "Anthus cervinus",
+      "hebrew": "פיפיון אדום-גרון",
+      "english": "Red-throated Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון אדום-גרון",
+        "פיפיון אדום-גרון"
+      ]
+    },
+    "פפיון אדום-גרון": {
+      "key": "Anthus cervinus",
+      "latin": "Anthus cervinus",
+      "hebrew": "פיפיון אדום-גרון",
+      "english": "Red-throated Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון אדום-גרון",
+        "פיפיון אדום-גרון"
+      ]
+    },
+    "צבר מצוי": {
+      "key": "Opuntia ficus-indica",
+      "latin": "Opuntia ficus-indica",
+      "hebrew": "צבר מצוי",
+      "english": "Prickly Pear",
+      "group": "flora",
+      "aliases_he": [
+        "צבר מצוי"
+      ]
+    },
+    "גפן": {
+      "key": "Vitis vinifera",
+      "latin": "Vitis vinifera",
+      "hebrew": "גפן",
+      "english": "Common Grape Vine",
+      "group": "flora",
+      "aliases_he": [
+        "גפן",
+        "גפן היין"
+      ]
+    },
+    "גפן היין": {
+      "key": "Vitis vinifera",
+      "latin": "Vitis vinifera",
+      "hebrew": "גפן",
+      "english": "Common Grape Vine",
+      "group": "flora",
+      "aliases_he": [
+        "גפן",
+        "גפן היין"
+      ]
+    },
+    "קאק": {
+      "key": "Corvus monedula",
+      "latin": "Corvus monedula",
+      "hebrew": "קאק",
+      "english": "Western Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-כיפה",
+        "קאק"
+      ]
+    },
+    "סלעית": {
+      "key": "Oenanthe",
+      "latin": "Oenanthe",
+      "hebrew": "סלעית",
+      "english": "Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית"
+      ]
+    },
+    "לבנין הצלף": {
+      "key": "Colotis fausta",
+      "latin": "Colotis fausta",
+      "hebrew": "לבנין הצלף",
+      "english": "Salmon Arab",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    "עפרוני מצויץ": {
+      "key": "Galerida cristata",
+      "latin": "Galerida cristata",
+      "hebrew": "עפרוני מצויץ",
+      "english": "Crested Lark",
+      "group": "birds",
+      "aliases_he": [
+        "עפרוני מצויץ",
+        "עפרוני מצוייץ",
+        "עקרונן מצויץ"
+      ]
+    },
+    "עפרוני מצוייץ": {
+      "key": "Galerida cristata",
+      "latin": "Galerida cristata",
+      "hebrew": "עפרוני מצויץ",
+      "english": "Crested Lark",
+      "group": "birds",
+      "aliases_he": [
+        "עפרוני מצויץ",
+        "עפרוני מצוייץ",
+        "עקרונן מצויץ"
+      ]
+    },
+    "עקרונן מצויץ": {
+      "key": "Galerida cristata",
+      "latin": "Galerida cristata",
+      "hebrew": "עפרוני מצויץ",
+      "english": "Crested Lark",
+      "group": "birds",
+      "aliases_he": [
+        "עפרוני מצויץ",
+        "עפרוני מצוייץ",
+        "עקרונן מצויץ"
+      ]
+    },
+    "זנב-סנונית נאה": {
+      "key": "Papilio machaon",
+      "latin": "Papilio machaon",
+      "hebrew": "זנב-סנונית נאה",
+      "english": "Old World Swallowtail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זנב-סנונית נאה",
+        "זנב סנונית נאה"
+      ]
+    },
+    "זנב סנונית נאה": {
+      "key": "Papilio machaon",
+      "latin": "Papilio machaon",
+      "hebrew": "זנב-סנונית נאה",
+      "english": "Old World Swallowtail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זנב-סנונית נאה",
+        "זנב סנונית נאה"
+      ]
+    },
+    "זמיר מנומר": {
+      "key": "Luscinia luscinia",
+      "latin": "Luscinia luscinia",
+      "hebrew": "זמיר מנומר",
+      "english": "Thrush Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומר"
+      ]
+    },
+    "שקד מצוי": {
+      "key": "Prunus dulcis",
+      "latin": "Prunus dulcis",
+      "hebrew": "שקד מצוי",
+      "english": "Almond",
+      "group": "flora",
+      "aliases_he": [
+        "שקד מצוי"
+      ]
+    },
+    "טבלן גמדי": {
+      "key": "Tachybaptus ruficollis",
+      "latin": "Tachybaptus ruficollis",
+      "hebrew": "טבלן גמדי",
+      "english": "Little Grebe",
+      "group": "birds",
+      "aliases_he": [
+        "טבלן גמדי"
+      ]
+    },
+    "סנאי אדום": {
+      "key": "Sciurus vulgaris",
+      "latin": "Sciurus vulgaris",
+      "hebrew": "סנאי אדום",
+      "english": "Red Squirrel",
+      "group": "mammals",
+      "aliases_he": [
+        "סנאי אדום"
+      ]
+    },
+    "נחליאלי צהוב": {
+      "key": "Motacilla flava",
+      "latin": "Motacilla flava",
+      "hebrew": "נחליאלי צהוב",
+      "english": "Western Yellow Wagtail",
+      "group": "birds",
+      "aliases_he": [
+        "נחליאלי צהוב"
+      ]
+    },
+    "סלעית אירופית": {
+      "key": "Oenanthe oenanthe",
+      "latin": "Oenanthe oenanthe",
+      "hebrew": "סלעית אירופית",
+      "english": "Northern Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית אירופית"
+      ]
+    },
+    "סלעית שחורת-בטן": {
+      "key": "Oenanthe finschii",
+      "latin": "Oenanthe finschii",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Finsch's Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    "סלעית לבנת-כנף": {
+      "key": "Oenanthe lugens",
+      "latin": "Oenanthe lugens",
+      "hebrew": "סלעית לבנת-כנף",
+      "english": "Mourning Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית לבנת-כנף"
+      ]
+    },
+    "עורב חום-עורף": {
+      "key": "Corvus ruficollis",
+      "latin": "Corvus ruficollis",
+      "hebrew": "עורב חום-עורף",
+      "english": "Brown-necked Raven",
+      "group": "birds",
+      "aliases_he": [
+        "עורב חום-עורף"
+      ]
+    },
+    "שדמית אדומת-כנף": {
+      "key": "Glareola pratincola",
+      "latin": "Glareola pratincola",
+      "hebrew": "שדמית אדומת-כנף",
+      "english": "Collared Pratincole",
+      "group": "birds",
+      "aliases_he": [
+        "שדמית אדומת-כנף"
+      ]
+    },
+    "עכביש סרטן": {
+      "key": "Thomisidae",
+      "latin": "Thomisidae",
+      "hebrew": "עכביש סרטן",
+      "english": "Crab Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש סרטן"
+      ]
+    },
+    "חוחית": {
+      "key": "Carduelis carduelis",
+      "latin": "Carduelis carduelis",
+      "hebrew": "חוחית",
+      "english": "European Goldfinch",
+      "group": "birds",
+      "aliases_he": [
+        "חוחית",
+        "חוחיות"
+      ]
+    },
+    "חוחיות": {
+      "key": "Carduelis carduelis",
+      "latin": "Carduelis carduelis",
+      "hebrew": "חוחית",
+      "english": "European Goldfinch",
+      "group": "birds",
+      "aliases_he": [
+        "חוחית",
+        "חוחיות"
+      ]
+    },
+    "זחל של עש": {
+      "key": "זחל של עש",
+      "latin": "Lepidoptera",
+      "hebrew": "זחל של עש",
+      "english": "Moth Caterpillar",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל של עש"
+      ]
+    },
+    "אוח מצוי": {
+      "key": "Bubo bubo",
+      "latin": "Bubo bubo",
+      "hebrew": "אוח מצוי",
+      "english": "Eurasian Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מצוי",
+        "אווח מצוי",
+        "אוח עיטי"
+      ]
+    },
+    "אווח מצוי": {
+      "key": "Bubo bubo",
+      "latin": "Bubo bubo",
+      "hebrew": "אוח מצוי",
+      "english": "Eurasian Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מצוי",
+        "אווח מצוי",
+        "אוח עיטי"
+      ]
+    },
+    "אוח עיטי": {
+      "key": "Bubo bubo",
+      "latin": "Bubo bubo",
+      "hebrew": "אוח מצוי",
+      "english": "Eurasian Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מצוי",
+        "אווח מצוי",
+        "אוח עיטי"
+      ]
+    },
+    "מושית השבע": {
+      "key": "Coccinella septempunctata",
+      "latin": "Coccinella septempunctata",
+      "hebrew": "מושית השבע",
+      "english": "Seven-spot Ladybird",
+      "group": "invertebrates",
+      "aliases_he": [
+        "מושית השבע",
+        "פרת משה רבנו"
+      ]
+    },
+    "פרת משה רבנו": {
+      "key": "Coccinellidae",
+      "latin": "Coccinellidae",
+      "hebrew": "פרת משה רבנו",
+      "english": "Ladybug",
+      "group": "invertebrates",
+      "aliases_he": [
+        "פרת משה רבנו"
+      ]
+    },
+    "דרור הבית": {
+      "key": "Passer domesticus",
+      "latin": "Passer domesticus",
+      "hebrew": "דרור הבית",
+      "english": "House Sparrow",
+      "group": "birds",
+      "aliases_he": [
+        "דרור הבית"
+      ]
+    },
+    "לבנין העריוז": {
+      "key": "Aporia crataegi",
+      "latin": "Aporia crataegi",
+      "hebrew": "לבנין העריוז",
+      "english": "Black-veined White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבני העיס",
+        "לבנין האציל",
+        "עצבק לבן",
+        "לבנין העריוז"
+      ]
+    },
+    "לבני העיס": {
+      "key": "Aporia crataegi",
+      "latin": "Aporia crataegi",
+      "hebrew": "לבנין העריוז",
+      "english": "Black-veined White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבני העיס",
+        "לבנין האציל",
+        "עצבק לבן",
+        "לבנין העריוז"
+      ]
+    },
+    "לבנין האציל": {
+      "key": "Aporia crataegi",
+      "latin": "Aporia crataegi",
+      "hebrew": "לבנין העריוז",
+      "english": "Black-veined White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבני העיס",
+        "לבנין האציל",
+        "עצבק לבן",
+        "לבנין העריוז"
+      ]
+    },
+    "עצבק לבן": {
+      "key": "Aporia crataegi",
+      "latin": "Aporia crataegi",
+      "hebrew": "לבנין העריוז",
+      "english": "Black-veined White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבני העיס",
+        "לבנין האציל",
+        "עצבק לבן",
+        "לבנין העריוז"
+      ]
+    },
+    "תוכי נזירי": {
+      "key": "Myiopsitta monachus",
+      "latin": "Myiopsitta monachus",
+      "hebrew": "תוכי נזירי",
+      "english": "Monk Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכי נזירי"
+      ]
+    },
+    "חצוצרן מדבר": {
+      "key": "Bucanetes githagineus",
+      "latin": "Bucanetes githagineus",
+      "hebrew": "חצוצרן מדבר",
+      "english": "Trumpeter Finch",
+      "group": "birds",
+      "aliases_he": [
+        "חצוצרן מדבר"
+      ]
+    },
+    "חרטומן ביצות": {
+      "key": "Gallinago gallinago",
+      "latin": "Gallinago gallinago",
+      "hebrew": "חרטומן ביצות",
+      "english": "Common Snipe",
+      "group": "birds",
+      "aliases_he": [
+        "חרטומן ביצות",
+        "חרטומית ביצות"
+      ]
+    },
+    "חרטומית ביצות": {
+      "key": "Gallinago gallinago",
+      "latin": "Gallinago gallinago",
+      "hebrew": "חרטומן ביצות",
+      "english": "Common Snipe",
+      "group": "birds",
+      "aliases_he": [
+        "חרטומן ביצות",
+        "חרטומית ביצות"
+      ]
+    },
+    "עטלף פירות מצוי": {
+      "key": "Rousettus aegyptiacus",
+      "latin": "Rousettus aegyptiacus",
+      "hebrew": "עטלף פירות מצוי",
+      "english": "Egyptian Fruit Bat",
+      "group": "mammals",
+      "aliases_he": [
+        "עטלף פירות מצוי"
+      ]
+    },
+    "שרשיר": {
+      "key": "Anas crecca",
+      "latin": "Anas crecca",
+      "hebrew": "שרשיר",
+      "english": "Common Teal",
+      "group": "birds",
+      "aliases_he": [
+        "שרשיר"
+      ]
+    },
+    "צוצלת": {
+      "key": "Spilopelia senegalensis",
+      "latin": "Spilopelia senegalensis",
+      "hebrew": "צוצלת",
+      "english": "Laughing Dove",
+      "group": "birds",
+      "aliases_he": [
+        "צוצלת"
+      ]
+    },
+    "קנית פסים": {
+      "key": "Acrocephalus melanopogon",
+      "latin": "Acrocephalus melanopogon",
+      "hebrew": "קנית פסים",
+      "english": "Moustached Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "קנית פסים"
+      ]
+    },
+    "איית צרעים": {
+      "key": "Pernis apivorus",
+      "latin": "Pernis apivorus",
+      "hebrew": "איית צרעים",
+      "english": "European Honey Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "איית צרעים"
+      ]
+    },
+    "דרור ספרדי": {
+      "key": "Passer hispaniolensis",
+      "latin": "Passer hispaniolensis",
+      "hebrew": "דרור ספרדי",
+      "english": "Spanish Sparrow",
+      "group": "birds",
+      "aliases_he": [
+        "דרור ספרדי"
+      ]
+    },
+    "אמנון": {
+      "key": "Oreochromis",
+      "latin": "Oreochromis",
+      "hebrew": "אמנון",
+      "english": "Tilapia",
+      "group": "other",
+      "aliases_he": [
+        "אמנון"
+      ]
+    },
+    "שחפית גמדית": {
+      "key": "Sternula albifrons",
+      "latin": "Sternula albifrons",
+      "hebrew": "שחפית גמדית",
+      "english": "Little Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית גמדית"
+      ]
+    },
+    "שחפית לבנת-לחי": {
+      "key": "Chlidonias hybrida",
+      "latin": "Chlidonias hybrida",
+      "hebrew": "שחפית לבנת-לחי",
+      "english": "Whiskered Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית לבנת-לחי"
+      ]
+    },
+    "אנפית גמדית": {
+      "key": "Ixobrychus minutus",
+      "latin": "Ixobrychus minutus",
+      "hebrew": "אנפית גמדית",
+      "english": "Little Bittern",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית גמדית"
+      ]
+    },
+    "חזיר בר": {
+      "key": "Sus scrofa",
+      "latin": "Sus scrofa",
+      "hebrew": "חזיר בר",
+      "english": "Wild Boar",
+      "group": "mammals",
+      "aliases_he": [
+        "חזיר בר"
+      ]
+    },
+    "צב ביצה מצוי": {
+      "key": "Mauremys caspica",
+      "latin": "Mauremys caspica",
+      "hebrew": "צב ביצה מצוי",
+      "english": "Caspian Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצה מצוי",
+        "צב מים מצוי"
+      ]
+    },
+    "צב מים מצוי": {
+      "key": "Mauremys caspica",
+      "latin": "Mauremys caspica",
+      "hebrew": "צב ביצה מצוי",
+      "english": "Caspian Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצה מצוי",
+        "צב מים מצוי"
+      ]
+    },
+    "נוטריה": {
+      "key": "Myocastor coypus",
+      "latin": "Myocastor coypus",
+      "hebrew": "נוטריה",
+      "english": "Coypu",
+      "group": "mammals",
+      "aliases_he": [
+        "נוטריה"
+      ]
+    },
+    "צב ביצות": {
+      "key": "Emys orbicularis",
+      "latin": "Emys orbicularis",
+      "hebrew": "צב ביצות",
+      "english": "European Pond Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצות",
+        "צב ביצות משוחר"
+      ]
+    },
+    "צב ביצות משוחר": {
+      "key": "Emys orbicularis",
+      "latin": "Emys orbicularis",
+      "hebrew": "צב ביצות",
+      "english": "European Pond Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצות",
+        "צב ביצות משוחר"
+      ]
+    },
+    "דררה מצויה": {
+      "key": "Psittacula krameri",
+      "latin": "Psittacula krameri",
+      "hebrew": "דררה מצויה",
+      "english": "Rose-ringed Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "דררה מצויה",
+        "דררה"
+      ]
+    },
+    "דררה": {
+      "key": "Psittacula krameri",
+      "latin": "Psittacula krameri",
+      "hebrew": "דררה מצויה",
+      "english": "Rose-ringed Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "דררה מצויה",
+        "דררה"
+      ]
+    },
+    "סבכי קוצים": {
+      "key": "Sylvia cantillans",
+      "latin": "Sylvia cantillans",
+      "hebrew": "סבכי קוצים",
+      "english": "Subalpine Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי קוצים"
+      ]
+    },
+    "שעיר מצוי": {
+      "key": "Otus scops",
+      "latin": "Otus scops",
+      "hebrew": "שעיר מצוי",
+      "english": "Common Scops Owl",
+      "group": "birds",
+      "aliases_he": [
+        "יערון מצוי",
+        "שעיר מצוי"
+      ]
+    },
+    "יערון מצוי": {
+      "key": "Otus scops",
+      "latin": "Otus scops",
+      "hebrew": "שעיר מצוי",
+      "english": "Common Scops Owl",
+      "group": "birds",
+      "aliases_he": [
+        "יערון מצוי",
+        "שעיר מצוי"
+      ]
+    },
+    "רקפת מצויה": {
+      "key": "Cyclamen persicum",
+      "latin": "Cyclamen persicum",
+      "hebrew": "רקפת מצויה",
+      "english": "Persian Cyclamen",
+      "group": "flora",
+      "aliases_he": [
+        "רקפת מצויה"
+      ]
+    },
+    "דאה שחורת-כתף": {
+      "key": "Elanus caeruleus",
+      "latin": "Elanus caeruleus",
+      "hebrew": "דאה שחורת-כתף",
+      "english": "Black-winged Kite",
+      "group": "birds",
+      "aliases_he": [
+        "דאה שחורת-כתף"
+      ]
+    },
+    "תוכיפז": {
+      "key": "Linaria cannabina",
+      "latin": "Linaria cannabina",
+      "hebrew": "תוכיפז",
+      "english": "Common Linnet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכיפז",
+        "קנרית",
+        "פרוש הרים"
+      ]
+    },
+    "קנרית": {
+      "key": "Linaria cannabina",
+      "latin": "Linaria cannabina",
+      "hebrew": "תוכיפז",
+      "english": "Common Linnet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכיפז",
+        "קנרית",
+        "פרוש הרים"
+      ]
+    },
+    "פרוש הרים": {
+      "key": "Linaria cannabina",
+      "latin": "Linaria cannabina",
+      "hebrew": "תוכיפז",
+      "english": "Common Linnet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכיפז",
+        "קנרית",
+        "פרוש הרים"
+      ]
+    },
+    "קורמורן גמדי": {
+      "key": "Microcarbo pygmaeus",
+      "latin": "Microcarbo pygmaeus",
+      "hebrew": "קורמורן גמדי",
+      "english": "Pygmy Cormorant",
+      "group": "birds",
+      "aliases_he": [
+        "קורמורן גמדי"
+      ]
+    },
+    "הספרית": {
+      "key": "Hesperiidae",
+      "latin": "Hesperiidae",
+      "hebrew": "הספרית",
+      "english": "Skipper",
+      "group": "invertebrates",
+      "aliases_he": [
+        "הספרית"
+      ]
+    },
+    "תחמס מצוי": {
+      "key": "Caprimulgus europaeus",
+      "latin": "Caprimulgus europaeus",
+      "hebrew": "תחמס מצוי",
+      "english": "European Nightjar",
+      "group": "birds",
+      "aliases_he": [
+        "תחמס מצוי"
+      ]
+    },
+    "שחור-זנב": {
+      "key": "Oenanthe melanura",
+      "latin": "Oenanthe melanura",
+      "hebrew": "שחור-זנב",
+      "english": "Blackstart",
+      "group": "birds",
+      "aliases_he": [
+        "שחור-זנב"
+      ]
+    },
+    "חסידה לבנה": {
+      "key": "Ciconia ciconia",
+      "latin": "Ciconia ciconia",
+      "hebrew": "חסידה לבנה",
+      "english": "White Stork",
+      "group": "birds",
+      "aliases_he": [
+        "חסידה לבנה"
+      ]
+    },
+    "עכביש": {
+      "key": "Araneae",
+      "latin": "Araneae",
+      "hebrew": "עכביש",
+      "english": "Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש"
+      ]
+    },
+    "צרעה מזרחית": {
+      "key": "Vespa orientalis",
+      "latin": "Vespa orientalis",
+      "hebrew": "צרעה מזרחית",
+      "english": "Oriental Hornet",
+      "group": "invertebrates",
+      "aliases_he": [
+        "צרעה מזרחית"
+      ]
+    },
+    "פרפר": {
+      "key": "פרפר",
+      "latin": "Lepidoptera",
+      "hebrew": "פרפר",
+      "english": "Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "פרפר"
+      ]
+    },
+    "נחש מים": {
+      "key": "Natrix tessellata",
+      "latin": "Natrix tessellata",
+      "hebrew": "נחש מים",
+      "english": "Dice Snake",
+      "group": "reptiles",
+      "aliases_he": [
+        "נחש מים"
+      ]
+    },
+    "בולבול": {
+      "key": "Pycnonotus capensis",
+      "latin": "Pycnonotus xanthopygos",
+      "hebrew": "בולבול",
+      "english": "White-spectacled Bulbul",
+      "group": "birds",
+      "aliases_he": [
+        "בולבול"
+      ]
+    },
+    "אנפה ירוקה": {
+      "key": "Butorides virescens",
+      "latin": "Butorides virescens",
+      "hebrew": "אנפה ירוקה",
+      "english": "Green Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה ירוקה"
+      ]
+    },
+    "בז עצים": {
+      "key": "Falco subbuteo",
+      "latin": "Falco subbuteo",
+      "hebrew": "בז עצים",
+      "english": "Eurasian Hobby",
+      "group": "birds",
+      "aliases_he": [
+        "בז עצים"
+      ]
+    },
+    "זבוב": {
+      "key": "Diptera",
+      "latin": "Diptera",
+      "hebrew": "זבוב",
+      "english": "Fly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זבוב"
+      ]
+    },
+    "רחפניים": {
+      "key": "Syrphidae",
+      "latin": "Syrphidae",
+      "hebrew": "רחפניים",
+      "english": "Hoverfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זובוב רחף",
+        "רחף"
+      ]
+    },
+    "זובוב רחף": {
+      "key": "Syrphidae",
+      "latin": "Syrphidae",
+      "hebrew": "רחפניים",
+      "english": "Hoverfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זובוב רחף",
+        "רחף"
+      ]
+    },
+    "רחף": {
+      "key": "Syrphidae",
+      "latin": "Syrphidae",
+      "hebrew": "רחפניים",
+      "english": "Hoverfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זובוב רחף",
+        "רחף"
+      ]
+    },
+    "סבכי טוחנים": {
+      "key": "Curruca communis",
+      "latin": "Curruca communis",
+      "hebrew": "סבכי טוחנים",
+      "english": "Greater Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי טוחנים"
+      ]
+    },
+    "סבכי קטן": {
+      "key": "Sylvia curruca",
+      "latin": "Curruca curruca",
+      "hebrew": "סבכי טוחנים",
+      "english": "Lesser Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי קטן",
+        "סבכי טוחנים"
+      ]
+    },
+    "זמיר מנומנם": {
+      "key": "Luscinia megarhynchos",
+      "latin": "Luscinia megarhynchos",
+      "hebrew": "זמיר מנומנם",
+      "english": "Common Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומנם",
+        "זמיר ירדן"
+      ]
+    },
+    "זמיר ירדן": {
+      "key": "Luscinia megarhynchos",
+      "latin": "Luscinia megarhynchos",
+      "hebrew": "זמיר מנומנם",
+      "english": "Common Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומנם",
+        "זמיר ירדן"
+      ]
+    },
+    "גיבתון עצה": {
+      "key": "Emberiza cirlus",
+      "latin": "Emberiza cirlus",
+      "hebrew": "גיבתון עצה",
+      "english": "Cirl Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון עציצים",
+        "גיבתון עצה"
+      ]
+    },
+    "גבתון עציצים": {
+      "key": "Emberiza cirlus",
+      "latin": "Emberiza cirlus",
+      "hebrew": "גיבתון עצה",
+      "english": "Cirl Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון עציצים",
+        "גיבתון עצה"
+      ]
+    },
+    "עיט חורש": {
+      "key": "Clanga pomarina",
+      "latin": "Clanga pomarina",
+      "hebrew": "עיט חורש",
+      "english": "Lesser Spotted Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט חורש"
+      ]
+    },
+    "שלך": {
+      "key": "Pandion haliaetus",
+      "latin": "Pandion haliaetus",
+      "hebrew": "שלך",
+      "english": "Osprey",
+      "group": "birds",
+      "aliases_he": [
+        "שלת אלעזרי",
+        "שלّالك"
+      ]
+    },
+    "שלת אלעזרי": {
+      "key": "Pandion haliaetus",
+      "latin": "Pandion haliaetus",
+      "hebrew": "שלך",
+      "english": "Osprey",
+      "group": "birds",
+      "aliases_he": [
+        "שלת אלעזרי",
+        "שלّالك"
+      ]
+    },
+    "שלّالك": {
+      "key": "Pandion haliaetus",
+      "latin": "Pandion haliaetus",
+      "hebrew": "שלך",
+      "english": "Osprey",
+      "group": "birds",
+      "aliases_he": [
+        "שלת אלעזרי",
+        "שלّالك"
+      ]
+    },
+    "עיט": {
+      "key": "Aquila",
+      "latin": "Aquila",
+      "hebrew": "עיט",
+      "english": "Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט"
+      ]
+    },
+    "סבראש": {
+      "key": "Jynx torquilla",
+      "latin": "Jynx torquilla",
+      "hebrew": "סבראש",
+      "english": "Eurasian Wryneck",
+      "group": "birds",
+      "aliases_he": [
+        "צווארון",
+        "סבראש"
+      ]
+    },
+    "צווארון": {
+      "key": "Jynx torquilla",
+      "latin": "Jynx torquilla",
+      "hebrew": "סבראש",
+      "english": "Eurasian Wryneck",
+      "group": "birds",
+      "aliases_he": [
+        "צווארון",
+        "סבראש"
+      ]
+    },
+    "קיפוד מצוי": {
+      "key": "Erinaceus concolor",
+      "latin": "Erinaceus concolor",
+      "hebrew": "קיפוד מצוי",
+      "english": "Southern White-breasted Hedgehog",
+      "group": "mammals",
+      "aliases_he": [
+        "קיפוד מצוי"
+      ]
+    },
+    "פרפור עקוד ושלדג לבן-חזה": {
+      "key": "Ceryle rudis / Halcyon smyrnensis",
+      "latin": "Ceryle rudis / Halcyon smyrnensis",
+      "hebrew": "פרפור עקוד ושלדג לבן-חזה",
+      "english": "Pied Kingfisher and White-throated Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד ושלדג לבן-חזה"
+      ]
+    },
+    "לבנית גדולה": {
+      "key": "Ardea alba",
+      "latin": "Ardea alba",
+      "hebrew": "לבנית גדולה",
+      "english": "Great Egret",
+      "group": "birds",
+      "aliases_he": [
+        "לבנית גדולה"
+      ]
+    },
+    "כפן לבן": {
+      "key": "Platalea leucorodia",
+      "latin": "Platalea leucorodia",
+      "hebrew": "כפן לבן",
+      "english": "Eurasian Spoonbill",
+      "group": "birds",
+      "aliases_he": [
+        "כפתן",
+        "כפן לבן"
+      ]
+    },
+    "כפתן": {
+      "key": "Platalea leucorodia",
+      "latin": "Platalea leucorodia",
+      "hebrew": "כפן לבן",
+      "english": "Eurasian Spoonbill",
+      "group": "birds",
+      "aliases_he": [
+        "כפתן",
+        "כפן לבן"
+      ]
+    },
+    "יעל נובי": {
+      "key": "Capra nubiana",
+      "latin": "Capra nubiana",
+      "hebrew": "יעל נובי",
+      "english": "Nubian Ibex",
+      "group": "mammals",
+      "aliases_he": [
+        "יעל נובי"
+      ]
+    },
+    "חסידן": {
+      "key": "Sitta europaea",
+      "latin": "Sitta europaea",
+      "hebrew": "חסידן",
+      "english": "Eurasian Nuthatch",
+      "group": "birds",
+      "aliases_he": [
+        "חッית עצים",
+        "חסידן"
+      ]
+    },
+    "חッית עצים": {
+      "key": "Sitta europaea",
+      "latin": "Sitta europaea",
+      "hebrew": "חסידן",
+      "english": "Eurasian Nuthatch",
+      "group": "birds",
+      "aliases_he": [
+        "חッית עצים",
+        "חסידן"
+      ]
+    },
+    "גיבתון": {
+      "key": "Emberiza",
+      "latin": "Emberiza",
+      "hebrew": "גיבתון",
+      "english": "Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "דוחן"
+      ]
+    },
+    "דוחן": {
+      "key": "Emberiza",
+      "latin": "Emberiza",
+      "hebrew": "גיבתון",
+      "english": "Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "דוחן"
+      ]
+    },
+    "חופמיים": {
+      "key": "Charadriidae",
+      "latin": "Charadriidae",
+      "hebrew": "חופמיים",
+      "english": "Plover",
+      "group": "birds",
+      "aliases_he": [
+        "חופמי"
+      ]
+    },
+    "חופמי": {
+      "key": "Charadriidae",
+      "latin": "Charadriidae",
+      "hebrew": "חופמיים",
+      "english": "Plover",
+      "group": "birds",
+      "aliases_he": [
+        "חופמי"
+      ]
+    },
+    "גיבתון גנים": {
+      "key": "Emberiza hortulana",
+      "latin": "Emberiza hortulana",
+      "hebrew": "גיבתון גנים",
+      "english": "Ortolan Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון גנים"
+      ]
+    },
+    "גבתון גנים": {
+      "key": "Emberiza hortulana",
+      "latin": "Emberiza hortulana",
+      "hebrew": "גיבתון גנים",
+      "english": "Ortolan Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון גנים"
+      ]
+    },
+    "ביצנית לבנת-כנף": {
+      "key": "Tringa ochropus",
+      "latin": "Tringa ochropus",
+      "hebrew": "ביצנית לבנת-כנף",
+      "english": "Green Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "ביצנית לבנת-כנף"
+      ]
+    },
+    "גדילן מצוי": {
+      "key": "Silybum marianum",
+      "latin": "Silybum marianum",
+      "hebrew": "גדילן מצוי",
+      "english": "Milk Thistle",
+      "group": "flora",
+      "aliases_he": [
+        "גדילן"
+      ]
+    },
+    "גדילן": {
+      "key": "Silybum marianum",
+      "latin": "Silybum marianum",
+      "hebrew": "גדילן מצוי",
+      "english": "Milk Thistle",
+      "group": "flora",
+      "aliases_he": [
+        "גדילן"
+      ]
+    },
+    "גמל חד-דבשתי": {
+      "key": "Camelus dromedarius",
+      "latin": "Camelus dromedarius",
+      "hebrew": "גמל חד-דבשתי",
+      "english": "Dromedary Camel",
+      "group": "mammals",
+      "aliases_he": [
+        "גמל חד-דבשתי"
+      ]
+    },
+    "תמר מצוי": {
+      "key": "Phoenix dactylifera",
+      "latin": "Phoenix dactylifera",
+      "hebrew": "תמר מצוי",
+      "english": "Date Palm",
+      "group": "flora",
+      "aliases_he": [
+        "תמר מצוי"
+      ]
+    },
+    "תור צווארון": {
+      "key": "Streptopelia decaocto",
+      "latin": "Streptopelia decaocto",
+      "hebrew": "תור צווארון",
+      "english": "Eurasian Collared Dove",
+      "group": "birds",
+      "aliases_he": [
+        "תור צווארון"
+      ]
+    },
+    "שחפית ים": {
+      "key": "Sterna hirundo",
+      "latin": "Sterna hirundo",
+      "hebrew": "שחפית ים",
+      "english": "Common Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית ים"
+      ]
+    },
+    "ביצנית מנוקדת": {
+      "key": "Actitis hypoleucos",
+      "latin": "Actitis hypoleucos",
+      "hebrew": "ביצנית מנוקדת",
+      "english": "Common Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "ביצנית מנוקדת"
+      ]
+    },
+    "תמירון מצוי וביצנית": {
+      "key": "Himantopus himantopus / Tringa sp.",
+      "latin": "Himantopus himantopus / Tringa sp.",
+      "hebrew": "תמירון מצוי וביצנית",
+      "english": "Black-winged Stilt and Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "תמירון מצוי וביצנית"
+      ]
+    },
+    "חיוויאי": {
+      "key": "Circaetus gallicus",
+      "latin": "Circaetus gallicus",
+      "hebrew": "חיוויאי",
+      "english": "Short-toed Snake Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "חיוויאי"
+      ]
+    },
+    "אורן": {
+      "key": "Pinus",
+      "latin": "Pinus",
+      "hebrew": "אורן",
+      "english": "Pine",
+      "group": "flora",
+      "aliases_he": [
+        "אורן"
+      ]
+    },
+    "יונת הבית": {
+      "key": "Columba livia domestica",
+      "latin": "Columba livia domestica",
+      "hebrew": "יונת הבית",
+      "english": "Feral Pigeon",
+      "group": "birds",
+      "aliases_he": [
+        "יונת הבית"
+      ]
+    },
+    "טוואיים": {
+      "key": "Lasiocampidae",
+      "latin": "Lasiocampidae",
+      "hebrew": "טוואיים",
+      "english": "Lasiocampid Moth",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל של טוואי"
+      ]
+    },
+    "זחל של טוואי": {
+      "key": "Lasiocampidae",
+      "latin": "Lasiocampidae",
+      "hebrew": "טוואיים",
+      "english": "Lasiocampid Moth",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל של טוואי"
+      ]
+    },
+    "לא ידוע": {
+      "key": "לא ידוע",
+      "latin": "Unknown",
+      "hebrew": "לא ידוע",
+      "english": "Unknown",
+      "group": "other",
+      "aliases_he": [
+        "לא ידוע"
+      ]
+    },
+    "חומטיים": {
+      "key": "Scincidae",
+      "latin": "Scincidae",
+      "hebrew": "חומטיים",
+      "english": "Skink",
+      "group": "reptiles",
+      "aliases_he": [
+        "חומט"
+      ]
+    },
+    "חומט": {
+      "key": "Scincidae",
+      "latin": "Scincidae",
+      "hebrew": "חומטיים",
+      "english": "Skink",
+      "group": "reptiles",
+      "aliases_he": [
+        "חומט"
+      ]
+    },
+    "דבוראים": {
+      "key": "Anthophila",
+      "latin": "Anthophila",
+      "hebrew": "דבוראים",
+      "english": "Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורה"
+      ]
+    },
+    "דבורה": {
+      "key": "Anthophila",
+      "latin": "Anthophila",
+      "hebrew": "דבוראים",
+      "english": "Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורה"
+      ]
+    },
+    "אריגנית": {
+      "key": "Argiope",
+      "latin": "Argiope",
+      "hebrew": "אריגנית",
+      "english": "Argiope Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "אריגנית"
+      ]
+    },
+    "חדקונית": {
+      "key": "Curculionidae",
+      "latin": "Curculionidae",
+      "hebrew": "חדקונית",
+      "english": "Weevil",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חדקונית"
+      ]
+    },
+    "כחליליים": {
+      "key": "Lycaenidae",
+      "latin": "Lycaenidae",
+      "hebrew": "כחליליים",
+      "english": "Lycaenid Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כחליל"
+      ]
+    },
+    "כחליל": {
+      "key": "Lycaenidae",
+      "latin": "Lycaenidae",
+      "hebrew": "כחליליים",
+      "english": "Lycaenid Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כחליל"
+      ]
+    },
+    "יחמור פרסי": {
+      "key": "Dama mesopotamica",
+      "latin": "Dama mesopotamica",
+      "hebrew": "יחמור פרסי",
+      "english": "Persian Fallow Deer",
+      "group": "mammals",
+      "aliases_he": [
+        "יחמור פרסי"
+      ]
+    },
+    "דרדר": {
+      "key": "Centaurea",
+      "latin": "Centaurea",
+      "hebrew": "דרדר",
+      "english": "Centaury",
+      "group": "flora",
+      "aliases_he": [
+        "דרדר"
+      ]
+    },
+    "פנק": {
+      "key": "Vulpes zerda",
+      "latin": "Vulpes zerda",
+      "hebrew": "פנק",
+      "english": "Fennec Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "פנק"
+      ]
+    },
+    "חתול בית": {
+      "key": "Felis catus",
+      "latin": "Felis catus",
+      "hebrew": "חתול בית",
+      "english": "Domestic Cat",
+      "group": "mammals",
+      "aliases_he": [
+        "חתול בית"
+      ]
+    },
+    "אוח מדבר": {
+      "key": "Bubo ascalaphus",
+      "latin": "Bubo ascalaphus",
+      "hebrew": "אוח מדבר",
+      "english": "Pharaoh Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מדבר"
+      ]
+    },
+    "סבכי שחור-עין": {
+      "key": "Sylvia melanocephala",
+      "latin": "Curruca melanocephala",
+      "hebrew": "סבכי שחור-עין",
+      "english": "Sardinian Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-עין"
+      ]
+    },
+    "קנתיריים": {
+      "key": "Cantharidae",
+      "latin": "Cantharidae",
+      "hebrew": "קנתיריים",
+      "english": "Soldier Beetle",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חיפושית"
+      ]
+    },
+    "חיפושית": {
+      "key": "Cantharidae",
+      "latin": "Cantharidae",
+      "hebrew": "קנתיריים",
+      "english": "Soldier Beetle",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חיפושית"
+      ]
+    },
+    "לבנין המכמשת": {
+      "key": "Pontia daplidice",
+      "latin": "Pontia daplidice",
+      "hebrew": "לבנין המכמשת",
+      "english": "Bath White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין המכמשת"
+      ]
+    },
+    "בומבוס": {
+      "key": "Bombus",
+      "latin": "Bombus",
+      "hebrew": "בומבוס",
+      "english": "Bumblebee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "בומבוס"
+      ]
+    },
+    "לבנין": {
+      "key": "Colias croceus",
+      "latin": "Colias croceus",
+      "hebrew": "לבנין",
+      "english": "Clouded Yellow",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין"
+      ]
+    },
+    "שחמטית": {
+      "key": "Melanargia galathea",
+      "latin": "Melanargia galathea",
+      "hebrew": "שחמטית",
+      "english": "Marbled White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שחמטית"
+      ]
+    },
+    "צב יבשה מצוי": {
+      "key": "Testudo graeca",
+      "latin": "Testudo graeca",
+      "hebrew": "צב יבשה מצוי",
+      "english": "Greek Tortoise",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב יבשה מצוי"
+      ]
+    },
+    "נימפית הסרפד": {
+      "key": "Vanessa cardui",
+      "latin": "Vanessa cardui",
+      "hebrew": "נימפית הסרפד",
+      "english": "Painted Lady",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נימפית הסרפד"
+      ]
+    },
+    "דבורת-עץ סגולה": {
+      "key": "Xylocopa violacea",
+      "latin": "Xylocopa violacea",
+      "hebrew": "דבורת-עץ סגולה",
+      "english": "Violet Carpenter Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת-עץ סגולה"
+      ]
+    },
+    "פרה": {
+      "key": "Bos taurus",
+      "latin": "Bos taurus",
+      "hebrew": "פרה",
+      "english": "Cattle",
+      "group": "mammals",
+      "aliases_he": [
+        "פרה הבית"
+      ]
+    },
+    "פרה הבית": {
+      "key": "Bos taurus",
+      "latin": "Bos taurus",
+      "hebrew": "פרה",
+      "english": "Cattle",
+      "group": "mammals",
+      "aliases_he": [
+        "פרה הבית"
+      ]
+    },
+    "חילזון": {
+      "key": "Gastropoda",
+      "latin": "Gastropoda",
+      "hebrew": "חילזון",
+      "english": "Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חילזון"
+      ]
+    },
+    "דבורת עץ": {
+      "key": "Xylocopa",
+      "latin": "Xylocopa",
+      "hebrew": "דבורת עץ",
+      "english": "Carpenter Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת עץ"
+      ]
+    },
+    "נימפאה לבנה": {
+      "key": "Nymphaea alba",
+      "latin": "Nymphaea alba",
+      "hebrew": "נימפאה לבנה",
+      "english": "European White Waterlily",
+      "group": "flora",
+      "aliases_he": [
+        "נימפאה לבנה"
+      ]
+    },
+    "נימפית הקטלב": {
+      "key": "Libythea celtis",
+      "latin": "Libythea celtis",
+      "hebrew": "נימפית הקטלב",
+      "english": "European Beak",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נימפית הקטלב"
+      ]
+    },
+    "שרקן סלעים": {
+      "key": "Kerodon rupestris",
+      "latin": "Kerodon rupestris",
+      "hebrew": "שרקן סלעים",
+      "english": "Rock Cavy",
+      "group": "mammals",
+      "aliases_he": [
+        "שרקן סלעים"
+      ]
+    },
+    "סבכי אפור": {
+      "key": "Sylvia communis",
+      "latin": "Curruca communis",
+      "hebrew": "סבכי אפור",
+      "english": "Greater Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי אפור"
+      ]
+    },
+    "עורב": {
+      "key": "Corvus",
+      "latin": "Corvus",
+      "hebrew": "עורב",
+      "english": "Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור"
+      ]
+    },
+    "עורבני שחור": {
+      "key": "Corvus",
+      "latin": "Corvus",
+      "hebrew": "עורב",
+      "english": "Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור"
+      ]
+    },
+    "חטפית שחורה": {
+      "key": "Ficedula hypoleuca",
+      "latin": "Ficedula hypoleuca",
+      "hebrew": "חטפית שחורה",
+      "english": "European Pied Flycatcher",
+      "group": "birds",
+      "aliases_he": [
+        "חטפית שחורה"
+      ]
+    },
+    "פיפרון": {
+      "key": "Anthus campestris",
+      "latin": "Anthus campestris",
+      "hebrew": "פיפרון",
+      "english": "Tawny Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פיפרון"
+      ]
+    },
+    "גיבתון סלעים": {
+      "key": "Emberiza cia",
+      "latin": "Emberiza cia",
+      "hebrew": "גיבתון סלעים",
+      "english": "Rock Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון סלעים"
+      ]
+    },
+    "זרון": {
+      "key": "Coloeus monedula",
+      "latin": "Coloeus monedula",
+      "hebrew": "זרון",
+      "english": "Eurasian Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "זרון"
+      ]
+    },
+    "לבנין המרווח": {
+      "key": "Euchloe ausonia",
+      "latin": "Euchloe ausonia",
+      "hebrew": "לבנין המרווח",
+      "english": "Eastern Dappled White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין המרווח"
+      ]
+    },
+    "סביון": {
+      "key": "Senecio",
+      "latin": "Senecio",
+      "hebrew": "סביון",
+      "english": "Groundsel",
+      "group": "flora",
+      "aliases_he": [
+        "סביון"
+      ]
+    },
+    "סחלב פרפרני": {
+      "key": "Anacamptis papilionacea",
+      "latin": "Anacamptis papilionacea",
+      "hebrew": "סחלב פרפרני",
+      "english": "Butterfly Orchid",
+      "group": "flora",
+      "aliases_he": [
+        "סחלב פרפרני"
+      ]
+    },
+    "עיט שמש": {
+      "key": "Aquila heliaca",
+      "latin": "Aquila heliaca",
+      "hebrew": "עיט שמש",
+      "english": "Eastern Imperial Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט שמש"
+      ]
+    },
+    "שבלוליים": {
+      "key": "Helicidae",
+      "latin": "Helicidae",
+      "hebrew": "שבלוליים",
+      "english": "Helicid Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שבלול"
+      ]
+    },
+    "שבלול": {
+      "key": "Helicidae",
+      "latin": "Helicidae",
+      "hebrew": "שבלוליים",
+      "english": "Helicid Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שבלול"
+      ]
+    },
+    "קוקייה אירופית": {
+      "key": "Cuculus canorus",
+      "latin": "Cuculus canorus",
+      "hebrew": "קוקייה אירופית",
+      "english": "Common Cuckoo",
+      "group": "birds",
+      "aliases_he": [
+        "קוקייה אירופית"
+      ]
+    },
+    "פפיון שדות": {
+      "key": "Anthus pratensis",
+      "latin": "Anthus pratensis",
+      "hebrew": "פפיון שדות",
+      "english": "Meadow Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון שדות"
+      ]
+    },
+    "אורן ירושלים": {
+      "key": "Pinus halepensis",
+      "latin": "Pinus halepensis",
+      "hebrew": "אורן ירושלים",
+      "english": "Aleppo Pine",
+      "group": "flora",
+      "aliases_he": [
+        "אורן ירושלים"
+      ]
+    },
+    "עיט זהב": {
+      "key": "Aquila chrysaetos",
+      "latin": "Aquila chrysaetos",
+      "hebrew": "עיט זהב",
+      "english": "Golden Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט זהב"
+      ]
+    },
+    "רימון מצוי": {
+      "key": "Punica granatum",
+      "latin": "Punica granatum",
+      "hebrew": "רימון מצוי",
+      "english": "Pomegranate",
+      "group": "flora",
+      "aliases_he": [
+        "רימון מצוי"
+      ]
+    },
+    "פצחן": {
+      "key": "Coccothraustes coccothraustes",
+      "latin": "Coccothraustes coccothraustes",
+      "hebrew": "פצחן",
+      "english": "Hawfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פצחן"
+      ]
+    },
+    "דוכיפת": {
+      "key": "Upupa epops",
+      "latin": "Upupa epops",
+      "hebrew": "דוכיפת",
+      "english": "Eurasian Hoopoe",
+      "group": "birds",
+      "aliases_he": [
+        "דוכיפת"
+      ]
+    },
+    "אנפה אפורה וקורמורן": {
+      "key": "Ardea cinerea, Phalacrocoracidae",
+      "latin": "Ardea cinerea, Phalacrocoracidae",
+      "hebrew": "אנפה אפורה וקורמורן",
+      "english": "Grey Heron and Cormorant",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה אפורה וקורמורן"
+      ]
+    },
+    "חגב": {
+      "key": "Caelifera",
+      "latin": "Caelifera",
+      "hebrew": "חגב",
+      "english": "Grasshopper",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חגב"
+      ]
+    },
+    "שלדג לבן-חזה ופרפור עקוד": {
+      "key": "Halcyon smyrnensis, Ceryle rudis",
+      "latin": "Halcyon smyrnensis, Ceryle rudis",
+      "hebrew": "שלדג לבן-חזה ופרפור עקוד",
+      "english": "White-throated Kingfisher and Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג לבן-חזה ופרפור עקוד"
+      ]
+    },
+    "אדם": {
+      "key": "Homo sapiens",
+      "latin": "Homo sapiens",
+      "hebrew": "אדם",
+      "english": "Human",
+      "group": "mammals",
+      "aliases_he": [
+        "אדם"
+      ]
+    },
+    "פטרייה": {
+      "key": "פטרייה",
+      "latin": "Fungi",
+      "hebrew": "פטרייה",
+      "english": "Fungus",
+      "group": "flora",
+      "aliases_he": [
+        "פטרייה"
+      ]
+    },
+    "אדר": {
+      "key": "Acer",
+      "latin": "Acer",
+      "hebrew": "אדר",
+      "english": "Maple",
+      "group": "flora",
+      "aliases_he": [
+        "עץ אדר"
+      ]
+    },
+    "עץ אדר": {
+      "key": "Acer",
+      "latin": "Acer",
+      "hebrew": "אדר",
+      "english": "Maple",
+      "group": "flora",
+      "aliases_he": [
+        "עץ אדר"
+      ]
+    },
+    "שחף אגמים": {
+      "key": "Chroicocephalus ridibundus",
+      "latin": "Chroicocephalus ridibundus",
+      "hebrew": "שחף אגמים",
+      "english": "Black-headed Gull",
+      "group": "birds",
+      "aliases_he": [
+        "שחף אגמים"
+      ]
+    },
+    "ירגזי כחול": {
+      "key": "Cyanistes caeruleus",
+      "latin": "Cyanistes caeruleus",
+      "hebrew": "ירגזי כחול",
+      "english": "Eurasian Blue Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי כחול"
+      ]
+    },
+    "דנאית הדורה": {
+      "key": "Danaus chrysippus",
+      "latin": "Danaus chrysippus",
+      "hebrew": "דנאית הדורה",
+      "english": "Plain Tiger",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דנאית הדורה"
+      ]
+    },
+    "שממית": {
+      "key": "Gekkonidae",
+      "latin": "Gekkonidae",
+      "hebrew": "שממית",
+      "english": "Gecko",
+      "group": "reptiles",
+      "aliases_he": [
+        "שממית"
+      ]
+    },
+    "סבכי ערמוני-גרון": {
+      "key": "Curruca cantillans",
+      "latin": "Curruca cantillans",
+      "hebrew": "סבכי ערמוני-גרון",
+      "english": "Subalpine Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי ערמוני-גרון"
+      ]
+    },
+    "קיכלי רונן": {
+      "key": "Turdus philomelos",
+      "latin": "Turdus philomelos",
+      "hebrew": "קיכלי רונן",
+      "english": "Song Thrush",
+      "group": "birds",
+      "aliases_he": [
+        "קיכלי רונן"
+      ]
+    },
+    "זרזיר מצוי": {
+      "key": "Sturnus vulgaris",
+      "latin": "Sturnus vulgaris",
+      "hebrew": "זרזיר מצוי",
+      "english": "Common Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר מצוי"
+      ]
+    },
+    "כחול-חזה": {
+      "key": "Luscinia svecica",
+      "latin": "Luscinia svecica",
+      "hebrew": "כחול-חזה",
+      "english": "Bluethroat",
+      "group": "birds",
+      "aliases_he": [
+        "כחול-חזה"
+      ]
+    },
+    "כסופי ענק": {
+      "key": "Argiope lobata",
+      "latin": "Argiope lobata",
+      "hebrew": "כסופי ענק",
+      "english": "Lobed Argiope",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כסופי ענק"
+      ]
+    },
+    "כדורניים": {
+      "key": "Theridiidae",
+      "latin": "Theridiidae",
+      "hebrew": "כדורניים",
+      "english": "Cobweb Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש רכן"
+      ]
+    },
+    "עכביש רכן": {
+      "key": "Theridiidae",
+      "latin": "Theridiidae",
+      "hebrew": "כדורניים",
+      "english": "Cobweb Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש רכן"
+      ]
+    },
+    "נחושתית הקוצים": {
+      "key": "Protaetia cuprea",
+      "latin": "Protaetia cuprea",
+      "hebrew": "נחושתית הקוצים",
+      "english": "Copper Rose Chafer",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נחושתית הקוצים"
+      ]
+    }
+  },
+  "entries": [
+    {
+      "key": "Vulpes vulpes",
+      "latin": "Vulpes vulpes",
+      "hebrew": "שועל מצוי",
+      "english": "Red Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "שועל מצוי"
+      ]
+    },
+    {
+      "key": "Athene noctua",
+      "latin": "Athene noctua",
+      "hebrew": "כוס החורבות",
+      "english": "Little Owl",
+      "group": "birds",
+      "aliases_he": [
+        "כוס חורבות",
+        "כוס החורבות"
+      ]
+    },
+    {
+      "key": "Falco tinnunculus",
+      "latin": "Falco tinnunculus",
+      "hebrew": "בז מצוי",
+      "english": "Common Kestrel",
+      "group": "birds",
+      "aliases_he": [
+        "בז מצוי"
+      ]
+    },
+    {
+      "key": "Canis aureus",
+      "latin": "Canis aureus",
+      "hebrew": "תן זהוב",
+      "english": "Golden Jackal",
+      "group": "mammals",
+      "aliases_he": [
+        "תן זהוב",
+        "תאן זהוב"
+      ]
+    },
+    {
+      "key": "Gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי",
+        "צבי ארץ-ישראלי",
+        "צבי ארצישראלי",
+        "צבי ארץ ישראלי"
+      ]
+    },
+    {
+      "key": "Lanius nubicus",
+      "latin": "Lanius nubicus",
+      "hebrew": "חנקן נובי",
+      "english": "Masked Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן נובי"
+      ]
+    },
+    {
+      "key": "Merops apiaster",
+      "latin": "Merops apiaster",
+      "hebrew": "שרקרק מצוי",
+      "english": "European Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק מצוי"
+      ]
+    },
+    {
+      "key": "Procavia capensis",
+      "latin": "Procavia capensis",
+      "hebrew": "שפן סלעים",
+      "english": "Rock Hyrax",
+      "group": "mammals",
+      "aliases_he": [
+        "שפן סלעים",
+        "שפן סלע"
+      ]
+    },
+    {
+      "key": "Accipiter nisus",
+      "latin": "Accipiter nisus",
+      "hebrew": "נץ מצוי",
+      "english": "Eurasian Sparrowhawk",
+      "group": "birds",
+      "aliases_he": [
+        "נץ מצוי"
+      ]
+    },
+    {
+      "key": "Cinnyris osea",
+      "latin": "Cinnyris osea",
+      "hebrew": "צופית",
+      "english": "Palestine Sunbird",
+      "group": "birds",
+      "aliases_he": [
+        "צופית",
+        "צופית בוהקת",
+        "צופית ססגונית"
+      ]
+    },
+    {
+      "key": "Halcyon smyrnensis",
+      "latin": "Halcyon smyrnensis",
+      "hebrew": "שלדג לבן-חזה",
+      "english": "White-throated Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג לבן-חזה"
+      ]
+    },
+    {
+      "key": "Saxicola rubicola",
+      "latin": "Saxicola rubicola",
+      "hebrew": "דוחל חום-גרון",
+      "english": "European Stonechat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל חום-גרון",
+        "דוחל שחור-גרון"
+      ]
+    },
+    {
+      "key": "Corvus cornix",
+      "latin": "Corvus cornix",
+      "hebrew": "עורב אפור",
+      "english": "Hooded Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורב אפור"
+      ]
+    },
+    {
+      "key": "Alcedo atthis",
+      "latin": "Alcedo atthis",
+      "hebrew": "שלדג גמדי",
+      "english": "Common Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג גמדי"
+      ]
+    },
+    {
+      "key": "Fringilla coelebs",
+      "latin": "Fringilla coelebs",
+      "hebrew": "פרוש מצוי",
+      "english": "Common Chaffinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש מצוי"
+      ]
+    },
+    {
+      "key": "Merops orientalis",
+      "latin": "Merops orientalis",
+      "hebrew": "שרקרק ירוק",
+      "english": "Green Bee-eater",
+      "group": "birds",
+      "aliases_he": [
+        "שרקרק ירוק",
+        "שרקרק גמדי"
+      ]
+    },
+    {
+      "key": "Coracias garrulus",
+      "latin": "Coracias garrulus",
+      "hebrew": "כחל מצוי",
+      "english": "European Roller",
+      "group": "birds",
+      "aliases_he": [
+        "כחל מצוי",
+        "כחל"
+      ]
+    },
+    {
+      "key": "Egretta garzetta",
+      "latin": "Egretta garzetta",
+      "hebrew": "לבנית קטנה",
+      "english": "Little Egret",
+      "group": "birds",
+      "aliases_he": [
+        "לבנית קטנה"
+      ]
+    },
+    {
+      "key": "Grus grus",
+      "latin": "Grus grus",
+      "hebrew": "עגור אפור",
+      "english": "Common Crane",
+      "group": "birds",
+      "aliases_he": [
+        "עגור אפור"
+      ]
+    },
+    {
+      "key": "Curruca melanocephala",
+      "latin": "Curruca melanocephala",
+      "hebrew": "סבכי שחור-ראש",
+      "english": "Sardinian Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-ראש"
+      ]
+    },
+    {
+      "key": "Clanga clanga",
+      "latin": "Clanga clanga",
+      "hebrew": "עיט צפרדעים",
+      "english": "Greater Spotted Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט צפרדעים"
+      ]
+    },
+    {
+      "key": "Alectoris chukar",
+      "latin": "Alectoris chukar",
+      "hebrew": "חוגלה",
+      "english": "Chukar Partridge",
+      "group": "birds",
+      "aliases_he": [
+        "חוגלה",
+        "חוגלת סלעים",
+        "חוגלת האבן"
+      ]
+    },
+    {
+      "key": "Nycticorax nycticorax",
+      "latin": "Nycticorax nycticorax",
+      "hebrew": "אנפת לילה",
+      "english": "Black-crowned Night Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפת לילה",
+        "אנפית לילה"
+      ]
+    },
+    {
+      "key": "Acridotheres tristis",
+      "latin": "Acridotheres tristis",
+      "hebrew": "מיינה מצויה",
+      "english": "Common Myna",
+      "group": "birds",
+      "aliases_he": [
+        "מיינה מצויה"
+      ]
+    },
+    {
+      "key": "Ceryle rudis",
+      "latin": "Ceryle rudis",
+      "hebrew": "פרפור עקוד",
+      "english": "Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד",
+        "פרפור נחלים"
+      ]
+    },
+    {
+      "key": "Gyps fulvus",
+      "latin": "Gyps fulvus",
+      "hebrew": "נשר מקראי",
+      "english": "Griffon Vulture",
+      "group": "birds",
+      "aliases_he": [
+        "נשר מקראי"
+      ]
+    },
+    {
+      "key": "Lanius collurio",
+      "latin": "Lanius collurio",
+      "hebrew": "חנקן אדום-גב",
+      "english": "Red-backed Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-גב",
+        "חנקן אדום ראש"
+      ]
+    },
+    {
+      "key": "Ardea cinerea",
+      "latin": "Ardea cinerea",
+      "hebrew": "אנפה אפורה",
+      "english": "Grey Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה אפורה"
+      ]
+    },
+    {
+      "key": "Pelecanus onocrotalus",
+      "latin": "Pelecanus onocrotalus",
+      "hebrew": "שקנאי מצוי",
+      "english": "Great White Pelican",
+      "group": "birds",
+      "aliases_he": [
+        "שקנאי מצוי"
+      ]
+    },
+    {
+      "key": "Mantodea",
+      "latin": "Mantodea",
+      "hebrew": "גמל שלמה",
+      "english": "Praying Mantis",
+      "group": "invertebrates",
+      "aliases_he": [
+        "גמל שלמה"
+      ]
+    },
+    {
+      "key": "Saxicola rubetra",
+      "latin": "Saxicola rubetra",
+      "hebrew": "דוחל חום-גרון",
+      "english": "Whinchat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל חום-גרון",
+        "דחליל שדות"
+      ]
+    },
+    {
+      "key": "Columba livia",
+      "latin": "Columba livia",
+      "hebrew": "יונת סלע",
+      "english": "Rock Dove",
+      "group": "birds",
+      "aliases_he": [
+        "יונת סלע"
+      ]
+    },
+    {
+      "key": "Bubulcus ibis",
+      "latin": "Bubulcus ibis",
+      "hebrew": "אנפית בקר",
+      "english": "Cattle Egret",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית בקר",
+        "לבנית בקר"
+      ]
+    },
+    {
+      "key": "Erithacus rubecula",
+      "latin": "Erithacus rubecula",
+      "hebrew": "אדום-חזה",
+      "english": "European Robin",
+      "group": "birds",
+      "aliases_he": [
+        "אדום-חזה",
+        "אדום-חזה אירופי"
+      ]
+    },
+    {
+      "key": "Emberiza calandra",
+      "latin": "Emberiza calandra",
+      "hebrew": "גבתון עפרוני",
+      "english": "Corn Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון מצוי",
+        "גבתון עפרוני"
+      ]
+    },
+    {
+      "key": "Gallinula chloropus",
+      "latin": "Gallinula chloropus",
+      "hebrew": "סופית מצויה",
+      "english": "Common Moorhen",
+      "group": "birds",
+      "aliases_he": [
+        "סופית",
+        "סופנית מצויה",
+        "סופית מצויה"
+      ]
+    },
+    {
+      "key": "Hirundo rustica",
+      "latin": "Hirundo rustica",
+      "hebrew": "סנונית רפתות",
+      "english": "Barn Swallow",
+      "group": "birds",
+      "aliases_he": [
+        "סנונית רפתות"
+      ]
+    },
+    {
+      "key": "Turdus merula",
+      "latin": "Turdus merula",
+      "hebrew": "שחרור מצוי",
+      "english": "Common Blackbird",
+      "group": "birds",
+      "aliases_he": [
+        "שחרור מצוי",
+        "שחרור"
+      ]
+    },
+    {
+      "key": "Anas platyrhynchos",
+      "latin": "Anas platyrhynchos",
+      "hebrew": "ברכייה",
+      "english": "Mallard",
+      "group": "birds",
+      "aliases_he": [
+        "ברכייה"
+      ]
+    },
+    {
+      "key": "Anisoptera",
+      "latin": "Anisoptera",
+      "hebrew": "שפירית",
+      "english": "Dragonfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שפירית"
+      ]
+    },
+    {
+      "key": "Sylvia atricapilla",
+      "latin": "Sylvia atricapilla",
+      "hebrew": "סבכי שחור-כיפה",
+      "english": "Eurasian Blackcap",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-כיפה"
+      ]
+    },
+    {
+      "key": "Asio otus",
+      "latin": "Asio otus",
+      "hebrew": "ינשוף עצים",
+      "english": "Long-eared Owl",
+      "group": "birds",
+      "aliases_he": [
+        "ינשוף עצים"
+      ]
+    },
+    {
+      "key": "Garrulus glandarius",
+      "latin": "Garrulus glandarius",
+      "hebrew": "עורבני",
+      "english": "Eurasian Jay",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני",
+        "עקצן",
+        "עורבני שחור-כיפה"
+      ]
+    },
+    {
+      "key": "Lanius excubitor",
+      "latin": "Lanius excubitor",
+      "hebrew": "חנקן גדול",
+      "english": "Great Grey Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן גדול"
+      ]
+    },
+    {
+      "key": "Tyto alba",
+      "latin": "Tyto alba",
+      "hebrew": "תנשמת לבנה",
+      "english": "Western Barn Owl",
+      "group": "birds",
+      "aliases_he": [
+        "תנשמת לבנה"
+      ]
+    },
+    {
+      "key": "Chloris chloris",
+      "latin": "Chloris chloris",
+      "hebrew": "ירקון מצוי",
+      "english": "European Greenfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פרוש ירוק",
+        "חוחית ירוקה",
+        "ירקון מצוי",
+        "ירקון"
+      ]
+    },
+    {
+      "key": "Sylvia nana",
+      "latin": "Sylvia nana",
+      "hebrew": "סבכי מדבר",
+      "english": "Desert Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי מדבר"
+      ]
+    },
+    {
+      "key": "Prinia gracilis",
+      "latin": "Prinia gracilis",
+      "hebrew": "פשוש",
+      "english": "Graceful Prinia",
+      "group": "birds",
+      "aliases_he": [
+        "תפרית עדינה",
+        "פשוש"
+      ]
+    },
+    {
+      "key": "Plegadis falcinellus",
+      "latin": "Plegadis falcinellus",
+      "hebrew": "מגלן חום",
+      "english": "Glossy Ibis",
+      "group": "birds",
+      "aliases_he": [
+        "מגלן חום"
+      ]
+    },
+    {
+      "key": "Laudakia stellio",
+      "latin": "Laudakia stellio",
+      "hebrew": "חרדון מצוי",
+      "english": "Starred Agama",
+      "group": "reptiles",
+      "aliases_he": [
+        "חרדון מצוי"
+      ]
+    },
+    {
+      "key": "Argiope bruennichi",
+      "latin": "Argiope bruennichi",
+      "hebrew": "ארגיופית ברוניך",
+      "english": "Wasp Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "ארגיופית ברוניך",
+        "ארגיופ מצוי"
+      ]
+    },
+    {
+      "key": "Buteo rufinus",
+      "latin": "Buteo rufinus",
+      "hebrew": "עקב עיטי",
+      "english": "Long-legged Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "עקב עיטי"
+      ]
+    },
+    {
+      "key": "Phylloscopus collybita",
+      "latin": "Phylloscopus collybita",
+      "hebrew": "עלווית אפורה",
+      "english": "Common Chiffchaff",
+      "group": "birds",
+      "aliases_he": [
+        "עלווית אפורה",
+        "עלעלת",
+        "עלביון",
+        "עלעל"
+      ]
+    },
+    {
+      "key": "Phoenicurus ochruros",
+      "latin": "Phoenicurus ochruros",
+      "hebrew": "חכלילית סלעים",
+      "english": "Black Redstart",
+      "group": "birds",
+      "aliases_he": [
+        "חכלילית סלעים"
+      ]
+    },
+    {
+      "key": "Streptopelia turtur",
+      "latin": "Streptopelia turtur",
+      "hebrew": "תור מצוי",
+      "english": "European Turtle Dove",
+      "group": "birds",
+      "aliases_he": [
+        "תור מצוי"
+      ]
+    },
+    {
+      "key": "Vulpes rueppellii",
+      "latin": "Vulpes rueppellii",
+      "hebrew": "שועל חולות",
+      "english": "Rüppell's Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "שועל חולות"
+      ]
+    },
+    {
+      "key": "Lanius senator",
+      "latin": "Lanius senator",
+      "hebrew": "חנקן אדום-ראש",
+      "english": "Woodchat Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן אדום-ראש"
+      ]
+    },
+    {
+      "key": "Luna",
+      "latin": "Luna",
+      "hebrew": "ירח",
+      "english": "Moon",
+      "group": "astronomy",
+      "aliases_he": [
+        "ירח"
+      ]
+    },
+    {
+      "key": "Emberiza caesia",
+      "latin": "Emberiza caesia",
+      "hebrew": "גיבתון אדום-מקור",
+      "english": "Cretzschmar's Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-מקור",
+        "גיבתון עפרוני"
+      ]
+    },
+    {
+      "key": "Parus major",
+      "latin": "Parus major",
+      "hebrew": "ירגזי מצוי",
+      "english": "Great Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי מצוי",
+        "קבצן מצוי",
+        "יקנתן מצוי"
+      ]
+    },
+    {
+      "key": "Emberiza bruniceps",
+      "latin": "Emberiza bruniceps",
+      "hebrew": "גיבתון אדום-ראש",
+      "english": "Red-headed Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון אדום-ראש",
+        "חמרי אדום-ראש"
+      ]
+    },
+    {
+      "key": "Alopochen aegyptiaca",
+      "latin": "Alopochen aegyptiaca",
+      "hebrew": "יאורית מצרית",
+      "english": "Egyptian Goose",
+      "group": "birds",
+      "aliases_he": [
+        "יאורית מצרית",
+        "יסעור מצוי"
+      ]
+    },
+    {
+      "key": "Ardeola ralloides",
+      "latin": "Ardeola ralloides",
+      "hebrew": "אנפית סוף",
+      "english": "Squacco Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית סוף",
+        "אנפית סופיות"
+      ]
+    },
+    {
+      "key": "Milvus migrans",
+      "latin": "Milvus migrans",
+      "hebrew": "דיה שחורה",
+      "english": "Black Kite",
+      "group": "birds",
+      "aliases_he": [
+        "דיה שחורה"
+      ]
+    },
+    {
+      "key": "Phoenicurus phoenicurus",
+      "latin": "Phoenicurus phoenicurus",
+      "hebrew": "חכלילית עצים",
+      "english": "Common Redstart",
+      "group": "birds",
+      "aliases_he": [
+        "חכלילית עצים"
+      ]
+    },
+    {
+      "key": "Apis mellifera",
+      "latin": "Apis mellifera",
+      "hebrew": "דבורת דבש",
+      "english": "Western Honey Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת דבש",
+        "דבורת הדבש",
+        "דבורת-דבש מערבית"
+      ]
+    },
+    {
+      "key": "Himantopus himantopus",
+      "latin": "Himantopus himantopus",
+      "hebrew": "תמירון מצוי",
+      "english": "Black-winged Stilt",
+      "group": "birds",
+      "aliases_he": [
+        "סייפן",
+        "תמינון",
+        "תמירון מצוי"
+      ]
+    },
+    {
+      "key": "Lepidoptera",
+      "latin": "Lepidoptera",
+      "hebrew": "זחל",
+      "english": "Caterpillar",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל"
+      ]
+    },
+    {
+      "key": "Dendrocopos syriacus",
+      "latin": "Dendrocopos syriacus",
+      "hebrew": "נקר סורי",
+      "english": "Syrian Woodpecker",
+      "group": "birds",
+      "aliases_he": [
+        "נקר סורי"
+      ]
+    },
+    {
+      "key": "Motacilla alba",
+      "latin": "Motacilla alba",
+      "hebrew": "נחליאלי לבן",
+      "english": "White Wagtail",
+      "group": "birds",
+      "aliases_he": [
+        "נחליאלי לבן"
+      ]
+    },
+    {
+      "key": "Pastor roseus",
+      "latin": "Pastor roseus",
+      "hebrew": "זרזיר ורדרד",
+      "english": "Rosy Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר ורדרד",
+        "זרזיר ברומזי",
+        "זרזיר אפור"
+      ]
+    },
+    {
+      "key": "Apus apus",
+      "latin": "Apus apus",
+      "hebrew": "סיס חומות",
+      "english": "Common Swift",
+      "group": "birds",
+      "aliases_he": [
+        "סיס חומות"
+      ]
+    },
+    {
+      "key": "Anemone coronaria",
+      "latin": "Anemone coronaria",
+      "hebrew": "כלנית מצויה",
+      "english": "Anemone",
+      "group": "flora",
+      "aliases_he": [
+        "כלנית מצויה"
+      ]
+    },
+    {
+      "key": "Anthus cervinus",
+      "latin": "Anthus cervinus",
+      "hebrew": "פיפיון אדום-גרון",
+      "english": "Red-throated Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון אדום-גרון",
+        "פיפיון אדום-גרון"
+      ]
+    },
+    {
+      "key": "Opuntia ficus-indica",
+      "latin": "Opuntia ficus-indica",
+      "hebrew": "צבר מצוי",
+      "english": "Prickly Pear",
+      "group": "flora",
+      "aliases_he": [
+        "צבר מצוי"
+      ]
+    },
+    {
+      "key": "Vitis vinifera",
+      "latin": "Vitis vinifera",
+      "hebrew": "גפן",
+      "english": "Common Grape Vine",
+      "group": "flora",
+      "aliases_he": [
+        "גפן",
+        "גפן היין"
+      ]
+    },
+    {
+      "key": "Corvus monedula",
+      "latin": "Corvus monedula",
+      "hebrew": "קאק",
+      "english": "Western Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-כיפה",
+        "קאק"
+      ]
+    },
+    {
+      "key": "Oenanthe",
+      "latin": "Oenanthe",
+      "hebrew": "סלעית",
+      "english": "Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית"
+      ]
+    },
+    {
+      "key": "Belenois aurota",
+      "latin": "Belenois aurota",
+      "hebrew": "לבנין הצלף",
+      "english": "Pioneer White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    {
+      "key": "Galerida cristata",
+      "latin": "Galerida cristata",
+      "hebrew": "עפרוני מצויץ",
+      "english": "Crested Lark",
+      "group": "birds",
+      "aliases_he": [
+        "עפרוני מצויץ",
+        "עפרוני מצוייץ",
+        "עקרונן מצויץ"
+      ]
+    },
+    {
+      "key": "Papilio machaon",
+      "latin": "Papilio machaon",
+      "hebrew": "זנב-סנונית נאה",
+      "english": "Old World Swallowtail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זנב-סנונית נאה",
+        "זנב סנונית נאה"
+      ]
+    },
+    {
+      "key": "Luscinia luscinia",
+      "latin": "Luscinia luscinia",
+      "hebrew": "זמיר מנומר",
+      "english": "Thrush Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומר"
+      ]
+    },
+    {
+      "key": "Prunus dulcis",
+      "latin": "Prunus dulcis",
+      "hebrew": "שקד מצוי",
+      "english": "Almond",
+      "group": "flora",
+      "aliases_he": [
+        "שקד מצוי"
+      ]
+    },
+    {
+      "key": "Tachybaptus ruficollis",
+      "latin": "Tachybaptus ruficollis",
+      "hebrew": "טבלן גמדי",
+      "english": "Little Grebe",
+      "group": "birds",
+      "aliases_he": [
+        "טבלן גמדי"
+      ]
+    },
+    {
+      "key": "Sciurus vulgaris",
+      "latin": "Sciurus vulgaris",
+      "hebrew": "סנאי אדום",
+      "english": "Red Squirrel",
+      "group": "mammals",
+      "aliases_he": [
+        "סנאי אדום"
+      ]
+    },
+    {
+      "key": "Motacilla flava",
+      "latin": "Motacilla flava",
+      "hebrew": "נחליאלי צהוב",
+      "english": "Western Yellow Wagtail",
+      "group": "birds",
+      "aliases_he": [
+        "נחליאלי צהוב"
+      ]
+    },
+    {
+      "key": "Oenanthe oenanthe",
+      "latin": "Oenanthe oenanthe",
+      "hebrew": "סלעית אירופית",
+      "english": "Northern Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית אירופית"
+      ]
+    },
+    {
+      "key": "Oenanthe leucopyga",
+      "latin": "Oenanthe leucopyga",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "White-crowned Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן",
+        "סלעית לבנת-כנף"
+      ]
+    },
+    {
+      "key": "Corvus ruficollis",
+      "latin": "Corvus ruficollis",
+      "hebrew": "עורב חום-עורף",
+      "english": "Brown-necked Raven",
+      "group": "birds",
+      "aliases_he": [
+        "עורב חום-עורף"
+      ]
+    },
+    {
+      "key": "Glareola pratincola",
+      "latin": "Glareola pratincola",
+      "hebrew": "שדמית אדומת-כנף",
+      "english": "Collared Pratincole",
+      "group": "birds",
+      "aliases_he": [
+        "שדמית אדומת-כנף"
+      ]
+    },
+    {
+      "key": "Butorides striata",
+      "latin": "Butorides striata",
+      "hebrew": "אנפית סוף",
+      "english": "Striated Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית סוף"
+      ]
+    },
+    {
+      "key": "Thomisidae",
+      "latin": "Thomisidae",
+      "hebrew": "עכביש סרטן",
+      "english": "Crab Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש סרטן"
+      ]
+    },
+    {
+      "key": "Anaphaeis aurota",
+      "latin": "Anaphaeis aurota",
+      "hebrew": "לבנין הצלף",
+      "english": "Pioneer White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    {
+      "key": "Carduelis carduelis",
+      "latin": "Carduelis carduelis",
+      "hebrew": "חוחית",
+      "english": "European Goldfinch",
+      "group": "birds",
+      "aliases_he": [
+        "חוחית",
+        "חוחיות"
+      ]
+    },
+    {
+      "key": "זחל של עש",
+      "latin": "Lepidoptera",
+      "hebrew": "זחל של עש",
+      "english": "Moth Caterpillar",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל של עש"
+      ]
+    },
+    {
+      "key": "Bubo bubo",
+      "latin": "Bubo bubo",
+      "hebrew": "אוח מצוי",
+      "english": "Eurasian Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מצוי",
+        "אווח מצוי",
+        "אוח עיטי"
+      ]
+    },
+    {
+      "key": "Coccinella septempunctata",
+      "latin": "Coccinella septempunctata",
+      "hebrew": "מושית השבע",
+      "english": "Seven-spot Ladybird",
+      "group": "invertebrates",
+      "aliases_he": [
+        "מושית השבע",
+        "פרת משה רבנו"
+      ]
+    },
+    {
+      "key": "Passer domesticus",
+      "latin": "Passer domesticus",
+      "hebrew": "דרור הבית",
+      "english": "House Sparrow",
+      "group": "birds",
+      "aliases_he": [
+        "דרור הבית"
+      ]
+    },
+    {
+      "key": "Aporia crataegi",
+      "latin": "Aporia crataegi",
+      "hebrew": "לבנין העריוז",
+      "english": "Black-veined White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבני העיס",
+        "לבנין האציל",
+        "עצבק לבן",
+        "לבנין העריוז"
+      ]
+    },
+    {
+      "key": "Myiopsitta monachus",
+      "latin": "Myiopsitta monachus",
+      "hebrew": "תוכי נזירי",
+      "english": "Monk Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכי נזירי"
+      ]
+    },
+    {
+      "key": "Bucanetes githagineus",
+      "latin": "Bucanetes githagineus",
+      "hebrew": "חצוצרן מדבר",
+      "english": "Trumpeter Finch",
+      "group": "birds",
+      "aliases_he": [
+        "חצוצרן מדבר"
+      ]
+    },
+    {
+      "key": "Gallinago gallinago",
+      "latin": "Gallinago gallinago",
+      "hebrew": "חרטומן ביצות",
+      "english": "Common Snipe",
+      "group": "birds",
+      "aliases_he": [
+        "חרטומן ביצות",
+        "חרטומית ביצות"
+      ]
+    },
+    {
+      "key": "Rousettus aegyptiacus",
+      "latin": "Rousettus aegyptiacus",
+      "hebrew": "עטלף פירות מצוי",
+      "english": "Egyptian Fruit Bat",
+      "group": "mammals",
+      "aliases_he": [
+        "עטלף פירות מצוי"
+      ]
+    },
+    {
+      "key": "Anas crecca",
+      "latin": "Anas crecca",
+      "hebrew": "שרשיר",
+      "english": "Common Teal",
+      "group": "birds",
+      "aliases_he": [
+        "שרשיר"
+      ]
+    },
+    {
+      "key": "Spilopelia senegalensis",
+      "latin": "Spilopelia senegalensis",
+      "hebrew": "צוצלת",
+      "english": "Laughing Dove",
+      "group": "birds",
+      "aliases_he": [
+        "צוצלת"
+      ]
+    },
+    {
+      "key": "Acrocephalus melanopogon",
+      "latin": "Acrocephalus melanopogon",
+      "hebrew": "קנית פסים",
+      "english": "Moustached Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "קנית פסים"
+      ]
+    },
+    {
+      "key": "Pernis apivorus",
+      "latin": "Pernis apivorus",
+      "hebrew": "איית צרעים",
+      "english": "European Honey Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "איית צרעים"
+      ]
+    },
+    {
+      "key": "Passer hispaniolensis",
+      "latin": "Passer hispaniolensis",
+      "hebrew": "דרור ספרדי",
+      "english": "Spanish Sparrow",
+      "group": "birds",
+      "aliases_he": [
+        "דרור ספרדי"
+      ]
+    },
+    {
+      "key": "Cichlidae",
+      "latin": "Cichlidae",
+      "hebrew": "אמנון",
+      "english": "Cichlid",
+      "group": "other",
+      "aliases_he": [
+        "אמנון"
+      ]
+    },
+    {
+      "key": "Sternula albifrons",
+      "latin": "Sternula albifrons",
+      "hebrew": "שחפית גמדית",
+      "english": "Little Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית גמדית"
+      ]
+    },
+    {
+      "key": "Chlidonias hybrida",
+      "latin": "Chlidonias hybrida",
+      "hebrew": "שחפית לבנת-לחי",
+      "english": "Whiskered Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית לבנת-לחי"
+      ]
+    },
+    {
+      "key": "Ixobrychus minutus",
+      "latin": "Ixobrychus minutus",
+      "hebrew": "אנפית גמדית",
+      "english": "Little Bittern",
+      "group": "birds",
+      "aliases_he": [
+        "אנפית גמדית"
+      ]
+    },
+    {
+      "key": "זחל",
+      "latin": "Lepidoptera",
+      "hebrew": "זחל",
+      "english": "Caterpillar",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל"
+      ]
+    },
+    {
+      "key": "Sus scrofa",
+      "latin": "Sus scrofa",
+      "hebrew": "חזיר בר",
+      "english": "Wild Boar",
+      "group": "mammals",
+      "aliases_he": [
+        "חזיר בר"
+      ]
+    },
+    {
+      "key": "Mauremys caspica",
+      "latin": "Mauremys caspica",
+      "hebrew": "צב ביצה מצוי",
+      "english": "Caspian Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצה מצוי",
+        "צב מים מצוי"
+      ]
+    },
+    {
+      "key": "Myocastor coypus",
+      "latin": "Myocastor coypus",
+      "hebrew": "נוטריה",
+      "english": "Coypu",
+      "group": "mammals",
+      "aliases_he": [
+        "נוטריה"
+      ]
+    },
+    {
+      "key": "Emys orbicularis",
+      "latin": "Emys orbicularis",
+      "hebrew": "צב ביצות",
+      "english": "European Pond Turtle",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב ביצות",
+        "צב ביצות משוחר"
+      ]
+    },
+    {
+      "key": "Stellagama stellio",
+      "latin": "Stellagama stellio",
+      "hebrew": "חרדון מצוי",
+      "english": "Starred Agama",
+      "group": "reptiles",
+      "aliases_he": [
+        "חרדון מצוי"
+      ]
+    },
+    {
+      "key": "Psittacula krameri",
+      "latin": "Psittacula krameri",
+      "hebrew": "דררה מצויה",
+      "english": "Rose-ringed Parakeet",
+      "group": "birds",
+      "aliases_he": [
+        "דררה מצויה",
+        "דררה"
+      ]
+    },
+    {
+      "key": "Sylvia cantillans",
+      "latin": "Sylvia cantillans",
+      "hebrew": "סבכי קוצים",
+      "english": "Subalpine Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי קוצים"
+      ]
+    },
+    {
+      "key": "Otus scops",
+      "latin": "Otus scops",
+      "hebrew": "שעיר מצוי",
+      "english": "Common Scops Owl",
+      "group": "birds",
+      "aliases_he": [
+        "יערון מצוי",
+        "שעיר מצוי"
+      ]
+    },
+    {
+      "key": "Cyclamen persicum",
+      "latin": "Cyclamen persicum",
+      "hebrew": "רקפת מצויה",
+      "english": "Persian Cyclamen",
+      "group": "flora",
+      "aliases_he": [
+        "רקפת מצויה"
+      ]
+    },
+    {
+      "key": "Elanus caeruleus",
+      "latin": "Elanus caeruleus",
+      "hebrew": "דאה שחורת-כתף",
+      "english": "Black-winged Kite",
+      "group": "birds",
+      "aliases_he": [
+        "דאה שחורת-כתף"
+      ]
+    },
+    {
+      "key": "Linaria cannabina",
+      "latin": "Linaria cannabina",
+      "hebrew": "תוכיפז",
+      "english": "Common Linnet",
+      "group": "birds",
+      "aliases_he": [
+        "תוכיפז",
+        "קנרית",
+        "פרוש הרים"
+      ]
+    },
+    {
+      "key": "Microcarbo pygmaeus",
+      "latin": "Microcarbo pygmaeus",
+      "hebrew": "קורמורן גמדי",
+      "english": "Pygmy Cormorant",
+      "group": "birds",
+      "aliases_he": [
+        "קורמורן גמדי"
+      ]
+    },
+    {
+      "key": "Hesperiidae",
+      "latin": "Hesperiidae",
+      "hebrew": "הספרית",
+      "english": "Skipper",
+      "group": "invertebrates",
+      "aliases_he": [
+        "הספרית"
+      ]
+    },
+    {
+      "key": "Caprimulgus europaeus",
+      "latin": "Caprimulgus europaeus",
+      "hebrew": "תחמס מצוי",
+      "english": "European Nightjar",
+      "group": "birds",
+      "aliases_he": [
+        "תחמס מצוי"
+      ]
+    },
+    {
+      "key": "Oenanthe melanura",
+      "latin": "Oenanthe melanura",
+      "hebrew": "שחור-זנב",
+      "english": "Blackstart",
+      "group": "birds",
+      "aliases_he": [
+        "שחור-זנב"
+      ]
+    },
+    {
+      "key": "Ciconia ciconia",
+      "latin": "Ciconia ciconia",
+      "hebrew": "חסידה לבנה",
+      "english": "White Stork",
+      "group": "birds",
+      "aliases_he": [
+        "חסידה לבנה"
+      ]
+    },
+    {
+      "key": "Araneae",
+      "latin": "Araneae",
+      "hebrew": "עכביש",
+      "english": "Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש"
+      ]
+    },
+    {
+      "key": "Vespa orientalis",
+      "latin": "Vespa orientalis",
+      "hebrew": "צרעה מזרחית",
+      "english": "Oriental Hornet",
+      "group": "invertebrates",
+      "aliases_he": [
+        "צרעה מזרחית"
+      ]
+    },
+    {
+      "key": "פרפר",
+      "latin": "Lepidoptera",
+      "hebrew": "פרפר",
+      "english": "Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "פרפר"
+      ]
+    },
+    {
+      "key": "Natrix tessellata",
+      "latin": "Natrix tessellata",
+      "hebrew": "נחש מים",
+      "english": "Dice Snake",
+      "group": "reptiles",
+      "aliases_he": [
+        "נחש מים"
+      ]
+    },
+    {
+      "key": "Pycnonotus capensis",
+      "latin": "Pycnonotus xanthopygos",
+      "hebrew": "בולבול",
+      "english": "White-spectacled Bulbul",
+      "group": "birds",
+      "aliases_he": [
+        "בולבול"
+      ]
+    },
+    {
+      "key": "Butorides virescens",
+      "latin": "Butorides virescens",
+      "hebrew": "אנפה ירוקה",
+      "english": "Green Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה ירוקה"
+      ]
+    },
+    {
+      "key": "Falco subbuteo",
+      "latin": "Falco subbuteo",
+      "hebrew": "בז עצים",
+      "english": "Eurasian Hobby",
+      "group": "birds",
+      "aliases_he": [
+        "בז עצים"
+      ]
+    },
+    {
+      "key": "Diptera",
+      "latin": "Diptera",
+      "hebrew": "זבוב",
+      "english": "Fly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זבוב"
+      ]
+    },
+    {
+      "key": "Syrphidae",
+      "latin": "Syrphidae",
+      "hebrew": "רחפניים",
+      "english": "Hoverfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זובוב רחף",
+        "רחף"
+      ]
+    },
+    {
+      "key": "Sylvia curruca",
+      "latin": "Curruca curruca",
+      "hebrew": "סבכי טוחנים",
+      "english": "Lesser Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי קטן",
+        "סבכי טוחנים"
+      ]
+    },
+    {
+      "key": "Luscinia megarhynchos",
+      "latin": "Luscinia megarhynchos",
+      "hebrew": "זמיר מנומנם",
+      "english": "Common Nightingale",
+      "group": "birds",
+      "aliases_he": [
+        "זמיר מנומנם",
+        "זמיר ירדן"
+      ]
+    },
+    {
+      "key": "Emberiza cirlus",
+      "latin": "Emberiza cirlus",
+      "hebrew": "גיבתון עצה",
+      "english": "Cirl Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון עציצים",
+        "גיבתון עצה"
+      ]
+    },
+    {
+      "key": "Clanga pomarina",
+      "latin": "Clanga pomarina",
+      "hebrew": "עיט חורש",
+      "english": "Lesser Spotted Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט חורש"
+      ]
+    },
+    {
+      "key": "Pandion haliaetus",
+      "latin": "Pandion haliaetus",
+      "hebrew": "שלך",
+      "english": "Osprey",
+      "group": "birds",
+      "aliases_he": [
+        "שלת אלעזרי",
+        "שלّالك"
+      ]
+    },
+    {
+      "key": "Aquila",
+      "latin": "Aquila",
+      "hebrew": "עיט",
+      "english": "Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט"
+      ]
+    },
+    {
+      "key": "Jynx torquilla",
+      "latin": "Jynx torquilla",
+      "hebrew": "סבראש",
+      "english": "Eurasian Wryneck",
+      "group": "birds",
+      "aliases_he": [
+        "צווארון",
+        "סבראש"
+      ]
+    },
+    {
+      "key": "Erinaceus concolor",
+      "latin": "Erinaceus concolor",
+      "hebrew": "קיפוד מצוי",
+      "english": "Southern White-breasted Hedgehog",
+      "group": "mammals",
+      "aliases_he": [
+        "קיפוד מצוי"
+      ]
+    },
+    {
+      "key": "Ceryle rudis / Halcyon smyrnensis",
+      "latin": "Ceryle rudis / Halcyon smyrnensis",
+      "hebrew": "פרפור עקוד ושלדג לבן-חזה",
+      "english": "Pied Kingfisher and White-throated Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "פרפור עקוד ושלדג לבן-חזה"
+      ]
+    },
+    {
+      "key": "Oenanthe lugens",
+      "latin": "Oenanthe lugens",
+      "hebrew": "סלעית לבנת-כנף",
+      "english": "Mourning Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית לבנת-כנף"
+      ]
+    },
+    {
+      "key": "Ardea alba",
+      "latin": "Ardea alba",
+      "hebrew": "לבנית גדולה",
+      "english": "Great Egret",
+      "group": "birds",
+      "aliases_he": [
+        "לבנית גדולה"
+      ]
+    },
+    {
+      "key": "Platalea leucorodia",
+      "latin": "Platalea leucorodia",
+      "hebrew": "כפן לבן",
+      "english": "Eurasian Spoonbill",
+      "group": "birds",
+      "aliases_he": [
+        "כפתן",
+        "כפן לבן"
+      ]
+    },
+    {
+      "key": "Capra nubiana",
+      "latin": "Capra nubiana",
+      "hebrew": "יעל נובי",
+      "english": "Nubian Ibex",
+      "group": "mammals",
+      "aliases_he": [
+        "יעל נובי"
+      ]
+    },
+    {
+      "key": "Sitta europaea",
+      "latin": "Sitta europaea",
+      "hebrew": "חסידן",
+      "english": "Eurasian Nuthatch",
+      "group": "birds",
+      "aliases_he": [
+        "חッית עצים",
+        "חסידן"
+      ]
+    },
+    {
+      "key": "Emberiza",
+      "latin": "Emberiza",
+      "hebrew": "גיבתון",
+      "english": "Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "דוחן"
+      ]
+    },
+    {
+      "key": "Charadriidae",
+      "latin": "Charadriidae",
+      "hebrew": "חופמיים",
+      "english": "Plover",
+      "group": "birds",
+      "aliases_he": [
+        "חופמי"
+      ]
+    },
+    {
+      "key": "Gazella gazella gazella",
+      "latin": "Gazella gazella",
+      "hebrew": "צבי ישראלי",
+      "english": "Mountain Gazelle",
+      "group": "mammals",
+      "aliases_he": [
+        "צבי ישראלי"
+      ]
+    },
+    {
+      "key": "Emberiza hortulana",
+      "latin": "Emberiza hortulana",
+      "hebrew": "גיבתון גנים",
+      "english": "Ortolan Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גבתון גנים"
+      ]
+    },
+    {
+      "key": "Tringa ochropus",
+      "latin": "Tringa ochropus",
+      "hebrew": "ביצנית לבנת-כנף",
+      "english": "Green Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "ביצנית לבנת-כנף"
+      ]
+    },
+    {
+      "key": "Silybum marianum",
+      "latin": "Silybum marianum",
+      "hebrew": "גדילן מצוי",
+      "english": "Milk Thistle",
+      "group": "flora",
+      "aliases_he": [
+        "גדילן"
+      ]
+    },
+    {
+      "key": "Oenanthe leucura",
+      "latin": "Oenanthe leucura",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Black Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    {
+      "key": "Camelus dromedarius",
+      "latin": "Camelus dromedarius",
+      "hebrew": "גמל חד-דבשתי",
+      "english": "Dromedary Camel",
+      "group": "mammals",
+      "aliases_he": [
+        "גמל חד-דבשתי"
+      ]
+    },
+    {
+      "key": "Phoenix dactylifera",
+      "latin": "Phoenix dactylifera",
+      "hebrew": "תמר מצוי",
+      "english": "Date Palm",
+      "group": "flora",
+      "aliases_he": [
+        "תמר מצוי"
+      ]
+    },
+    {
+      "key": "Streptopelia decaocto",
+      "latin": "Streptopelia decaocto",
+      "hebrew": "תור צווארון",
+      "english": "Eurasian Collared Dove",
+      "group": "birds",
+      "aliases_he": [
+        "תור צווארון"
+      ]
+    },
+    {
+      "key": "Sterna hirundo",
+      "latin": "Sterna hirundo",
+      "hebrew": "שחפית ים",
+      "english": "Common Tern",
+      "group": "birds",
+      "aliases_he": [
+        "שחפית ים"
+      ]
+    },
+    {
+      "key": "Actitis hypoleucos",
+      "latin": "Actitis hypoleucos",
+      "hebrew": "ביצנית מנוקדת",
+      "english": "Common Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "ביצנית מנוקדת"
+      ]
+    },
+    {
+      "key": "Himantopus himantopus / Tringa sp.",
+      "latin": "Himantopus himantopus / Tringa sp.",
+      "hebrew": "תמירון מצוי וביצנית",
+      "english": "Black-winged Stilt and Sandpiper",
+      "group": "birds",
+      "aliases_he": [
+        "תמירון מצוי וביצנית"
+      ]
+    },
+    {
+      "key": "Circaetus gallicus",
+      "latin": "Circaetus gallicus",
+      "hebrew": "חיוויאי",
+      "english": "Short-toed Snake Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "חיוויאי"
+      ]
+    },
+    {
+      "key": "Pinus",
+      "latin": "Pinus",
+      "hebrew": "אורן",
+      "english": "Pine",
+      "group": "flora",
+      "aliases_he": [
+        "אורן"
+      ]
+    },
+    {
+      "key": "Columba livia domestica",
+      "latin": "Columba livia domestica",
+      "hebrew": "יונת הבית",
+      "english": "Feral Pigeon",
+      "group": "birds",
+      "aliases_he": [
+        "יונת הבית"
+      ]
+    },
+    {
+      "key": "Lasiocampidae",
+      "latin": "Lasiocampidae",
+      "hebrew": "טוואיים",
+      "english": "Lasiocampid Moth",
+      "group": "invertebrates",
+      "aliases_he": [
+        "זחל של טוואי"
+      ]
+    },
+    {
+      "key": "לא ידוע",
+      "latin": "Unknown",
+      "hebrew": "לא ידוע",
+      "english": "Unknown",
+      "group": "other",
+      "aliases_he": [
+        "לא ידוע"
+      ]
+    },
+    {
+      "key": "Scincidae",
+      "latin": "Scincidae",
+      "hebrew": "חומטיים",
+      "english": "Skink",
+      "group": "reptiles",
+      "aliases_he": [
+        "חומט"
+      ]
+    },
+    {
+      "key": "Anthophila",
+      "latin": "Anthophila",
+      "hebrew": "דבוראים",
+      "english": "Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורה"
+      ]
+    },
+    {
+      "key": "Oreochromis",
+      "latin": "Oreochromis",
+      "hebrew": "אמנון",
+      "english": "Tilapia",
+      "group": "other",
+      "aliases_he": [
+        "אמנון"
+      ]
+    },
+    {
+      "key": "Argiope",
+      "latin": "Argiope",
+      "hebrew": "אריגנית",
+      "english": "Argiope Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "אריגנית"
+      ]
+    },
+    {
+      "key": "Curculionidae",
+      "latin": "Curculionidae",
+      "hebrew": "חדקונית",
+      "english": "Weevil",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חדקונית"
+      ]
+    },
+    {
+      "key": "Lycaenidae",
+      "latin": "Lycaenidae",
+      "hebrew": "כחליליים",
+      "english": "Lycaenid Butterfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כחליל"
+      ]
+    },
+    {
+      "key": "Colotis fausta",
+      "latin": "Colotis fausta",
+      "hebrew": "לבנין הצלף",
+      "english": "Salmon Arab",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין הצלף"
+      ]
+    },
+    {
+      "key": "Dama mesopotamica",
+      "latin": "Dama mesopotamica",
+      "hebrew": "יחמור פרסי",
+      "english": "Persian Fallow Deer",
+      "group": "mammals",
+      "aliases_he": [
+        "יחמור פרסי"
+      ]
+    },
+    {
+      "key": "Centaurea",
+      "latin": "Centaurea",
+      "hebrew": "דרדר",
+      "english": "Centaury",
+      "group": "flora",
+      "aliases_he": [
+        "דרדר"
+      ]
+    },
+    {
+      "key": "Vulpes zerda",
+      "latin": "Vulpes zerda",
+      "hebrew": "פנק",
+      "english": "Fennec Fox",
+      "group": "mammals",
+      "aliases_he": [
+        "פנק"
+      ]
+    },
+    {
+      "key": "Felis catus",
+      "latin": "Felis catus",
+      "hebrew": "חתול בית",
+      "english": "Domestic Cat",
+      "group": "mammals",
+      "aliases_he": [
+        "חתול בית"
+      ]
+    },
+    {
+      "key": "Bubo ascalaphus",
+      "latin": "Bubo ascalaphus",
+      "hebrew": "אוח מדבר",
+      "english": "Pharaoh Eagle-Owl",
+      "group": "birds",
+      "aliases_he": [
+        "אוח מדבר"
+      ]
+    },
+    {
+      "key": "Sylvia melanocephala",
+      "latin": "Curruca melanocephala",
+      "hebrew": "סבכי שחור-עין",
+      "english": "Sardinian Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי שחור-עין"
+      ]
+    },
+    {
+      "key": "Cantharidae",
+      "latin": "Cantharidae",
+      "hebrew": "קנתיריים",
+      "english": "Soldier Beetle",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חיפושית"
+      ]
+    },
+    {
+      "key": "Pontia daplidice",
+      "latin": "Pontia daplidice",
+      "hebrew": "לבנין המכמשת",
+      "english": "Bath White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין המכמשת"
+      ]
+    },
+    {
+      "key": "Bombus",
+      "latin": "Bombus",
+      "hebrew": "בומבוס",
+      "english": "Bumblebee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "בומבוס"
+      ]
+    },
+    {
+      "key": "Pieris rapae",
+      "latin": "Pieris rapae",
+      "hebrew": "לבנין",
+      "english": "Small White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין"
+      ]
+    },
+    {
+      "key": "Melanargia galathea",
+      "latin": "Melanargia galathea",
+      "hebrew": "שחמטית",
+      "english": "Marbled White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שחמטית"
+      ]
+    },
+    {
+      "key": "Testudo graeca",
+      "latin": "Testudo graeca",
+      "hebrew": "צב יבשה מצוי",
+      "english": "Greek Tortoise",
+      "group": "reptiles",
+      "aliases_he": [
+        "צב יבשה מצוי"
+      ]
+    },
+    {
+      "key": "Vanessa cardui",
+      "latin": "Vanessa cardui",
+      "hebrew": "נימפית הסרפד",
+      "english": "Painted Lady",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נימפית הסרפד"
+      ]
+    },
+    {
+      "key": "Coccinellidae",
+      "latin": "Coccinellidae",
+      "hebrew": "פרת משה רבנו",
+      "english": "Ladybug",
+      "group": "invertebrates",
+      "aliases_he": [
+        "פרת משה רבנו"
+      ]
+    },
+    {
+      "key": "Xylocopa violacea",
+      "latin": "Xylocopa violacea",
+      "hebrew": "דבורת-עץ סגולה",
+      "english": "Violet Carpenter Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת-עץ סגולה"
+      ]
+    },
+    {
+      "key": "Colias croceus",
+      "latin": "Colias croceus",
+      "hebrew": "לבנין",
+      "english": "Clouded Yellow",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין"
+      ]
+    },
+    {
+      "key": "Bos taurus",
+      "latin": "Bos taurus",
+      "hebrew": "פרה",
+      "english": "Cattle",
+      "group": "mammals",
+      "aliases_he": [
+        "פרה הבית"
+      ]
+    },
+    {
+      "key": "Gastropoda",
+      "latin": "Gastropoda",
+      "hebrew": "חילזון",
+      "english": "Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חילזון"
+      ]
+    },
+    {
+      "key": "Xylocopa",
+      "latin": "Xylocopa",
+      "hebrew": "דבורת עץ",
+      "english": "Carpenter Bee",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דבורת עץ"
+      ]
+    },
+    {
+      "key": "Odonata",
+      "latin": "Odonata",
+      "hebrew": "שפירית",
+      "english": "Dragonfly",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שפירית"
+      ]
+    },
+    {
+      "key": "Nymphaea alba",
+      "latin": "Nymphaea alba",
+      "hebrew": "נימפאה לבנה",
+      "english": "European White Waterlily",
+      "group": "flora",
+      "aliases_he": [
+        "נימפאה לבנה"
+      ]
+    },
+    {
+      "key": "Libythea celtis",
+      "latin": "Libythea celtis",
+      "hebrew": "נימפית הקטלב",
+      "english": "European Beak",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נימפית הקטלב"
+      ]
+    },
+    {
+      "key": "Garrulus glandarius atricapillus",
+      "latin": "Garrulus glandarius",
+      "hebrew": "עורבני שחור-כיפה",
+      "english": "Eurasian Jay",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור-כיפה"
+      ]
+    },
+    {
+      "key": "Kerodon rupestris",
+      "latin": "Kerodon rupestris",
+      "hebrew": "שרקן סלעים",
+      "english": "Rock Cavy",
+      "group": "mammals",
+      "aliases_he": [
+        "שרקן סלעים"
+      ]
+    },
+    {
+      "key": "Sylvia communis",
+      "latin": "Curruca communis",
+      "hebrew": "סבכי אפור",
+      "english": "Greater Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי אפור"
+      ]
+    },
+    {
+      "key": "Corvus",
+      "latin": "Corvus",
+      "hebrew": "עורב",
+      "english": "Crow",
+      "group": "birds",
+      "aliases_he": [
+        "עורבני שחור"
+      ]
+    },
+    {
+      "key": "Ficedula hypoleuca",
+      "latin": "Ficedula hypoleuca",
+      "hebrew": "חטפית שחורה",
+      "english": "European Pied Flycatcher",
+      "group": "birds",
+      "aliases_he": [
+        "חטפית שחורה"
+      ]
+    },
+    {
+      "key": "Anthus campestris",
+      "latin": "Anthus campestris",
+      "hebrew": "פיפרון",
+      "english": "Tawny Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פיפרון"
+      ]
+    },
+    {
+      "key": "Oenanthe pleschanka",
+      "latin": "Oenanthe pleschanka",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Pied Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    {
+      "key": "Curruca communis",
+      "latin": "Curruca communis",
+      "hebrew": "סבכי טוחנים",
+      "english": "Greater Whitethroat",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי טוחנים"
+      ]
+    },
+    {
+      "key": "Emberiza cia",
+      "latin": "Emberiza cia",
+      "hebrew": "גיבתון סלעים",
+      "english": "Rock Bunting",
+      "group": "birds",
+      "aliases_he": [
+        "גיבתון סלעים"
+      ]
+    },
+    {
+      "key": "Coloeus monedula",
+      "latin": "Coloeus monedula",
+      "hebrew": "זרון",
+      "english": "Eurasian Jackdaw",
+      "group": "birds",
+      "aliases_he": [
+        "זרון"
+      ]
+    },
+    {
+      "key": "Euchloe ausonia",
+      "latin": "Euchloe ausonia",
+      "hebrew": "לבנין המרווח",
+      "english": "Eastern Dappled White",
+      "group": "invertebrates",
+      "aliases_he": [
+        "לבנין המרווח"
+      ]
+    },
+    {
+      "key": "Senecio",
+      "latin": "Senecio",
+      "hebrew": "סביון",
+      "english": "Groundsel",
+      "group": "flora",
+      "aliases_he": [
+        "סביון"
+      ]
+    },
+    {
+      "key": "Oenanthe finschii",
+      "latin": "Oenanthe finschii",
+      "hebrew": "סלעית שחורת-בטן",
+      "english": "Finsch's Wheatear",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית שחורת-בטן"
+      ]
+    },
+    {
+      "key": "Anacamptis papilionacea",
+      "latin": "Anacamptis papilionacea",
+      "hebrew": "סחלב פרפרני",
+      "english": "Butterfly Orchid",
+      "group": "flora",
+      "aliases_he": [
+        "סחלב פרפרני"
+      ]
+    },
+    {
+      "key": "Aquila heliaca",
+      "latin": "Aquila heliaca",
+      "hebrew": "עיט שמש",
+      "english": "Eastern Imperial Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט שמש"
+      ]
+    },
+    {
+      "key": "Helicidae",
+      "latin": "Helicidae",
+      "hebrew": "שבלוליים",
+      "english": "Helicid Snail",
+      "group": "invertebrates",
+      "aliases_he": [
+        "שבלול"
+      ]
+    },
+    {
+      "key": "Cuculus canorus",
+      "latin": "Cuculus canorus",
+      "hebrew": "קוקייה אירופית",
+      "english": "Common Cuckoo",
+      "group": "birds",
+      "aliases_he": [
+        "קוקייה אירופית"
+      ]
+    },
+    {
+      "key": "Anthus pratensis",
+      "latin": "Anthus pratensis",
+      "hebrew": "פפיון שדות",
+      "english": "Meadow Pipit",
+      "group": "birds",
+      "aliases_he": [
+        "פפיון שדות"
+      ]
+    },
+    {
+      "key": "Pinus halepensis",
+      "latin": "Pinus halepensis",
+      "hebrew": "אורן ירושלים",
+      "english": "Aleppo Pine",
+      "group": "flora",
+      "aliases_he": [
+        "אורן ירושלים"
+      ]
+    },
+    {
+      "key": "Aquila chrysaetos",
+      "latin": "Aquila chrysaetos",
+      "hebrew": "עיט זהב",
+      "english": "Golden Eagle",
+      "group": "birds",
+      "aliases_he": [
+        "עיט זהב"
+      ]
+    },
+    {
+      "key": "Punica granatum",
+      "latin": "Punica granatum",
+      "hebrew": "רימון מצוי",
+      "english": "Pomegranate",
+      "group": "flora",
+      "aliases_he": [
+        "רימון מצוי"
+      ]
+    },
+    {
+      "key": "Coccothraustes coccothraustes",
+      "latin": "Coccothraustes coccothraustes",
+      "hebrew": "פצחן",
+      "english": "Hawfinch",
+      "group": "birds",
+      "aliases_he": [
+        "פצחן"
+      ]
+    },
+    {
+      "key": "Saxicola torquatus",
+      "latin": "Saxicola torquatus",
+      "hebrew": "דוחל שחור-גרון",
+      "english": "African Stonechat",
+      "group": "birds",
+      "aliases_he": [
+        "דוחל שחור-גרון"
+      ]
+    },
+    {
+      "key": "Upupa epops",
+      "latin": "Upupa epops",
+      "hebrew": "דוכיפת",
+      "english": "Eurasian Hoopoe",
+      "group": "birds",
+      "aliases_he": [
+        "דוכיפת"
+      ]
+    },
+    {
+      "key": "Ardea cinerea, Phalacrocoracidae",
+      "latin": "Ardea cinerea, Phalacrocoracidae",
+      "hebrew": "אנפה אפורה וקורמורן",
+      "english": "Grey Heron and Cormorant",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה אפורה וקורמורן"
+      ]
+    },
+    {
+      "key": "Caelifera",
+      "latin": "Caelifera",
+      "hebrew": "חגב",
+      "english": "Grasshopper",
+      "group": "invertebrates",
+      "aliases_he": [
+        "חגב"
+      ]
+    },
+    {
+      "key": "Halcyon smyrnensis, Ceryle rudis",
+      "latin": "Halcyon smyrnensis, Ceryle rudis",
+      "hebrew": "שלדג לבן-חזה ופרפור עקוד",
+      "english": "White-throated Kingfisher and Pied Kingfisher",
+      "group": "birds",
+      "aliases_he": [
+        "שלדג לבן-חזה ופרפור עקוד"
+      ]
+    },
+    {
+      "key": "Homo sapiens",
+      "latin": "Homo sapiens",
+      "hebrew": "אדם",
+      "english": "Human",
+      "group": "mammals",
+      "aliases_he": [
+        "אדם"
+      ]
+    },
+    {
+      "key": "פטרייה",
+      "latin": "Fungi",
+      "hebrew": "פטרייה",
+      "english": "Fungus",
+      "group": "flora",
+      "aliases_he": [
+        "פטרייה"
+      ]
+    },
+    {
+      "key": "Acer",
+      "latin": "Acer",
+      "hebrew": "אדר",
+      "english": "Maple",
+      "group": "flora",
+      "aliases_he": [
+        "עץ אדר"
+      ]
+    },
+    {
+      "key": "Chroicocephalus ridibundus",
+      "latin": "Chroicocephalus ridibundus",
+      "hebrew": "שחף אגמים",
+      "english": "Black-headed Gull",
+      "group": "birds",
+      "aliases_he": [
+        "שחף אגמים"
+      ]
+    },
+    {
+      "key": "Cyanistes caeruleus",
+      "latin": "Cyanistes caeruleus",
+      "hebrew": "ירגזי כחול",
+      "english": "Eurasian Blue Tit",
+      "group": "birds",
+      "aliases_he": [
+        "ירגזי כחול"
+      ]
+    },
+    {
+      "key": "Danaus chrysippus",
+      "latin": "Danaus chrysippus",
+      "hebrew": "דנאית הדורה",
+      "english": "Plain Tiger",
+      "group": "invertebrates",
+      "aliases_he": [
+        "דנאית הדורה"
+      ]
+    },
+    {
+      "key": "Gekkonidae",
+      "latin": "Gekkonidae",
+      "hebrew": "שממית",
+      "english": "Gecko",
+      "group": "reptiles",
+      "aliases_he": [
+        "שממית"
+      ]
+    },
+    {
+      "key": "Curruca cantillans",
+      "latin": "Curruca cantillans",
+      "hebrew": "סבכי ערמוני-גרון",
+      "english": "Subalpine Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי ערמוני-גרון"
+      ]
+    },
+    {
+      "key": "Turdus philomelos",
+      "latin": "Turdus philomelos",
+      "hebrew": "קיכלי רונן",
+      "english": "Song Thrush",
+      "group": "birds",
+      "aliases_he": [
+        "קיכלי רונן"
+      ]
+    },
+    {
+      "key": "Sturnus vulgaris",
+      "latin": "Sturnus vulgaris",
+      "hebrew": "זרזיר מצוי",
+      "english": "Common Starling",
+      "group": "birds",
+      "aliases_he": [
+        "זרזיר מצוי"
+      ]
+    },
+    {
+      "key": "Luscinia svecica",
+      "latin": "Luscinia svecica",
+      "hebrew": "כחול-חזה",
+      "english": "Bluethroat",
+      "group": "birds",
+      "aliases_he": [
+        "כחול-חזה"
+      ]
+    },
+    {
+      "key": "Argiope lobata",
+      "latin": "Argiope lobata",
+      "hebrew": "כסופי ענק",
+      "english": "Lobed Argiope",
+      "group": "invertebrates",
+      "aliases_he": [
+        "כסופי ענק"
+      ]
+    },
+    {
+      "key": "Theridiidae",
+      "latin": "Theridiidae",
+      "hebrew": "כדורניים",
+      "english": "Cobweb Spider",
+      "group": "invertebrates",
+      "aliases_he": [
+        "עכביש רכן"
+      ]
+    },
+    {
+      "key": "Protaetia cuprea",
+      "latin": "Protaetia cuprea",
+      "hebrew": "נחושתית הקוצים",
+      "english": "Copper Rose Chafer",
+      "group": "invertebrates",
+      "aliases_he": [
+        "נחושתית הקוצים"
+      ]
+    }
+  ]
+}
