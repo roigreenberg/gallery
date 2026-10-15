@@ -187,15 +187,21 @@ const handleTagClick = (tag) => {
   emit('select-tag', tag);
 };
 
-// Format date strictly to DD/MM/YYYY
+// Format date strictly to DD/MM/YYYY with time preserved if available
 const formatDate = (dateStr) => {
   if (!dateStr || typeof dateStr !== 'string') return '';
-  const match = dateStr.trim().match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})/);
+  const clean = dateStr.trim();
+  if (!clean) return '';
+
+  // If already formatted as DD/MM/YYYY (with or without time)
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(clean)) return clean;
+
+  const match = clean.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})(?:[T\s](\d{2}:\d{2}(?::\d{2})?))?/);
   if (match) {
-    const [, year, month, day] = match;
-    return `${day}/${month}/${year}`;
+    const [, year, month, day, time] = match;
+    return time ? `${day}/${month}/${year} ${time}` : `${day}/${month}/${year}`;
   }
-  return dateStr;
+  return clean;
 };
 
 // ==========================================

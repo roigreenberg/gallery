@@ -27,17 +27,20 @@ const getCategoryHebrew = (cat) => {
   return categoryMap[cat] || cat || 'טבע וציפורים';
 };
 
-// Format any date or EXIF timestamp to DD/MM/YYYY
+// Format any date or EXIF timestamp to DD/MM/YYYY while preserving time (HH:MM:SS)
 const formatDateDDMMYYYY = (dateStr) => {
   if (!dateStr || typeof dateStr !== 'string') return '';
   const clean = dateStr.trim();
   if (!clean) return '';
 
-  // Match EXIF "YYYY:MM:DD" or standard "YYYY-MM-DD"
-  const match = clean.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})/);
+  // If already formatted as DD/MM/YYYY
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(clean)) return clean;
+
+  // Match EXIF "YYYY:MM:DD HH:MM:SS" or standard "YYYY-MM-DD HH:MM:SS"
+  const match = clean.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})(?:[T\s](\d{2}:\d{2}(?::\d{2})?))?/);
   if (match) {
-    const [, year, month, day] = match;
-    return `${day}/${month}/${year}`;
+    const [, year, month, day, time] = match;
+    return time ? `${day}/${month}/${year} ${time}` : `${day}/${month}/${year}`;
   }
 
   try {
@@ -46,7 +49,10 @@ const formatDateDDMMYYYY = (dateStr) => {
       const d = String(parsed.getDate()).padStart(2, '0');
       const m = String(parsed.getMonth() + 1).padStart(2, '0');
       const y = parsed.getFullYear();
-      return `${d}/${m}/${y}`;
+      const hh = String(parsed.getHours()).padStart(2, '0');
+      const mm = String(parsed.getMinutes()).padStart(2, '0');
+      const ss = String(parsed.getSeconds()).padStart(2, '0');
+      return `${d}/${m}/${y} ${hh}:${mm}:${ss}`;
     }
   } catch (e) {}
 

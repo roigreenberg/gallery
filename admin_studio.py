@@ -669,8 +669,8 @@ HTML_PAGE = """<!DOCTYPE html>
       document.getElementById('editIdBadge').innerText = photo.id;
       document.getElementById('editHeaderTitle').innerText = getPhotoTitle(photo);
       const rawDate = exif.date_time_original || '';
-      const dateMatch = rawDate.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})/);
-      const formattedExifDate = dateMatch ? `${dateMatch[3]}/${dateMatch[2]}/${dateMatch[1]}` : rawDate;
+      const dateMatch = rawDate.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})(?:\s+(\d{2}:\d{2}(?::\d{2})?))?/);
+      const formattedExifDate = dateMatch ? (dateMatch[4] ? `${dateMatch[3]}/${dateMatch[2]}/${dateMatch[1]} ${dateMatch[4]}` : `${dateMatch[3]}/${dateMatch[2]}/${dateMatch[1]}`) : rawDate;
       document.getElementById('editLocationHeader').innerText = formattedExifDate ? `${formattedExifDate} • ${exif.camera_model || ''}` : (exif.camera_model || '');
 
       // Update Featured button state
