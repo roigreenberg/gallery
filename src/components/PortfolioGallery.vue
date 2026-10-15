@@ -88,6 +88,23 @@ const normalizedPhotos = computed(() => {
       ''
     ).trim();
 
+    // Extract clean comparable capture timestamp (YYYYMMDDHHMMSS)
+    const rawDate = exif.date_time_original || exif.date || '';
+    let captureTs = '00000000000000';
+    const matchExif = rawDate.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})\s*(\d{2})?[:\-]?(\d{2})?[:\-]?(\d{2})?/);
+    if (matchExif) {
+      const [, y, m, d, hh = '00', mm = '00', ss = '00'] = matchExif;
+      captureTs = `${y}${m}${d}${hh}${mm}${ss}`;
+    } else {
+      const idMatch = (p.id || '').match(/^(\d{8})/);
+      if (idMatch) {
+        captureTs = `${idMatch[1]}000000`;
+      }
+    }
+
+    const animalName = (ai.species_hebrew || p.species_he || ai.title || p.title || '').trim();
+    const addedTs = p.processed_at || '';
+
     return {
       id: p.id || p.filename || String(Math.random()),
       title: ai.title || p.title || p.filename || 'תמונת טבע',
@@ -98,6 +115,9 @@ const normalizedPhotos = computed(() => {
       description: ai.description || p.description || '',
       humorous_description: rawHumor,
       has_humor: Boolean(rawHumor),
+      captureTs,
+      animalName,
+      addedTs,
       thumbnail: fixUrl(rawThumb),
       display: fixUrl(rawDisplay),
       aspectRatio: p.dimensions?.aspect_ratio ? `${p.dimensions.aspect_ratio}` : (p.aspectRatio || '3/2'),
@@ -121,40 +141,22 @@ const normalizedPhotos = computed(() => {
 // Categories list in UI - Featured photos is the default first category
 const categories = ['נבחרות ⭐', 'הכל', 'טבע וציפורים', 'נוף', 'אסטרופוטוגרפיה', 'מאקרו'];
 
-// Active filter states - default to 'נבחרות ⭐'
+// Sorting options
+const sortOptions = [
+  { value: 'capture_desc', label: 'תאריך צילום (מהחדש לישן)' },
+  { value: 'capture_asc', label: 'תאריך צילום (מהישן לחדש)' },
+  { value: 'animal_asc', label: 'שם החיה (א׳ עד ת׳)' },
+  { value: 'animal_desc', label: 'שם החיה (ת׳ עד א׳)' },
+  { value: 'added_desc', label: 'תאריך הוספה (מהחדש לישן)' },
+  { value: 'added_asc', label: 'תאריך הוספה (מהישן לחדש)' },
+];
+
+// Active filter & sort states
 const activeCategory = ref('נבחרות ⭐');
 const searchQuery = ref('');
 const activeTag = ref(null);
 const activePhoto = ref(null);
-const isHumorMode = ref(false);
-
-const HUMOR_STORAGE_KEY = 'roigreenberg_humor_mode';
-
-const toggleHumorMode = () => {
-  isHumorMode.value = !isHumorMode.value;
-  if (isHumorMode.value) {
-    // If activating humor mode while on default 'נבחרות ⭐', switch to 'הכל'
-    // so user immediately sees all 900+ humorous photos across the entire gallery!
-    if (activeCategory.value === 'נבחרות ⭐') {
-      activeCategory.value = 'הכל';
-    }
-  } else {
-    // When exiting humor mode, restore the default featured landing view
-    if (activeCategory.value === 'הכל') {
-      activeCategory.value = 'נבחרות ⭐';
-    }
-  }
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(HUMOR_STORAGE_KEY, String(isHumorMode.value));
-    } catch (e) {}
-  }
-};
-
-// Count of photos with humorous descriptions
-const humorCount = computed(() => {
-  return normalizedPhotos.value.filter(p => p.has_humor).length;
-});
+const sortBy = ref('capture_desc');
 
 // Extract top tags from normalized photos
 const allTags = computed(() => {
@@ -171,14 +173,9 @@ const allTags = computed(() => {
     .slice(0, 12);
 });
 
-// Filtered photos computed property
+// Filtered photos computed property (category, tag, search query)
 const filteredPhotos = computed(() => {
   return normalizedPhotos.value.filter(photo => {
-    // 0. Humor Mode check: in humor mode, strictly include only photos with humorous descriptions
-    if (isHumorMode.value && !photo.has_humor) {
-      return false;
-    }
-
     // 1. Category check
     if (activeCategory.value === 'נבחרות ⭐') {
       if (!photo.is_featured) return false;
@@ -211,6 +208,27 @@ const filteredPhotos = computed(() => {
   });
 });
 
+// Sorted photos computed property based on selected sortBy
+const sortedPhotos = computed(() => {
+  const list = [...filteredPhotos.value];
+  switch (sortBy.value) {
+    case 'capture_desc':
+      return list.sort((a, b) => b.captureTs.localeCompare(a.captureTs) || b.id.localeCompare(a.id));
+    case 'capture_asc':
+      return list.sort((a, b) => a.captureTs.localeCompare(b.captureTs) || a.id.localeCompare(b.id));
+    case 'animal_asc':
+      return list.sort((a, b) => a.animalName.localeCompare(b.animalName, 'he') || b.captureTs.localeCompare(a.captureTs));
+    case 'animal_desc':
+      return list.sort((a, b) => b.animalName.localeCompare(a.animalName, 'he') || b.captureTs.localeCompare(a.captureTs));
+    case 'added_desc':
+      return list.sort((a, b) => (b.addedTs || '').localeCompare(a.addedTs || '') || b.captureTs.localeCompare(a.captureTs));
+    case 'added_asc':
+      return list.sort((a, b) => (a.addedTs || '').localeCompare(b.addedTs || '') || a.captureTs.localeCompare(b.captureTs));
+    default:
+      return list;
+  }
+});
+
 // ==========================================
 // Virtual Pagination & Infinite Scroll (Batch of 30)
 // ==========================================
@@ -219,23 +237,23 @@ const visibleCount = ref(PAGE_SIZE);
 const sentinelRef = ref(null);
 let observer = null;
 
-// Reset pagination whenever filters or humor mode change
-watch([activeCategory, searchQuery, activeTag, isHumorMode], () => {
+// Reset pagination whenever filters or sort change
+watch([activeCategory, searchQuery, activeTag, sortBy], () => {
   visibleCount.value = PAGE_SIZE;
 });
 
 // Sliced list of photos currently rendered in the DOM
 const visiblePhotos = computed(() => {
-  return filteredPhotos.value.slice(0, visibleCount.value);
+  return sortedPhotos.value.slice(0, visibleCount.value);
 });
 
 const hasMore = computed(() => {
-  return visibleCount.value < filteredPhotos.value.length;
+  return visibleCount.value < sortedPhotos.value.length;
 });
 
 const loadMore = () => {
   if (hasMore.value) {
-    visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, filteredPhotos.value.length);
+    visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, sortedPhotos.value.length);
   }
 };
 
@@ -334,22 +352,7 @@ const syncStateFromUrl = () => {
   try {
     const params = new URLSearchParams(window.location.search);
 
-    // 1. Humor Mode
-    const humorParam = params.get('humor') || params.get('mode');
-    if (humorParam === '1' || humorParam === 'true' || humorParam === 'humor') {
-      isHumorMode.value = true;
-    } else if (humorParam === '0' || humorParam === 'false') {
-      isHumorMode.value = false;
-    } else if (typeof window !== 'undefined') {
-      try {
-        const savedHumor = localStorage.getItem(HUMOR_STORAGE_KEY);
-        if (savedHumor === 'true') {
-          isHumorMode.value = true;
-        }
-      } catch (e) {}
-    }
-
-    // 2. Category
+    // 1. Category
     const cat = params.get('category');
     if (cat) {
       if (cat === 'all' || cat === 'הכל') {
@@ -365,8 +368,13 @@ const syncStateFromUrl = () => {
         }
       }
     } else {
-      // In humor mode default to 'הכל' to reveal all 934 funny photos, else default to 'נבחרות ⭐'
-      activeCategory.value = isHumorMode.value ? 'הכל' : 'נבחרות ⭐';
+      activeCategory.value = 'נבחרות ⭐';
+    }
+
+    // 2. Sort option
+    const sort = params.get('sort');
+    if (sort && sortOptions.some(o => o.value === sort)) {
+      sortBy.value = sort;
     }
 
     // 3. Tag
@@ -387,9 +395,9 @@ const syncStateFromUrl = () => {
       const match = normalizedPhotos.value.find(p => p.id === photoId);
       if (match) {
         activePhoto.value = match;
-        const idx = filteredPhotos.value.findIndex(p => p.id === match.id);
+        const idx = sortedPhotos.value.findIndex(p => p.id === match.id);
         if (idx >= visibleCount.value) {
-          visibleCount.value = Math.min(idx + PAGE_SIZE, filteredPhotos.value.length);
+          visibleCount.value = Math.min(idx + PAGE_SIZE, sortedPhotos.value.length);
         }
       } else {
         activePhoto.value = null;
@@ -410,19 +418,18 @@ const updateUrl = (pushToHistory = false) => {
   const url = new URL(window.location.href);
   const params = url.searchParams;
 
-  // Category (omitted when default for current mode: 'הכל' in humor mode, 'נבחרות ⭐' in normal mode)
-  const defaultCategory = isHumorMode.value ? 'הכל' : 'נבחרות ⭐';
-  if (activeCategory.value && activeCategory.value !== defaultCategory) {
+  // Category (omitted when default 'נבחרות ⭐')
+  if (activeCategory.value && activeCategory.value !== 'נבחרות ⭐') {
     params.set('category', activeCategory.value);
   } else {
     params.delete('category');
   }
 
-  // Humor Mode
-  if (isHumorMode.value) {
-    params.set('humor', '1');
+  // Sort option (omitted when default 'capture_desc')
+  if (sortBy.value && sortBy.value !== 'capture_desc') {
+    params.set('sort', sortBy.value);
   } else {
-    params.delete('humor');
+    params.delete('sort');
   }
 
   // Tag
@@ -465,7 +472,7 @@ onMounted(() => {
   window.addEventListener('popstate', syncStateFromUrl);
 });
 
-watch([activeCategory, searchQuery, activeTag, isHumorMode], () => {
+watch([activeCategory, searchQuery, activeTag, sortBy], () => {
   updateUrl(false);
 });
 
@@ -488,6 +495,10 @@ const handleCategoryChange = (cat) => {
   activeCategory.value = cat;
 };
 
+const handleSortChange = (newSort) => {
+  sortBy.value = newSort;
+};
+
 const handleSearchChange = (query) => {
   searchQuery.value = query;
 };
@@ -500,12 +511,7 @@ const resetFilters = () => {
   activeCategory.value = 'נבחרות ⭐';
   searchQuery.value = '';
   activeTag.value = null;
-  isHumorMode.value = false;
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.removeItem(HUMOR_STORAGE_KEY);
-    } catch (e) {}
-  }
+  sortBy.value = 'capture_desc';
 };
 
 const openPhoto = (photo) => {
@@ -525,9 +531,9 @@ const selectTagFromLightbox = (tag) => {
 const navigateToPhoto = (photo) => {
   activePhoto.value = photo;
   // Ensure the photo navigated to in lightbox is included in visible photos
-  const idx = filteredPhotos.value.findIndex(p => p.id === photo.id);
+  const idx = sortedPhotos.value.findIndex(p => p.id === photo.id);
   if (idx >= visibleCount.value) {
-    visibleCount.value = Math.min(idx + PAGE_SIZE, filteredPhotos.value.length);
+    visibleCount.value = Math.min(idx + PAGE_SIZE, sortedPhotos.value.length);
   }
 };
 </script>
@@ -541,64 +547,22 @@ const navigateToPhoto = (photo) => {
       :searchQuery="searchQuery"
       :allTags="allTags"
       :activeTag="activeTag"
-      :filteredCount="filteredPhotos.length"
+      :filteredCount="sortedPhotos.length"
       :totalCount="normalizedPhotos.length"
       :selectedCount="selectedPhotoIds.length"
-      :isHumorMode="isHumorMode"
-      :humorCount="humorCount"
+      :sortBy="sortBy"
+      :sortOptions="sortOptions"
       @update:category="handleCategoryChange"
+      @update:sort="handleSortChange"
       @update:search="handleSearchChange"
       @update:tag="handleTagChange"
-      @toggle-humor="toggleHumorMode"
       @reset-filters="resetFilters"
       @open-selection="openSelectionModal"
     />
 
-    <!-- Humor Mode Banner (when active) -->
-    <div
-      v-if="isHumorMode"
-      class="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/15 via-purple-950/30 to-slate-900/40 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 backdrop-blur-md shadow-lg"
-    >
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0 border border-amber-500/40 shadow-inner">
-          🎭
-        </div>
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <h2 class="text-white font-bold text-base sm:text-lg">מצב הומוריסטי פעיל</h2>
-            <span class="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
-              {{ filteredPhotos.length }} תמונות
-            </span>
-            <span v-if="activeCategory !== 'הכל'" class="text-xs text-amber-300/80">
-              (מסונן לפי: {{ activeCategory }} מתוך {{ humorCount }} סה״כ)
-            </span>
-          </div>
-          <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
-            מוצגות רק תמונות שזוהו כבעלות זווית משעשעת או הבעה מצחיקה, והתיאורים מוחלפים בכיתובים שנונים.
-            <span v-if="activeCategory !== 'הכל'">
-              <button
-                type="button"
-                @click="activeCategory = 'הכל'"
-                class="underline hover:text-white mr-1.5 cursor-pointer font-bold text-amber-300 transition-colors"
-              >
-                לחץ כאן לצפייה בכל {{ humorCount }} התמונות ההומוריסטיות בגלריה
-              </button>
-            </span>
-          </p>
-        </div>
-      </div>
-      <button
-        type="button"
-        @click="toggleHumorMode"
-        class="self-start sm:self-auto px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 shrink-0 transition-colors cursor-pointer"
-      >
-        חזור למצב רגיל
-      </button>
-    </div>
-
     <!-- Featured Category Banner -->
     <div
-      v-else-if="activeCategory === 'נבחרות ⭐'"
+      v-if="activeCategory === 'נבחרות ⭐'"
       class="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-amber-950/20 to-transparent p-4 sm:p-5 flex items-center justify-between gap-4 backdrop-blur-sm"
     >
       <div class="flex items-center gap-3">
@@ -627,7 +591,6 @@ const navigateToPhoto = (photo) => {
     <GalleryGrid
       :photos="visiblePhotos"
       :selectedIds="selectedPhotoIds"
-      :isHumorMode="isHumorMode"
       @select-photo="openPhoto"
       @toggle-select="togglePhotoSelection"
     />
@@ -688,8 +651,7 @@ const navigateToPhoto = (photo) => {
     <!-- Lightbox Modal -->
     <Lightbox
       :photo="activePhoto"
-      :photosList="filteredPhotos"
-      :isHumorMode="isHumorMode"
+      :photosList="sortedPhotos"
       @close="closePhoto"
       @navigate="navigateToPhoto"
       @select-tag="selectTagFromLightbox"

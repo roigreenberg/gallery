@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Search, X, SlidersHorizontal, Sparkles } from 'lucide-vue-next';
+import { Search, X, Sparkles, ArrowUpDown, ChevronDown } from 'lucide-vue-next';
 
 const props = defineProps({
   categories: {
@@ -35,20 +35,20 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  isHumorMode: {
-    type: Boolean,
-    default: false
+  sortBy: {
+    type: String,
+    default: 'capture_desc'
   },
-  humorCount: {
-    type: Number,
-    default: 0
+  sortOptions: {
+    type: Array,
+    required: true
   }
 });
 
-const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'reset-filters', 'open-selection', 'toggle-humor']);
+const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'update:sort', 'reset-filters', 'open-selection']);
 
 const hasActiveFilters = computed(() => {
-  return props.activeCategory !== 'נבחרות ⭐' || props.searchQuery.trim() !== '' || Boolean(props.activeTag) || props.isHumorMode;
+  return props.activeCategory !== 'נבחרות ⭐' || props.searchQuery.trim() !== '' || Boolean(props.activeTag) || props.sortBy !== 'capture_desc';
 });
 </script>
 
@@ -89,26 +89,30 @@ const hasActiveFilters = computed(() => {
           <span>{{ totalCount }} תמונות</span>
         </div>
 
-        <!-- Humor Mode Toggle Button -->
-        <button
-          type="button"
-          @click="emit('toggle-humor')"
-          class="px-3.5 py-1.5 rounded-full border transition-all duration-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 select-none"
-          :class="isHumorMode
-            ? 'bg-gradient-to-r from-amber-500/25 via-purple-500/25 to-pink-500/20 border-amber-400 text-amber-200 ring-2 ring-amber-400/40 shadow-amber-500/20 font-bold scale-102'
-            : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:text-amber-300 hover:border-slate-700 hover:bg-slate-800/80'"
-          :title="isHumorMode ? 'בטל מצב הומוריסטי וחזור לתיאורים רגילים' : 'הפעל מצב הומוריסטי והצג כיתובים משעשעים'"
-        >
-          <span class="text-sm">🎭</span>
-          <span>מצב הומוריסטי</span>
-          <span
-            v-if="humorCount > 0"
-            class="px-1.5 py-0.2 rounded-full text-[10px] font-black"
-            :class="isHumorMode ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-400'"
+        <!-- Sort Selector -->
+        <div class="relative inline-flex items-center">
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-sky-400">
+            <ArrowUpDown class="w-3.5 h-3.5" />
+          </div>
+          <select
+            :value="sortBy"
+            @change="emit('update:sort', $event.target.value)"
+            class="appearance-none bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-slate-600 rounded-full pr-8 pl-7 py-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500/50 cursor-pointer transition shadow-inner backdrop-blur-md"
+            title="סדר מיון התמונות"
           >
-            {{ humorCount }}
-          </span>
-        </button>
+            <option
+              v-for="opt in sortOptions"
+              :key="opt.value"
+              :value="opt.value"
+              class="bg-slate-900 text-slate-200 py-1"
+            >
+              {{ opt.label }}
+            </option>
+          </select>
+          <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
+            <ChevronDown class="w-3 h-3" />
+          </div>
+        </div>
 
         <!-- Chosen Photos Button -->
         <button

@@ -27,10 +27,6 @@ const props = defineProps({
   photosList: {
     type: Array,
     required: true
-  },
-  isHumorMode: {
-    type: Boolean,
-    default: false
   }
 });
 
@@ -49,8 +45,7 @@ const handleShare = async () => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   const origin = window.location.origin;
   // Use dedicated static page for photo so WhatsApp extracts unique OpenGraph thumbnail & title
-  const humorQuery = props.isHumorMode ? '?humor=1' : '';
-  const shareUrl = `${origin}${base}/photo/${encodeURIComponent(props.photo.id)}/${humorQuery}`;
+  const shareUrl = `${origin}${base}/photo/${encodeURIComponent(props.photo.id)}/`;
 
   const shareData = {
     title: props.photo.title || 'צילום מאת רועי גרינברג',
@@ -602,52 +597,23 @@ onUnmounted(() => {
               </p>
             </div>
 
-            <!-- In Humor Mode: Primary Humorous Description -->
-            <div
-              v-if="isHumorMode && photo.humorous_description"
-              class="space-y-3"
+            <!-- Description -->
+            <p
+              v-if="photo.description"
+              class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-950/40 p-3.5 rounded-xl border border-white/5"
             >
-              <div class="text-xs sm:text-sm text-amber-100 leading-relaxed bg-gradient-to-br from-amber-500/20 via-purple-950/40 to-slate-950 p-4 rounded-xl border border-amber-400/40 shadow-lg space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
-                    <span>🎭</span>
-                    <span>זווית משעשעת (מצב הומוריסטי)</span>
-                  </span>
-                </div>
-                <p class="text-sm sm:text-base font-semibold italic text-amber-100 leading-relaxed drop-shadow-sm">
-                  "{{ photo.humorous_description }}"
-                </p>
-              </div>
+              {{ photo.description }}
+            </p>
 
-              <!-- Collapsible standard description in humor mode -->
-              <details v-if="photo.description" class="group bg-slate-950/30 rounded-xl border border-white/5 p-3 text-xs text-slate-400 cursor-pointer">
-                <summary class="font-medium text-slate-300 select-none hover:text-white flex items-center justify-between">
-                  <span>תיאור הצילום המקורי</span>
-                  <span class="text-slate-500 text-[10px] group-open:rotate-180 transition-transform">▼</span>
-                </summary>
-                <p class="mt-2 text-slate-300 leading-relaxed pt-2 border-t border-white/5">
-                  {{ photo.description }}
-                </p>
-              </details>
-            </div>
-
-            <!-- Standard Mode: Regular Description + Optional Humor callout -->
-            <div v-else class="space-y-3">
-              <p v-if="photo.description" class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-950/40 p-3.5 rounded-xl border border-white/5">
-                {{ photo.description }}
+            <!-- Humorous Description (always shown if present, icon followed immediately by text) -->
+            <div
+              v-if="photo.humorous_description"
+              class="text-xs sm:text-sm text-amber-100/95 leading-relaxed bg-amber-950/30 p-3.5 rounded-xl border border-amber-500/30 shadow-sm"
+            >
+              <p class="leading-relaxed">
+                <span class="text-base ml-1.5 select-none align-baseline">🎭</span>
+                <span class="italic font-medium align-baseline">"{{ photo.humorous_description }}"</span>
               </p>
-
-              <!-- Humorous Description Callout (if present) -->
-              <div
-                v-if="photo.humorous_description"
-                class="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-950/25 p-3.5 rounded-xl border border-amber-500/25 flex items-start gap-2.5 shadow-sm"
-              >
-                <span class="text-base select-none shrink-0 mt-0.5">🎭</span>
-                <div class="space-y-0.5">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">זווית הומוריסטית</span>
-                  <p class="italic leading-relaxed">"{{ photo.humorous_description }}"</p>
-                </div>
-              </div>
             </div>
 
             <!-- EXIF & Gear Specs Grid -->

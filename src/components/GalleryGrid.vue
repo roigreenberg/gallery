@@ -10,10 +10,6 @@ const props = defineProps({
   selectedIds: {
     type: Array,
     default: () => []
-  },
-  isHumorMode: {
-    type: Boolean,
-    default: false
   }
 });
 
@@ -35,19 +31,11 @@ const handleImageLoad = (id) => {
       class="text-center py-24 px-4 rounded-3xl border border-dashed border-slate-800 bg-slate-900/30"
     >
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800/80 text-slate-400 mb-4">
-        <span v-if="isHumorMode" class="text-3xl">🎭</span>
-        <Camera v-else class="w-8 h-8 stroke-1 text-slate-400" />
+        <Camera class="w-8 h-8 stroke-1 text-slate-400" />
       </div>
-      <h3 class="text-lg font-semibold text-slate-200 mb-1">
-        {{ isHumorMode ? 'אין תמונות במצב הומוריסטי כרגע' : 'לא נמצאו תמונות תואמות' }}
-      </h3>
-      <p class="text-sm text-slate-400 max-w-md mx-auto">
-        <span v-if="isHumorMode">
-          התיאורים ההומוריסטיים נמצאים בתהליך ניתוח והפקה ע"י ה-AI. ברגע שנוספו תיאורים שנונים לתמונות, הן תופענה כאן אוטומטית.
-        </span>
-        <span v-else>
-          נסה לשנות את מילות החיפוש או לבחור קטגוריה ותגית אחרת
-        </span>
+      <h3 class="text-lg font-semibold text-slate-200 mb-1">לא נמצאו תמונות תואמות</h3>
+      <p class="text-sm text-slate-400 max-w-sm mx-auto">
+        נסה לשנות את מילות החיפוש או לבחור קטגוריה ותגית אחרת
       </p>
     </div>
 
@@ -60,7 +48,7 @@ const handleImageLoad = (id) => {
         v-for="photo in photos"
         :key="photo.id"
         class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-slate-900 border transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl"
-        :class="selectedIds.includes(photo.id) ? 'border-sky-500/80 ring-2 ring-sky-500/30 shadow-sky-500/10' : (isHumorMode ? 'border-amber-500/30 hover:border-amber-400/60' : 'border-slate-800/80 hover:border-slate-700/80')"
+        :class="selectedIds.includes(photo.id) ? 'border-sky-500/80 ring-2 ring-sky-500/30 shadow-sky-500/10' : 'border-slate-800/80 hover:border-slate-700/80'"
         style="content-visibility: auto; contain-intrinsic-size: auto 300px;"
         @click="emit('select-photo', photo)"
       >
@@ -92,15 +80,8 @@ const handleImageLoad = (id) => {
           />
         </div>
 
-        <!-- Top Badges: Category & Featured Star & Humor -->
+        <!-- Top Badges: Category & Featured Star -->
         <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5">
-          <span
-            v-if="isHumorMode && photo.humorous_description"
-            class="px-2 py-0.5 text-[11px] font-bold text-amber-200 bg-purple-950/90 backdrop-blur-md rounded-full border border-amber-400/50 shadow-sm"
-            title="מצב הומוריסטי"
-          >
-            🎭
-          </span>
           <span
             v-if="photo.is_featured"
             class="px-2 py-0.5 text-[11px] font-bold text-amber-300 bg-amber-950/80 backdrop-blur-md rounded-full border border-amber-500/50 shadow-sm"
@@ -118,31 +99,23 @@ const handleImageLoad = (id) => {
           class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 pointer-events-none"
         >
           <div class="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 space-y-1.5 text-right">
-            <!-- Humorous caption if in humor mode -->
-            <div v-if="isHumorMode && photo.humorous_description" class="space-y-1">
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/30">
-                <span>🎭</span>
-                <span>זווית משעשעת</span>
-              </span>
-              <p class="text-sm font-bold text-amber-100 italic leading-snug drop-shadow-md">
-                "{{ photo.humorous_description }}"
-              </p>
-              <p class="text-[11px] text-slate-300/80 truncate font-normal">
-                {{ photo.title }}
-              </p>
-            </div>
+            <h4 class="text-base font-bold text-white tracking-tight drop-shadow-sm">
+              {{ photo.title }}
+            </h4>
 
-            <!-- Standard title and species -->
-            <div v-else class="space-y-1">
-              <h4 class="text-base font-bold text-white tracking-tight drop-shadow-sm">
-                {{ photo.title }}
-              </h4>
+            <p class="text-xs text-sky-300/90 font-medium italic">
+              {{ photo.species_he }}
+              <span v-if="photo.species_la" class="text-slate-400 font-normal">({{ photo.species_la }})</span>
+            </p>
 
-              <p class="text-xs text-sky-300/90 font-medium italic">
-                {{ photo.species_he }}
-                <span v-if="photo.species_la" class="text-slate-400 font-normal">({{ photo.species_la }})</span>
-              </p>
-            </div>
+            <!-- Humorous description in hover overlay if present -->
+            <p
+              v-if="photo.humorous_description"
+              class="text-xs text-amber-200/90 italic pt-1 truncate border-t border-white/10"
+              :title="photo.humorous_description"
+            >
+              <span class="ml-1">🎭</span>"{{ photo.humorous_description }}"
+            </p>
 
             <!-- Quick EXIF Badge -->
             <div class="pt-2 flex items-center justify-between text-[11px] text-slate-300/80 border-t border-white/10">
