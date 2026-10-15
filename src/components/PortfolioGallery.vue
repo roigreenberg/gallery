@@ -132,6 +132,18 @@ const HUMOR_STORAGE_KEY = 'roigreenberg_humor_mode';
 
 const toggleHumorMode = () => {
   isHumorMode.value = !isHumorMode.value;
+  if (isHumorMode.value) {
+    // If activating humor mode while on default 'נבחרות ⭐', switch to 'הכל'
+    // so user immediately sees all 900+ humorous photos across the entire gallery!
+    if (activeCategory.value === 'נבחרות ⭐') {
+      activeCategory.value = 'הכל';
+    }
+  } else {
+    // When exiting humor mode, restore the default featured landing view
+    if (activeCategory.value === 'הכל') {
+      activeCategory.value = 'נבחרות ⭐';
+    }
+  }
   if (typeof window !== 'undefined') {
     try {
       localStorage.setItem(HUMOR_STORAGE_KEY, String(isHumorMode.value));
@@ -322,7 +334,22 @@ const syncStateFromUrl = () => {
   try {
     const params = new URLSearchParams(window.location.search);
 
-    // 1. Category
+    // 1. Humor Mode
+    const humorParam = params.get('humor') || params.get('mode');
+    if (humorParam === '1' || humorParam === 'true' || humorParam === 'humor') {
+      isHumorMode.value = true;
+    } else if (humorParam === '0' || humorParam === 'false') {
+      isHumorMode.value = false;
+    } else if (typeof window !== 'undefined') {
+      try {
+        const savedHumor = localStorage.getItem(HUMOR_STORAGE_KEY);
+        if (savedHumor === 'true') {
+          isHumorMode.value = true;
+        }
+      } catch (e) {}
+    }
+
+    // 2. Category
     const cat = params.get('category');
     if (cat) {
       if (cat === 'all' || cat === 'הכל') {
@@ -338,23 +365,8 @@ const syncStateFromUrl = () => {
         }
       }
     } else {
-      // Default landing category is Featured Photos
-      activeCategory.value = 'נבחרות ⭐';
-    }
-
-    // 2. Humor Mode
-    const humorParam = params.get('humor') || params.get('mode');
-    if (humorParam === '1' || humorParam === 'true' || humorParam === 'humor') {
-      isHumorMode.value = true;
-    } else if (humorParam === '0' || humorParam === 'false') {
-      isHumorMode.value = false;
-    } else if (typeof window !== 'undefined') {
-      try {
-        const savedHumor = localStorage.getItem(HUMOR_STORAGE_KEY);
-        if (savedHumor === 'true') {
-          isHumorMode.value = true;
-        }
-      } catch (e) {}
+      // In humor mode default to 'הכל' to reveal all 934 funny photos, else default to 'נבחרות ⭐'
+      activeCategory.value = isHumorMode.value ? 'הכל' : 'נבחרות ⭐';
     }
 
     // 3. Tag
@@ -398,8 +410,9 @@ const updateUrl = (pushToHistory = false) => {
   const url = new URL(window.location.href);
   const params = url.searchParams;
 
-  // Category (omitted when default 'נבחרות ⭐')
-  if (activeCategory.value && activeCategory.value !== 'נבחרות ⭐') {
+  // Category (omitted when default for current mode: 'הכל' in humor mode, 'נבחרות ⭐' in normal mode)
+  const defaultCategory = isHumorMode.value ? 'הכל' : 'נבחרות ⭐';
+  if (activeCategory.value && activeCategory.value !== defaultCategory) {
     params.set('category', activeCategory.value);
   } else {
     params.delete('category');
@@ -556,9 +569,21 @@ const navigateToPhoto = (photo) => {
             <span class="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
               {{ filteredPhotos.length }} תמונות
             </span>
+            <span v-if="activeCategory !== 'הכל'" class="text-xs text-amber-300/80">
+              (מסונן לפי: {{ activeCategory }} מתוך {{ humorCount }} סה״כ)
+            </span>
           </div>
           <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
             מוצגות רק תמונות שזוהו כבעלות זווית משעשעת או הבעה מצחיקה, והתיאורים מוחלפים בכיתובים שנונים.
+            <span v-if="activeCategory !== 'הכל'">
+              <button
+                type="button"
+                @click="activeCategory = 'הכל'"
+                class="underline hover:text-white mr-1.5 cursor-pointer font-bold text-amber-300 transition-colors"
+              >
+                לחץ כאן לצפייה בכל {{ humorCount }} התמונות ההומוריסטיות בגלריה
+              </button>
+            </span>
           </p>
         </div>
       </div>
