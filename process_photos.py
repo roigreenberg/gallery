@@ -145,6 +145,10 @@ class PhotoAITags(BaseModel):
         default="",
         description="תיאור קצר במשפט אחד בעברית המעביר את הסיפור של התמונה"
     )
+    humorous_description: Optional[str] = Field(
+        default=None,
+        description="תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי, אחרת מחרוזת ריקה"
+    )
 
 
 class BatchItemAITags(BaseModel):
@@ -157,11 +161,29 @@ class BatchItemAITags(BaseModel):
     behavior: List[str] = Field(default_factory=list, description="התנהגויות")
     tags: List[str] = Field(default_factory=list, description="3-6 תגיות בעברית")
     description: str = Field(default="", description="תיאור קצר במשפט אחד בעברית")
+    humorous_description: Optional[str] = Field(
+        default="",
+        description="תיאור קצר ומבדר במשפט אחד בעברית רק אם יש הומור אותנטי, אחרת מחרוזת ריקה"
+    )
 
 
 class BatchPhotosAITags(BaseModel):
     """תשובה מרוכזת מקריאת Batch ל-Gemini."""
     items: List[BatchItemAITags] = Field(default_factory=list)
+
+
+class BatchHumorItem(BaseModel):
+    """פריט בודד של תיאור הומוריסטי מקריאת Batch."""
+    index: int = Field(description="מספר התמונה ברשימה (1, 2, ...)")
+    humorous_description: Optional[str] = Field(
+        default="",
+        description="תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה משעשעת באופן טבעי, אחרת מחרוזת ריקה"
+    )
+
+
+class BatchHumorResponse(BaseModel):
+    """תשובת Batch לתיוג הומוריסטי בלבד."""
+    items: List[BatchHumorItem] = Field(default_factory=list)
 
 
 class ExifMetadata(BaseModel):
@@ -410,6 +432,16 @@ def extract_exif(image_path: Path, pil_image: Image.Image) -> ExifMetadata:
     )
 
 
+def sanitize_text(text: Optional[str]) -> str:
+    """ניקוי מחרוזות מתווי בקרה, סימני bidi, גרשיים ומרכאות עודפות ורווחים כפולים."""
+    if not text:
+        return ""
+    t = re.sub(r"[\u200e\u200f\u202a-\u202e\ufeff\u200b\ufffd]", "", str(text))
+    t = re.sub(r"^[\"\'\`\*\_\#\s]+|[\"\'\`\*\_\#\s]+$", "", t)
+    t = re.sub(r"\s+", " ", t).strip()
+    return t
+
+
 # ==============================================================================
 # תיוג תמונה באמצעות Gemini Flash API
 # ==============================================================================
@@ -465,6 +497,7 @@ class AITagger:
             "5. behavior: רשימת התנהגויות ייחודיות הנראות בתמונה (למשל: ['מעוף', 'ציד', 'האכלה', 'מנוחה', 'חיזור', 'צלילה']).\n"
             "6. tags: 3 עד 6 תגיות רלוונטיות בעברית לסינון בגלריה (למשל: ['ציפורים', 'עופות מים', 'טבע ישראלי', 'שלדגים']).\n"
             "7. description: תיאור קצר, מדויק ופואטי במשפט אחד בעברית.\n"
+            "8. humorous_description: תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי (למשל מחשבות פנימיות של החיה, כיתוב שנון). אם אין משהו משעשע באופן אותנטי (למשל תמונת נוף, תמונה שלווה או רצינית), השאר מחרוזת ריקה (\"\") - לא בכוח!\n"
             "החזר פלט מובנה התואם ל-Schema."
         )
 
@@ -489,12 +522,31 @@ class AITagger:
                 )
 
                 if response.parsed and isinstance(response.parsed, PhotoAITags):
-                    return response.parsed
+                    p = response.parsed
+                    return PhotoAITags(
+                        title=sanitize_text(p.title),
+                        species_hebrew=sanitize_text(p.species_hebrew),
+                        species_latin=sanitize_text(p.species_latin),
+                        category=sanitize_text(p.category) or "wildlife",
+                        behavior=[sanitize_text(b) for b in p.behavior if sanitize_text(b)],
+                        tags=[sanitize_text(t) for t in p.tags if sanitize_text(t)] or ["טבע"],
+                        description=sanitize_text(p.description),
+                        humorous_description=sanitize_text(p.humorous_description),
+                    )
 
                 # גיבוי ניתוח JSON ידני
                 raw_text = response.text or "{}"
                 data = json.loads(raw_text)
-                return PhotoAITags(**data)
+                return PhotoAITags(
+                    title=sanitize_text(data.get("title")),
+                    species_hebrew=sanitize_text(data.get("species_hebrew")),
+                    species_latin=sanitize_text(data.get("species_latin")),
+                    category=sanitize_text(data.get("category")) or "wildlife",
+                    behavior=[sanitize_text(b) for b in data.get("behavior", []) if sanitize_text(b)],
+                    tags=[sanitize_text(t) for t in data.get("tags", ["טבע"]) if sanitize_text(t)] or ["טבע"],
+                    description=sanitize_text(data.get("description")),
+                    humorous_description=sanitize_text(data.get("humorous_description")),
+                )
 
             except Exception as e:
                 err_str = str(e)
@@ -504,7 +556,7 @@ class AITagger:
                     else:
                         time.sleep(2.0)
                 else:
-                    logger.warning(f"דילוג על תיוג AI עבור '{filename}' עקב מגבלת קצב/שגיאה: שימוש בברירת מחדל.")
+                    logger.warning(f"דילוג על תיוג AI עבור '{filename}' עקב מגבלת קצב/שגיאה: שימוש בברירות מחדל.")
                     return self._fallback_tags(filename)
 
         return self._fallback_tags(filename)
@@ -524,13 +576,14 @@ class AITagger:
             "לפניך קבוצה של מספר תמונות ממוספרות (תמונה 1, תמונה 2, וכו').\n"
             "נתח כל תמונה בנפרד והחזר ברשימה את הניתוח עבור כל אינדקס (index) בהתאמה:\n"
             "- index: מספר התמונה (1, 2, ...)\n"
-            "- title: כותרת קצרה, מרשימה וקולעת בעברית\n"
+            "- title: כותרת קצרה, מרשימה וקולעת בעברית (ללא מרכאות)\n"
             "- species_hebrew: שם המין המדויק בעברית (אם יש בעל חיים/צמח/גרם שמיים, אחרת מחרוזת ריקה)\n"
             "- species_latin: שם מדעי בלטינית (אם רלוונטי, אחרת מחרוזת ריקה)\n"
             "- category: קטגוריה ראשית (wildlife, landscape, macro, astrophotography, portrait, nature)\n"
             "- behavior: רשימת התנהגויות ייחודיות הנראות בתמונה\n"
             "- tags: 3 עד 6 תגיות רלוונטיות בעברית לסינון\n"
             "- description: תיאור קצר במשפט אחד בעברית\n"
+            "- humorous_description: תיאור קצר, משעשע ומבדר במשפט אחד בעברית רק אם הסיטואציה/ההבעה בתמונה מצחיקה באופן טבעי (למשל מחשבות פנימיות של החיה, כיתוב שנון). אם אין משהו משעשע באופן אותנטי (למשל תמונת נוף, תמונה שלווה או רגילה), השאר מחרוזת ריקה (\"\") - לא בכוח!\n"
         ]
 
         for idx, (thumb_img, fn) in enumerate(items, 1):
@@ -557,20 +610,30 @@ class AITagger:
                 if response.parsed and isinstance(response.parsed, BatchPhotosAITags):
                     for p in response.parsed.items:
                         parsed_map[p.index] = PhotoAITags(
-                            title=p.title,
-                            species_hebrew=p.species_hebrew or "",
-                            species_latin=p.species_latin or "",
-                            category=p.category or "wildlife",
-                            behavior=p.behavior or [],
-                            tags=p.tags or ["טבע"],
-                            description=p.description or "",
+                            title=sanitize_text(p.title),
+                            species_hebrew=sanitize_text(p.species_hebrew),
+                            species_latin=sanitize_text(p.species_latin),
+                            category=sanitize_text(p.category) or "wildlife",
+                            behavior=[sanitize_text(b) for b in (p.behavior or []) if sanitize_text(b)],
+                            tags=[sanitize_text(t) for t in (p.tags or ["טבע"]) if sanitize_text(t)] or ["טבע"],
+                            description=sanitize_text(p.description),
+                            humorous_description=sanitize_text(p.humorous_description),
                         )
                 elif response.text:
                     raw_data = json.loads(response.text)
                     raw_items = raw_data.get("items", []) if isinstance(raw_data, dict) else raw_data
                     for p in raw_items:
                         idx = p.get("index", len(parsed_map) + 1)
-                        parsed_map[idx] = PhotoAITags(**p)
+                        parsed_map[idx] = PhotoAITags(
+                            title=sanitize_text(p.get("title")),
+                            species_hebrew=sanitize_text(p.get("species_hebrew")),
+                            species_latin=sanitize_text(p.get("species_latin")),
+                            category=sanitize_text(p.get("category")) or "wildlife",
+                            behavior=[sanitize_text(b) for b in p.get("behavior", []) if sanitize_text(b)],
+                            tags=[sanitize_text(t) for t in p.get("tags", ["טבע"]) if sanitize_text(t)] or ["טבע"],
+                            description=sanitize_text(p.get("description")),
+                            humorous_description=sanitize_text(p.get("humorous_description")),
+                        )
 
                 results = []
                 for idx, (_, fn) in enumerate(items, 1):
@@ -595,6 +658,77 @@ class AITagger:
 
         return [self._fallback_tags(fn) for _, fn in items]
 
+    def tag_humor_batch(
+        self,
+        items: List[Tuple[Image.Image, str, str]]
+    ) -> List[str]:
+        """
+        שליחת מקבץ (Batch) של תמונות קיימות לקבלת תיאור הומוריסטי/משעשע בלבד.
+        """
+        if not self.is_available or self.client is None or not items:
+            return ["" for _ in items]
+
+        contents = [
+            "אתה מומחה לצילום טבע עם חוש הומור חד, שנון, משובח ומצחיק.\n"
+            f"לפניך קבוצה של {len(items)} תמונות טבע. עבור כל תמונה (לפי מספר ה-index שלה),\n"
+            "בדוק היטב את התמונה, הבעת הפנים, התנוחה או הרגע:\n"
+            "1. אם יש בסיטואציה משהו קומי, משעשע או מבדר (למשל: מחשבות פנימיות של החיה, הבעה מצחיקה, 'דיאלוג', כיתוב שנון של מימ):\n"
+            "   כתוב משפט קצר, קולע ומבדר בעברית (ללא מרכאות).\n"
+            "2. דגש עליון וקריטי: לא בכוח! אם התמונה רגילה, שלווה, נופית או שאין בה שום דבר משעשע באמת - החזר מחרוזת ריקה (\"\"). הומור מאולץ הוא גרוע.\n"
+            "החזר פלט JSON התואם ל-Schema עם index ו-humorous_description לכל תמונה.\n"
+        ]
+
+        for idx, (thumb_img, title, desc) in enumerate(items, 1):
+            contents.append(f"תמונה {idx}: {title} | {desc}")
+            buf = io.BytesIO()
+            thumb_img.save(buf, format="WEBP", quality=80)
+            contents.append(types.Part.from_bytes(data=buf.getvalue(), mime_type="image/webp"))
+
+        max_retries = 2
+        for attempt in range(1, max_retries + 1):
+            try:
+                cfg = types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=BatchHumorResponse,
+                    temperature=0.3,
+                )
+                response = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=contents,
+                    config=cfg,
+                )
+
+                parsed_map = {}
+                if response.parsed and isinstance(response.parsed, BatchHumorResponse):
+                    for p in response.parsed.items:
+                        parsed_map[p.index] = sanitize_text(p.humorous_description)
+                elif response.text:
+                    raw_data = json.loads(response.text)
+                    raw_items = raw_data.get("items", []) if isinstance(raw_data, dict) else raw_data
+                    for p in raw_items:
+                        idx = p.get("index", len(parsed_map) + 1)
+                        parsed_map[idx] = sanitize_text(p.get("humorous_description"))
+
+                results = []
+                for idx in range(1, len(items) + 1):
+                    results.append(parsed_map.get(idx, ""))
+
+                time.sleep(0.5)
+                return results
+
+            except Exception as e:
+                err_str = str(e)
+                if attempt < max_retries:
+                    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                        time.sleep(5.0)
+                    else:
+                        time.sleep(2.0)
+                else:
+                    logger.warning(f"שגיאה בהפקת הומור Batch: {e}")
+                    return ["" for _ in items]
+
+        return ["" for _ in items]
+
     def _fallback_tags(self, filename: str) -> PhotoAITags:
         """יצירת נתוני תיוג ברירת מחדל במקרה שאין מפתח או שקרתה תקלה."""
         # ניקוי שם הקובץ ליצירת כותרת בסיסית
@@ -604,13 +738,14 @@ class AITagger:
         clean_title = re.sub(r"(Topaz|Sharpen|Denoise|Gigapixel|\d+X)", "", clean_title, flags=re.IGNORECASE).strip()
 
         return PhotoAITags(
-            title=clean_title or "תמונה מהגלריה",
+            title=sanitize_text(clean_title) or "תמונה מהגלריה",
             species_hebrew="",
             species_latin="",
             category="wildlife",
             behavior=[],
             tags=["גלריה", "טבע"],
-            description="תמונה מאוסף הגלריה."
+            description="תמונה מאוסף הגלריה.",
+            humorous_description="",
         )
 
 
@@ -623,6 +758,8 @@ def clean_safe_id(filename: str, existing_ids: Set[str]) -> str:
     יצירת מזהה (ID) בטוח לשימוש ברשת ולשמות קבצים, ללא תווים בעייתיים.
     """
     stem = Path(filename).stem
+    # הסרת סימני כיוון בלתי נראים ותווי בקרה
+    stem = re.sub(r"[\u200e\u200f\u202a-\u202e\ufeff\u200b\ufffd]", "", stem)
     # החלפת תווים מיוחדים ורווחים בקו תחתי
     safe = re.sub(r"[^\w\-_]+", "_", stem, flags=re.UNICODE)
     safe = re.sub(r"_+", "_", safe).strip("_")
@@ -970,7 +1107,17 @@ def process_gallery(
         logger.info(f"הוגבל ל-{limit} תמונות בלבד (דגל --limit).")
 
     if not pending_files:
-        print("\n✨ כל התמונות כבר מעובדות ומעודכנות! אין צורך בפעולה נוספת.\n")
+        print("\n✨ כל התמונות כבר מעובדות ומעודכנות! אין צורך בעיבוד קבצים חדשים.\n")
+        if not skip_ai and ai_tagger and ai_tagger.is_available:
+            missing_humor = [r for r in db.records.values() if r.ai.humorous_description is None]
+            if missing_humor:
+                logger.info(f"מפעיל הפקת תיאורים הומוריסטיים עבור {len(missing_humor)} תמונות שטרם נותחו...")
+                generate_humor_for_gallery(
+                    data_file=data_file,
+                    thumbs_dir=thumbs_dir,
+                    gemini_model=gemini_model,
+                    batch_size=10,
+                )
         return
 
     # 6. לולאת עיבוד במקבצים (Batch) לחסכון מרבי בבקשות ובזמן
@@ -1086,6 +1233,18 @@ def process_gallery(
     print(f"[*] קובץ נתונים מעודכן:   {data_file}")
     print("=" * 65 + "\n")
 
+    # 7. השלמת מצב הומוריסטי לתמונות קיימות שטרם נותחו
+    if not skip_ai and ai_tagger and ai_tagger.is_available:
+        missing_humor = [r for r in db.records.values() if r.ai.humorous_description is None]
+        if missing_humor:
+            logger.info(f"מפעיל הפקת תיאורים הומוריסטיים עבור {len(missing_humor)} תמונות קיימות שטרם נותחו...")
+            generate_humor_for_gallery(
+                data_file=data_file,
+                thumbs_dir=thumbs_dir,
+                gemini_model=gemini_model,
+                batch_size=10,
+            )
+
 
 def is_fallback_ai(ai: PhotoAITags, orig_filename: str) -> bool:
     """זיהוי האם תיוג ה-AI של התמונה הוא ברירת מחדל / חסר / נכשל."""
@@ -1178,6 +1337,88 @@ def retag_fallback_photos(
     progress_bar.close()
     print("\n" + "=" * 65)
     print(f"[SUCCESS] סיום תיוג מחדש! {fixed_count} תמונות עודכנו בהצלחה.")
+    print(f"[*] קובץ נתונים מעודכן: {data_file}")
+    print("=" * 65 + "\n")
+
+
+def generate_humor_for_gallery(
+    data_file: Path = DEFAULT_DATA_FILE,
+    thumbs_dir: Path = DEFAULT_THUMBS_DIR,
+    gemini_model: str = DEFAULT_GEMINI_MODEL,
+    batch_size: int = 10,
+    force_all: bool = False,
+) -> None:
+    """
+    הפקת תיאורים הומוריסטיים (מצב משעשע) עבור כל תמונות הגלריה שטרם נותחו.
+    שולח במקבצים של 10 תמונות ל-Gemini Flash.
+    """
+    print("\n" + "=" * 65)
+    print("[START] הפקת תיאורים הומוריסטיים (מצב משעשע) לתמונות הגלריה")
+    print(f"[-] קובץ נתונים:  {data_file}")
+    print(f"[-] Thumbnails:   {thumbs_dir}")
+    print(f"[-] גודל מקבץ AI: {batch_size} תמונות לבקשה")
+    print(f"[-] מודל:         {gemini_model}")
+    print("=" * 65 + "\n")
+
+    db = GalleryDatabase(data_file)
+    ai_tagger = AITagger(model_name=gemini_model)
+    if not ai_tagger.is_available:
+        print("[ERROR] מפתח Gemini API אינו מוגדר או אינו זמין!")
+        return
+
+    # איתור תמונות שטרם נבדקו למצב הומוריסטי
+    to_process: List[PhotoRecord] = []
+    for record in db.records.values():
+        if force_all or record.ai.humorous_description is None:
+            to_process.append(record)
+
+    print(f"[INFO] נמצאו {len(to_process)} תמונות הממתינות לבדיקה/הפקת הומור.")
+    if not to_process:
+        print("[SUCCESS] כל התמונות כבר עברו ניתוח הומוריסטי!")
+        return
+
+    progress_bar = tqdm(total=len(to_process), desc="Humor Processing", unit="img")
+    funny_count = 0
+
+    for i in range(0, len(to_process), batch_size):
+        batch_records = to_process[i : i + batch_size]
+        batch_items: List[Tuple[Image.Image, str, str]] = []
+        valid_records: List[PhotoRecord] = []
+
+        for rec in batch_records:
+            thumb_path = thumbs_dir / rec.filename
+            if not thumb_path.exists():
+                thumb_path = thumbs_dir / Path(rec.paths.thumbnail).name
+            if thumb_path.exists():
+                try:
+                    img = Image.open(thumb_path)
+                    img.load()
+                    batch_items.append((img, rec.ai.title, rec.ai.description))
+                    valid_records.append(rec)
+                except Exception as e:
+                    logger.warning(f"שגיאה בפתיחת thumbnail {thumb_path}: {e}")
+                    rec.ai.humorous_description = ""
+            else:
+                logger.warning(f"לא נמצא thumbnail עבור {rec.original_filename}")
+                rec.ai.humorous_description = ""
+
+        if batch_items:
+            progress_bar.set_postfix_str(f"AI Batch {len(batch_items)} imgs...")
+            humor_list = ai_tagger.tag_humor_batch(batch_items)
+
+            for rec, humor in zip(valid_records, humor_list):
+                rec.ai.humorous_description = humor
+                if humor:
+                    funny_count += 1
+                db.add_record(rec)
+
+            db.save()
+
+        progress_bar.update(len(batch_records))
+
+    progress_bar.close()
+    print("\n" + "=" * 65)
+    print(f"[SUCCESS] סיום הפקת מצב הומוריסטי! הופקו {funny_count} תיאורים משעשעים מתוך {len(to_process)} תמונות שנבדקו.")
     print(f"[*] קובץ נתונים מעודכן: {data_file}")
     print("=" * 65 + "\n")
 
@@ -1347,6 +1588,16 @@ def parse_args() -> argparse.Namespace:
         help="איתור ותיוג מחדש ב-AI בלבד של כל התמונות שבהן התיוג נכשל או השתמש בברירת מחדל",
     )
     parser.add_argument(
+        "--add-humor",
+        action="store_true",
+        help="הפקת תיאור הומוריסטי/משעשע עבור כל התמונות שטרם נותחו",
+    )
+    parser.add_argument(
+        "--force-humor",
+        action="store_true",
+        help="הפקה מחדש של תיאור הומוריסטי לכל התמונות גם אם כבר נותחו",
+    )
+    parser.add_argument(
         "--migrate-r2",
         "--upload-existing-to-r2",
         action="store_true",
@@ -1381,6 +1632,14 @@ if __name__ == "__main__":
             thumbs_dir=cli_args.thumbs_dir,
             gemini_model=cli_args.model,
             batch_size=cli_args.batch_size,
+        )
+    elif cli_args.add_humor or cli_args.force_humor:
+        generate_humor_for_gallery(
+            data_file=cli_args.data_file,
+            thumbs_dir=cli_args.thumbs_dir,
+            gemini_model=cli_args.model,
+            batch_size=10,
+            force_all=cli_args.force_humor,
         )
     else:
         process_gallery(
