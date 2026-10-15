@@ -42,10 +42,14 @@ const props = defineProps({
   sortOptions: {
     type: Array,
     required: true
+  },
+  showCaptions: {
+    type: Boolean,
+    default: false
   }
 });
 
-const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'update:sort', 'reset-filters', 'open-selection']);
+const emit = defineEmits(['update:category', 'update:search', 'update:tag', 'update:sort', 'toggle-captions', 'reset-filters', 'open-selection']);
 
 const hasActiveFilters = computed(() => {
   return props.activeCategory !== 'נבחרות ⭐' || props.searchQuery.trim() !== '' || Boolean(props.activeTag) || props.sortBy !== 'capture_desc';
@@ -88,6 +92,20 @@ const hasActiveFilters = computed(() => {
           <span> מתוך </span>
           <span>{{ totalCount }} תמונות</span>
         </div>
+
+        <!-- "אני לא פולני" Humor Captions Toggle Button -->
+        <button
+          type="button"
+          @click="emit('toggle-captions')"
+          class="px-3.5 py-1.5 rounded-full border transition-all duration-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 select-none"
+          :class="showCaptions
+            ? 'bg-gradient-to-r from-amber-500/25 via-purple-500/25 to-pink-500/20 border-amber-400 text-amber-200 ring-2 ring-amber-400/40 shadow-amber-500/20 font-bold scale-102'
+            : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:text-amber-300 hover:border-slate-700 hover:bg-slate-800/80'"
+          :title="showCaptions ? 'הסתר את המשפטים המשעשעים שעל גבי התמונות' : 'הצג את המשפטים המשעשעים ישירות על גבי התמונות בגלריה'"
+        >
+          <span class="text-sm">🎭</span>
+          <span>אני לא פולני</span>
+        </button>
 
         <!-- Sort Selector -->
         <div class="relative inline-flex items-center">

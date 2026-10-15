@@ -163,6 +163,18 @@ const searchQuery = ref('');
 const activeTag = ref(null);
 const activePhoto = ref(null);
 const sortBy = ref('capture_desc');
+const showCaptions = ref(false);
+
+const CAPTIONS_STORAGE_KEY = 'roigreenberg_show_captions';
+
+const toggleCaptions = () => {
+  showCaptions.value = !showCaptions.value;
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(CAPTIONS_STORAGE_KEY, String(showCaptions.value));
+    } catch (e) {}
+  }
+};
 
 // Extract top tags from normalized photos
 const allTags = computed(() => {
@@ -476,6 +488,12 @@ onMounted(() => {
   loadSavedSelections();
   syncStateFromUrl();
   window.addEventListener('popstate', syncStateFromUrl);
+  try {
+    const savedCaptions = localStorage.getItem(CAPTIONS_STORAGE_KEY);
+    if (savedCaptions === 'true') {
+      showCaptions.value = true;
+    }
+  } catch (e) {}
 });
 
 watch([activeCategory, searchQuery, activeTag, sortBy], () => {
@@ -558,10 +576,12 @@ const navigateToPhoto = (photo) => {
       :selectedCount="selectedPhotoIds.length"
       :sortBy="sortBy"
       :sortOptions="sortOptions"
+      :showCaptions="showCaptions"
       @update:category="handleCategoryChange"
       @update:sort="handleSortChange"
       @update:search="handleSearchChange"
       @update:tag="handleTagChange"
+      @toggle-captions="toggleCaptions"
       @reset-filters="resetFilters"
       @open-selection="openSelectionModal"
     />
@@ -597,6 +617,7 @@ const navigateToPhoto = (photo) => {
     <GalleryGrid
       :photos="visiblePhotos"
       :selectedIds="selectedPhotoIds"
+      :showCaptions="showCaptions"
       @select-photo="openPhoto"
       @toggle-select="togglePhotoSelection"
     />

@@ -10,6 +10,10 @@ const props = defineProps({
   selectedIds: {
     type: Array,
     default: () => []
+  },
+  showCaptions: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -78,18 +82,47 @@ const handleImageLoad = (id) => {
             decoding="async"
             class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
           />
+
+          <!-- Bottom Humorous Caption Overlay (visible directly on image when 'showCaptions' is ON) -->
+          <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0 translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 translate-y-2"
+          >
+            <div
+              v-if="showCaptions && photo.humorous_description"
+              class="absolute bottom-0 inset-x-0 z-10 p-2.5 sm:p-3 bg-gradient-to-t from-slate-950/95 via-slate-950/75 to-transparent backdrop-blur-[2px] pointer-events-none"
+            >
+              <p class="text-xs sm:text-[13px] font-medium text-amber-100/95 leading-snug drop-shadow-md text-right line-clamp-3">
+                <span class="text-sm ml-1 select-none align-baseline">🎭</span>
+                <span class="italic font-semibold align-baseline">"{{ photo.humorous_description }}"</span>
+              </p>
+            </div>
+          </Transition>
         </div>
 
-        <!-- Top Badges: Category & Featured Star -->
-        <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5">
+        <!-- Top Badges: Featured Star, Name badge (if exists), and Category -->
+        <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5 max-w-[calc(100%-80px)] overflow-hidden">
           <span
             v-if="photo.is_featured"
-            class="px-2 py-0.5 text-[11px] font-bold text-amber-300 bg-amber-950/80 backdrop-blur-md rounded-full border border-amber-500/50 shadow-sm"
+            class="px-2 py-0.5 text-[11px] font-bold text-amber-300 bg-amber-950/80 backdrop-blur-md rounded-full border border-amber-500/50 shadow-sm shrink-0"
             title="תמונה נבחרת"
           >
             ⭐
           </span>
-          <span class="inline-block px-2.5 py-1 text-[11px] font-medium tracking-wide text-slate-200 bg-slate-950/75 backdrop-blur-md rounded-full border border-white/10 shadow-sm">
+          <!-- Subject / Species Name badge before Category badge -->
+          <span
+            v-if="photo.species_he"
+            class="inline-block px-2.5 py-1 text-[11px] font-bold tracking-tight text-white bg-slate-950/85 backdrop-blur-md rounded-full border border-sky-500/40 shadow-sm truncate max-w-[140px]"
+            :title="photo.species_he"
+          >
+            {{ photo.species_he }}
+          </span>
+          <!-- Category badge -->
+          <span class="inline-block px-2.5 py-1 text-[11px] font-medium tracking-wide text-slate-200 bg-slate-950/75 backdrop-blur-md rounded-full border border-white/10 shadow-sm shrink-0">
             {{ photo.category }}
           </span>
         </div>
