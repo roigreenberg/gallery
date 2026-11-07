@@ -513,15 +513,24 @@ class AITagger:
             logger.warning(f"שגיאה בטעינת מאגר השמות: {e}")
             return {"by_latin": {}, "by_hebrew": {}}
 
-    def _resolve_species_en(self, species_latin: Optional[str], species_hebrew: Optional[str]) -> str:
-        """שליפת שם המין הרשמי באנגלית ממאגר השמות."""
+    def _resolve_species(self, species_latin: Optional[str], species_hebrew: Optional[str]) -> Tuple[str, str]:
+        """שליפת שם המין הרשמי והקנוני בעברית ובאנגלית ממאגר השמות."""
         la = (species_latin or "").strip().lower()
         he = (species_hebrew or "").strip()
+        reg_entry = None
         if la and la in self.species_registry.get("by_latin", {}):
-            return self.species_registry["by_latin"][la].get("english", "")
-        if he and he in self.species_registry.get("by_hebrew", {}):
-            return self.species_registry["by_hebrew"][he].get("english", "")
-        return ""
+            reg_entry = self.species_registry["by_latin"][la]
+        elif he and he in self.species_registry.get("by_hebrew", {}):
+            reg_entry = self.species_registry["by_hebrew"][he]
+        
+        canon_he = reg_entry.get("hebrew", he) if reg_entry else he
+        canon_en = reg_entry.get("english", "") if reg_entry else ""
+        return canon_he, canon_en
+
+    def _resolve_species_en(self, species_latin: Optional[str], species_hebrew: Optional[str]) -> str:
+        """שליפת שם המין הרשמי באנגלית ממאגר השמות (תאימות לאחור)."""
+        _, en = self._resolve_species(species_latin, species_hebrew)
+        return en
 
     @property
     def is_available(self) -> bool:
@@ -581,9 +590,11 @@ class AITagger:
 
                 if response.parsed and isinstance(response.parsed, PhotoAITags):
                     p = response.parsed
-                    sp_he = sanitize_text(p.species_hebrew)
+                    sp_he_raw = sanitize_text(p.species_hebrew)
                     sp_la = sanitize_text(p.species_latin)
-                    sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(p.species_en)
+                    canon_he, canon_en = self._resolve_species(sp_la, sp_he_raw)
+                    sp_he = canon_he or sp_he_raw
+                    sp_en = canon_en or sanitize_text(p.species_en)
                     h_he = sanitize_text(p.humorous_description)
                     h_en = sanitize_text(p.humorous_description_en) if h_he else ""
                     return PhotoAITags(
@@ -605,9 +616,11 @@ class AITagger:
                 # גיבוי ניתוח JSON ידני
                 raw_text = response.text or "{}"
                 data = json.loads(raw_text)
-                sp_he = sanitize_text(data.get("species_hebrew"))
+                sp_he_raw = sanitize_text(data.get("species_hebrew"))
                 sp_la = sanitize_text(data.get("species_latin"))
-                sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(data.get("species_en"))
+                canon_he, canon_en = self._resolve_species(sp_la, sp_he_raw)
+                sp_he = canon_he or sp_he_raw
+                sp_en = canon_en or sanitize_text(data.get("species_en"))
                 h_he = sanitize_text(data.get("humorous_description"))
                 h_en = sanitize_text(data.get("humorous_description_en")) if h_he else ""
                 return PhotoAITags(
@@ -692,9 +705,11 @@ class AITagger:
                 parsed_map = {}
                 if response.parsed and isinstance(response.parsed, BatchPhotosAITags):
                     for p in response.parsed.items:
-                        sp_he = sanitize_text(p.species_hebrew)
+                        sp_he_raw = sanitize_text(p.species_hebrew)
                         sp_la = sanitize_text(p.species_latin)
-                        sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(p.species_en)
+                        canon_he, canon_en = self._resolve_species(sp_la, sp_he_raw)
+                        sp_he = canon_he or sp_he_raw
+                        sp_en = canon_en or sanitize_text(p.species_en)
                         h_he = sanitize_text(p.humorous_description)
                         h_en = sanitize_text(p.humorous_description_en) if h_he else ""
                         parsed_map[p.index] = PhotoAITags(
@@ -717,9 +732,11 @@ class AITagger:
                     raw_items = raw_data.get("items", []) if isinstance(raw_data, dict) else raw_data
                     for p in raw_items:
                         idx = p.get("index", len(parsed_map) + 1)
-                        sp_he = sanitize_text(p.get("species_hebrew"))
+                        sp_he_raw = sanitize_text(p.get("species_hebrew"))
                         sp_la = sanitize_text(p.get("species_latin"))
-                        sp_en = self._resolve_species_en(sp_la, sp_he) or sanitize_text(p.get("species_en"))
+                        canon_he, canon_en = self._resolve_species(sp_la, sp_he_raw)
+                        sp_he = canon_he or sp_he_raw
+                        sp_en = canon_en or sanitize_text(p.get("species_en"))
                         h_he = sanitize_text(p.get("humorous_description"))
                         h_en = sanitize_text(p.get("humorous_description_en")) if h_he else ""
                         parsed_map[idx] = PhotoAITags(

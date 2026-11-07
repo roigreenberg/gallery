@@ -1593,7 +1593,7 @@
     },
     "ai": {
       "title": "פיפיון אדום-גרון במים",
-      "species_hebrew": "פיפיון אדום-גרון",
+      "species_hebrew": "פפיון אדום-גרון",
       "species_latin": "Anthus cervinus",
       "category": "wildlife",
       "behavior": [
@@ -1651,7 +1651,7 @@
     },
     "ai": {
       "title": "בבואת הפפיון",
-      "species_hebrew": "פיפיון אדום-גרון",
+      "species_hebrew": "פפיון אדום-גרון",
       "species_latin": "Anthus cervinus",
       "category": "wildlife",
       "behavior": [
@@ -2272,7 +2272,7 @@
     },
     "ai": {
       "title": "פיפיון אדום-גרון בחיפוש",
-      "species_hebrew": "פיפיון אדום-גרון",
+      "species_hebrew": "פפיון אדום-גרון",
       "species_latin": "Anthus cervinus",
       "category": "wildlife",
       "behavior": [
@@ -2774,7 +2774,7 @@
     },
     "ai": {
       "title": "דבורה בטיסה אל הפרח",
-      "species_hebrew": "דבורת דבש",
+      "species_hebrew": "דבורת-דבש",
       "species_latin": "Apis mellifera",
       "category": "macro",
       "behavior": [
@@ -3229,7 +3229,7 @@
     },
     "ai": {
       "title": "דוחל חום-גרון במנוחה",
-      "species_hebrew": "דוחל חום-גרון",
+      "species_hebrew": "דוחל שחור-גרון",
       "species_latin": "Saxicola rubicola",
       "category": "wildlife",
       "behavior": [
@@ -3284,7 +3284,7 @@
     },
     "ai": {
       "title": "דוחל חום-גרון בשמש",
-      "species_hebrew": "דוחל חום-גרון",
+      "species_hebrew": "דוחל שחור-גרון",
       "species_latin": "Saxicola rubicola",
       "category": "wildlife",
       "behavior": [
@@ -4806,8 +4806,8 @@
       "date_time_original": "2026:09:10 18:24:15"
     },
     "ai": {
-      "title": "חוגלה בצעידה",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים בצעידה",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -4820,7 +4820,7 @@
         "טבע",
         "צפרות"
       ],
-      "description": "חוגלה צועדת בזהירות על גבי סלעים באזור טרשי.",
+      "description": "חוגלת סלעים צועדת בזהירות על גבי סלעים באזור טרשי.",
       "humorous_description": "כשאתה מנסה ללכת בסטייל אבל הרצפה עקומה לגמרי.",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge on the Move",
@@ -4919,7 +4919,7 @@
     },
     "ai": {
       "title": "חנקן אדום ראש בנחיתה",
-      "species_hebrew": "חנקן אדום ראש",
+      "species_hebrew": "חנקן אדום-גב",
       "species_latin": "Lanius collurio",
       "category": "wildlife",
       "behavior": [
@@ -5103,7 +5103,7 @@
       ],
       "description": "שרקרק גמדי צבעוני עומד על חוט חשמל כנגד שמיים כחולים.",
       "humorous_description": "כשאתה מחכה לאוטובוס אבל החלטת שקווי מתח גבוה זה הסטייל החדש שלך.",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater on a Wire",
       "description_en": "A colorful Green Bee-eater perched on a power line against a blue sky.",
       "humorous_description_en": "When you're waiting for the bus but decided high-voltage lines are your new style.",
@@ -5312,7 +5312,7 @@
     },
     "ai": {
       "title": "דוחל חום גרון על קוצים",
-      "species_hebrew": "דוחל חום גרון",
+      "species_hebrew": "דוחל חום-גרון",
       "species_latin": "Saxicola rubetra",
       "category": "wildlife",
       "behavior": [
@@ -5922,7 +5922,7 @@
     },
     "ai": {
       "title": "צעד זהיר במים",
-      "species_hebrew": "אנפית לילה",
+      "species_hebrew": "אנפת לילה",
       "species_latin": "Nycticorax nycticorax",
       "category": "wildlife",
       "behavior": [
@@ -5981,7 +5981,7 @@
     },
     "ai": {
       "title": "צייד לילי במארב",
-      "species_hebrew": "אנפית לילה",
+      "species_hebrew": "אנפת לילה",
       "species_latin": "Nycticorax nycticorax",
       "category": "wildlife",
       "behavior": [
@@ -6270,7 +6270,7 @@
     },
     "ai": {
       "title": "סוף עונת הבציר",
-      "species_hebrew": "גפן היין",
+      "species_hebrew": "גפן",
       "species_latin": "Vitis vinifera",
       "category": "nature",
       "behavior": [
@@ -7569,7 +7569,7 @@
     },
     "ai": {
       "title": "סלעית שחורת-בטן על משמרתה",
-      "species_hebrew": "סלעית שחורת-בטן",
+      "species_hebrew": "סלעית לבנת-כנף",
       "species_latin": "Oenanthe leucopyga",
       "category": "wildlife",
       "behavior": [
@@ -8197,7 +8197,7 @@
       ],
       "description": "שרקרק גמדי נתפס בעדשה ברגע של תעופה עם כנפיים פרושות לרווחה.",
       "humorous_description": "",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater in Flight",
       "description_en": "A Green Bee-eater captured in mid-air with its wings spread wide.",
       "humorous_description_en": "",
@@ -8253,7 +8253,7 @@
       ],
       "description": "שרקרק גמדי בתעופה חזיתית עם כנפיים פרושות לרווחה.",
       "humorous_description": "כשאתה מנסה להיראות דרמטי בטיקטוק אבל יוצא לך פרצוף של מופתע",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater Wingspan",
       "description_en": "A frontal view of a Green Bee-eater in flight with wings fully extended.",
       "humorous_description_en": "When you try to look dramatic for TikTok but end up with a surprised face.",
@@ -8309,7 +8309,7 @@
       ],
       "description": "שרקרק גמדי נראה בתעופה חזיתית רגע לפני נחיתה.",
       "humorous_description": "רגע לפני הנחיתה, כשאתה קולט ששכחת להוריד את הגלגלים",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater Landing",
       "description_en": "A Green Bee-eater seen in frontal flight just moments before landing.",
       "humorous_description_en": "Just before landing, when you realize you forgot to put the landing gear down.",
@@ -8365,7 +8365,7 @@
       ],
       "description": "צילום פורטרט מפורט של שרקרק גמדי העומד על גדר תיל.",
       "humorous_description": "הפרצוף של הציפור הזו אומר הכל: אני יושב על גדר תיל, מה כבר יכול להשתבש",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Close-up of a Green Bee-eater",
       "description_en": "A detailed portrait of a Green Bee-eater perched on a barbed wire fence.",
       "humorous_description_en": "This bird's face says it all: I'm sitting on a barbed wire fence, what could possibly go wrong?",
@@ -8421,7 +8421,7 @@
       ],
       "description": "שרקרק גמדי נתפס בעדשה ברגע של תעופה עם כנפיים פרושות לרווחה.",
       "humorous_description": "",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater in Flight",
       "description_en": "A Green Bee-eater captured in mid-air with its wings spread wide.",
       "humorous_description_en": "",
@@ -8477,7 +8477,7 @@
       ],
       "description": "שרקרק גמדי ניצב במנוחה על גדר תיל דוקרני על רקע מטושטש.",
       "humorous_description": "מישהו פה שכח להביא כרית ומתעקש לעשות יוגה על גדר תיל.",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Resting Green Bee-eater",
       "description_en": "A Green Bee-eater resting on a barbed wire fence against a blurred background.",
       "humorous_description_en": "Someone forgot to bring a pillow and insists on doing yoga on a barbed wire fence.",
@@ -8533,7 +8533,7 @@
       ],
       "description": "שרקרק גמדי נתפס ברגע של תעופה עם כנפיים פרושות החושפות את הגוונים הזהובים.",
       "humorous_description": "",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Bee-eater in Flight",
       "description_en": "A Green Bee-eater captured in flight with wings spread, revealing golden hues.",
       "humorous_description_en": "",
@@ -8589,7 +8589,7 @@
       ],
       "description": "צילום פורטרט בפרופיל המציג את העין האדומה והמקור החד של השרקרק.",
       "humorous_description": "כשאתה מנסה להיראות רציני בתמונת פרופיל ללינקדאין.",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Perfect Profile",
       "description_en": "A profile portrait showcasing the red eye and sharp beak of the Green Bee-eater.",
       "humorous_description_en": "When you try to look serious for your LinkedIn profile picture.",
@@ -8645,7 +8645,7 @@
       ],
       "description": "צילום תקריב חזיתי המדגיש את צבעי הניאון והמרקם של נוצות השרקרק.",
       "humorous_description": "מה זאת אומרת שנגמרו החרקים בתפריט?",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Mesmerizing Frontal Gaze",
       "description_en": "A frontal close-up highlighting the neon colors and texture of the Green Bee-eater's feathers.",
       "humorous_description_en": "What do you mean there are no more insects on the menu?",
@@ -8701,7 +8701,7 @@
       ],
       "description": "שרקרק גמדי בודד ניצב על גדר תיל על רקע מטושטש ורך.",
       "humorous_description": "",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Resting Green Bee-eater",
       "description_en": "A solitary Green Bee-eater perched on a wire fence against a soft, blurred background.",
       "humorous_description_en": "",
@@ -8757,7 +8757,7 @@
       ],
       "description": "זוג שרקרקים גמדיים עומדים על גדר תיל ומנהלים אינטראקציה קולית.",
       "humorous_description": "אמרתי לך שזה לא הקיצור הנכון לדרך, אבל אתה תמיד חייב להקשיב ל-GPS!",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Dialogue on the Wire",
       "description_en": "A pair of Green Bee-eaters perched on a barbed wire fence, engaged in a vocal interaction.",
       "humorous_description_en": "I told you this wasn't the right shortcut, but you just have to listen to the GPS!",
@@ -10106,7 +10106,7 @@
     },
     "ai": {
       "title": "דבורה במים",
-      "species_hebrew": "דבורת דבש",
+      "species_hebrew": "דבורת-דבש",
       "species_latin": "Apis mellifera",
       "category": "macro",
       "behavior": [
@@ -11279,7 +11279,7 @@
     },
     "ai": {
       "title": "תנופה מעל המים",
-      "species_hebrew": "תמינון",
+      "species_hebrew": "תמירון מצוי",
       "species_latin": "Himantopus himantopus",
       "category": "wildlife",
       "behavior": [
@@ -14797,7 +14797,7 @@
     },
     "ai": {
       "title": "מבט של שפן סלעים",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -14853,7 +14853,7 @@
     },
     "ai": {
       "title": "שפני סלעים בשמש",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -14909,7 +14909,7 @@
     },
     "ai": {
       "title": "שפן סלעים בין הענפים",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -14965,7 +14965,7 @@
     },
     "ai": {
       "title": "שפן סלעים בשמש",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -15422,7 +15422,7 @@
     },
     "ai": {
       "title": "סייפן בחיפוש מזון",
-      "species_hebrew": "סייפן",
+      "species_hebrew": "תמירון מצוי",
       "species_latin": "Himantopus himantopus",
       "category": "wildlife",
       "behavior": [
@@ -16503,7 +16503,7 @@
     },
     "ai": {
       "title": "סקרנות על הסלע",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -17125,7 +17125,7 @@
     },
     "ai": {
       "title": "מבט מלמטה על ציידת",
-      "species_hebrew": "ארגיופית ברוניך",
+      "species_hebrew": "ארגיופ מצוי",
       "species_latin": "Argiope bruennichi",
       "category": "macro",
       "behavior": [
@@ -17240,7 +17240,7 @@
     },
     "ai": {
       "title": "אורגת הקורים המורכבים",
-      "species_hebrew": "ארגיופית ברוניך",
+      "species_hebrew": "ארגיופ מצוי",
       "species_latin": "Argiope bruennichi",
       "category": "macro",
       "behavior": [
@@ -21365,7 +21365,7 @@
     },
     "ai": {
       "title": "צבי בשקיעה",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -24083,7 +24083,7 @@
     },
     "ai": {
       "title": "אנפית לילה במנוחה",
-      "species_hebrew": "אנפית לילה",
+      "species_hebrew": "אנפת לילה",
       "species_latin": "Nycticorax nycticorax",
       "category": "wildlife",
       "behavior": [
@@ -25257,7 +25257,7 @@
     },
     "ai": {
       "title": "אפרוח סופנית במנוחה",
-      "species_hebrew": "סופנית מצויה",
+      "species_hebrew": "סופית מצויה",
       "species_latin": "Gallinula chloropus",
       "category": "wildlife",
       "behavior": [
@@ -25271,7 +25271,7 @@
         "מים",
         "צילום טבע"
       ],
-      "description": "אפרוח של סופנית מצויה נח על גזע עץ בולט מעל פני המים.",
+      "description": "אפרוח של סופית מצויה נח על גזע עץ בולט מעל פני המים.",
       "humorous_description": "הפרצוף שלי בבוקר לפני הקפה הראשון.",
       "species_en": "Common Moorhen",
       "title_en": "Resting Common Moorhen Chick",
@@ -25315,7 +25315,7 @@
     },
     "ai": {
       "title": "צמד צבים על גזע",
-      "species_hebrew": "צב ביצה מצוי",
+      "species_hebrew": "צב ביצות מצוי",
       "species_latin": "Mauremys caspica",
       "category": "wildlife",
       "behavior": [
@@ -26302,7 +26302,7 @@
     },
     "ai": {
       "title": "זוג כוסים על סלעים",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -26414,7 +26414,7 @@
     },
     "ai": {
       "title": "ינשוף קטן בשמש הזהובה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -27207,7 +27207,7 @@
     },
     "ai": {
       "title": "פורטרט של אנפית לילה",
-      "species_hebrew": "אנפית לילה",
+      "species_hebrew": "אנפת לילה",
       "species_latin": "Nycticorax nycticorax",
       "category": "wildlife",
       "behavior": [
@@ -27832,7 +27832,7 @@
     },
     "ai": {
       "title": "כוס החורבות במבט ערני",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -27888,7 +27888,7 @@
     },
     "ai": {
       "title": "כוס חורבות נח",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -27944,7 +27944,7 @@
     },
     "ai": {
       "title": "כוס חורבות בהמראה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -28000,7 +28000,7 @@
     },
     "ai": {
       "title": "כוס חורבות בתעופה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -28056,7 +28056,7 @@
     },
     "ai": {
       "title": "כוס חורבות נוחת",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -28112,7 +28112,7 @@
     },
     "ai": {
       "title": "דריכות בזהב",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -28790,7 +28790,7 @@
     },
     "ai": {
       "title": "צב ביצות מתחמם על בול עץ במים",
-      "species_hebrew": "צב ביצות",
+      "species_hebrew": "צב ביצות אירופי",
       "species_latin": "Emys orbicularis",
       "category": "wildlife",
       "behavior": [
@@ -28964,7 +28964,7 @@
     },
     "ai": {
       "title": "אפרוח סופית במים",
-      "species_hebrew": "סופית",
+      "species_hebrew": "סופית מצויה",
       "species_latin": "Gallinula chloropus",
       "category": "wildlife",
       "behavior": [
@@ -29022,7 +29022,7 @@
     },
     "ai": {
       "title": "אפרוח סופית מצויה בין הצמחייה",
-      "species_hebrew": "סופית מצויה (אפרוח)",
+      "species_hebrew": "סופית מצויה",
       "species_latin": "Gallinula chloropus",
       "category": "wildlife",
       "behavior": [
@@ -29365,7 +29365,7 @@
     },
     "ai": {
       "title": "כוס חורבות עומד על סלע",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -29539,7 +29539,7 @@
     },
     "ai": {
       "title": "דורסי חמד בפתח המחילה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -29772,7 +29772,7 @@
     },
     "ai": {
       "title": "אוח מצוי על רקע סלעי",
-      "species_hebrew": "אווח מצוי",
+      "species_hebrew": "אוח עיטי",
       "species_latin": "Bubo bubo",
       "category": "wildlife",
       "behavior": [
@@ -29886,7 +29886,7 @@
     },
     "ai": {
       "title": "אוח מצוי על רקע מצוק מדברי",
-      "species_hebrew": "אוח מצוי",
+      "species_hebrew": "אוח עיטי",
       "species_latin": "Bubo bubo",
       "category": "wildlife",
       "behavior": [
@@ -29944,7 +29944,7 @@
     },
     "ai": {
       "title": "אוח עיני לקקן על רקע מצוק מדברי",
-      "species_hebrew": "אוח מצוי",
+      "species_hebrew": "אוח עיטי",
       "species_latin": "Bubo bubo",
       "category": "wildlife",
       "behavior": [
@@ -30411,7 +30411,7 @@
     },
     "ai": {
       "title": "נחיתת זרזיר ברומזי",
-      "species_hebrew": "זרזיר ברומזי",
+      "species_hebrew": "זרזיר ורדרד",
       "species_latin": "Pastor roseus",
       "category": "wildlife",
       "behavior": [
@@ -30467,7 +30467,7 @@
     },
     "ai": {
       "title": "זרזיר אפור על גזע עץ",
-      "species_hebrew": "זרזיר אפור",
+      "species_hebrew": "זרזיר ורדרד",
       "species_latin": "Pastor roseus",
       "category": "wildlife",
       "behavior": [
@@ -30523,7 +30523,7 @@
     },
     "ai": {
       "title": "תפרית עדינה על ענף",
-      "species_hebrew": "תפרית עדינה",
+      "species_hebrew": "פשוש",
       "species_latin": "Prinia gracilis",
       "category": "wildlife",
       "behavior": [
@@ -30809,7 +30809,7 @@
     },
     "ai": {
       "title": "זרזיר ברומזי בעשב",
-      "species_hebrew": "זרזיר ברומזי",
+      "species_hebrew": "זרזיר ורדרד",
       "species_latin": "Pastor roseus",
       "category": "wildlife",
       "behavior": [
@@ -31909,7 +31909,7 @@
     },
     "ai": {
       "title": "כוס חורבות מפהק",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -32193,7 +32193,7 @@
     },
     "ai": {
       "title": "כוס חורבות מותח כנף",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -32310,7 +32310,7 @@
     },
     "ai": {
       "title": "כוס חורבות נח על רקע מצוק סלעי",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -32365,7 +32365,7 @@
     },
     "ai": {
       "title": "ברכיה ממריאה מעל גדת המים",
-      "species_hebrew": "ברכיה (נקבה)",
+      "species_hebrew": "ברכייה",
       "species_latin": "Anas platyrhynchos",
       "category": "wildlife",
       "behavior": [
@@ -32423,7 +32423,7 @@
     },
     "ai": {
       "title": "צב ביצות פורח בשמש",
-      "species_hebrew": "צב ביצות",
+      "species_hebrew": "צב ביצות אירופי",
       "species_latin": "Emys orbicularis",
       "category": "wildlife",
       "behavior": [
@@ -33057,7 +33057,7 @@
     },
     "ai": {
       "title": "סבכי שחור-עין עם פרי בפיו",
-      "species_hebrew": "סבכי שחור-עין",
+      "species_hebrew": "סבכי שחור-ראש",
       "species_latin": "Sylvia melanocephala",
       "category": "wildlife",
       "behavior": [
@@ -34710,7 +34710,7 @@
     },
     "ai": {
       "title": "צופית ססגונית על ענף",
-      "species_hebrew": "צופית ססגונית",
+      "species_hebrew": "צופית בוהקת",
       "species_latin": "Cinnyris osea",
       "category": "wildlife",
       "behavior": [
@@ -34822,8 +34822,8 @@
       "date_time_original": "2026:05:10 07:27:47"
     },
     "ai": {
-      "title": "חוגלה במעוף אלגנטי",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים במעוף אלגנטי",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -34836,7 +34836,7 @@
         "טבע ישראלי",
         "ציפורים במעוף"
       ],
-      "description": "חוגלה פורשת כנפיים במעוף אלגנטי ומרשים על רקע נוף הטבע הפתוח.",
+      "description": "חוגלת סלעים פורשת כנפיים במעוף אלגנטי ומרשים על רקע נוף הטבע הפתוח.",
       "humorous_description": "",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge in Flight",
@@ -34878,8 +34878,8 @@
       "date_time_original": "2026:05:10 07:27:32"
     },
     "ai": {
-      "title": "חוגלה עומדת על סלע",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים עומדת על סלע",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -34893,7 +34893,7 @@
         "ציפורי ארץ ישראל",
         "חיות בר"
       ],
-      "description": "חוגלה דרוכה עומדת בביטחון על סלע ומביטה אל האופק בלב הטבע.",
+      "description": "חוגלת סלעים דרוכה עומדת בביטחון על סלע ומביטה אל האופק בלב הטבע.",
       "humorous_description": "",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge on a Rock",
@@ -35223,7 +35223,7 @@
     },
     "ai": {
       "title": "כוס חורבות נח על אבן",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -35281,7 +35281,7 @@
     },
     "ai": {
       "title": "כוס חורבות בפתח מחילה סלעית",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -35515,7 +35515,7 @@
     },
     "ai": {
       "title": "כוס חורבות בפתח מחילה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -35796,7 +35796,7 @@
     },
     "ai": {
       "title": "זריחה מעל רכס הרים",
-      "species_hebrew": null,
+      "species_hebrew": "",
       "species_latin": null,
       "category": "landscape",
       "behavior": [],
@@ -36355,7 +36355,7 @@
     },
     "ai": {
       "title": "עלווית אפורה בין הענפים",
-      "species_hebrew": "עלווית אפורה",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -36411,7 +36411,7 @@
     },
     "ai": {
       "title": "עלווית אפורה בצללים",
-      "species_hebrew": "עלווית אפורה",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -36467,7 +36467,7 @@
     },
     "ai": {
       "title": "כחל במנוחה",
-      "species_hebrew": "כחל",
+      "species_hebrew": "כחל מצוי",
       "species_latin": "Coracias garrulus",
       "category": "wildlife",
       "behavior": [
@@ -37899,7 +37899,7 @@
     },
     "ai": {
       "title": "כחל פוער מקור",
-      "species_hebrew": "כחל",
+      "species_hebrew": "כחל מצוי",
       "species_latin": "Coracias garrulus",
       "category": "wildlife",
       "behavior": [
@@ -40060,7 +40060,7 @@
     },
     "ai": {
       "title": "כוס חורבות במחילה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -40119,7 +40119,7 @@
     },
     "ai": {
       "title": "צבי ארץ ישראלי בטבע",
-      "species_hebrew": "צבי ארץ ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -40581,7 +40581,7 @@
     },
     "ai": {
       "title": "פרת משה רבנו על פרח סגול",
-      "species_hebrew": "פרת משה רבנו",
+      "species_hebrew": "מושית השבע",
       "species_latin": "Coccinella septempunctata",
       "category": "macro",
       "behavior": [
@@ -40696,7 +40696,7 @@
     },
     "ai": {
       "title": "פרת משה רבנו על גדילן מצוי",
-      "species_hebrew": "פרת משה רבנו",
+      "species_hebrew": "מושית השבע",
       "species_latin": "Coccinella septempunctata",
       "category": "macro",
       "behavior": [
@@ -40810,7 +40810,7 @@
     },
     "ai": {
       "title": "רחף על פרח חרדל",
-      "species_hebrew": "זובוב רחף",
+      "species_hebrew": "זבוב רחף",
       "species_latin": "Syrphidae",
       "category": "macro",
       "behavior": [
@@ -40825,7 +40825,7 @@
         "פרחים",
         "צילום תקריב"
       ],
-      "description": "זובוב רחף עומד בדייקנות על פרח צהוב קטן ואוסף צוף.",
+      "description": "זבוב רחף עומד בדייקנות על פרח צהוב קטן ואוסף צוף.",
       "humorous_description": "כשאתה מנסה לאכול צהריים אבל כל העולם מסתכל עליך.",
       "species_en": "Hoverfly",
       "title_en": "Hoverfly on a Mustard Flower",
@@ -41039,8 +41039,8 @@
       "date_time_original": "2026:04:30 07:53:16"
     },
     "ai": {
-      "title": "פסיخان עדין מאכיל את גוזלו בסבך",
-      "species_hebrew": "פסיخان עדין",
+      "title": "פסיخن עדין מאכיל את גוזלו בסבך",
+      "species_hebrew": "פשוש",
       "species_latin": "Prinia gracilis",
       "category": "wildlife",
       "behavior": [
@@ -41054,7 +41054,7 @@
         "האכלה",
         "ציפורי שיר"
       ],
-      "description": "פסיخان עדין מקדיש את זמנו להאכלת גוזלו הרעב המסתתר בתוך סבך הצמחייה הירוקה.",
+      "description": "פשוש מקדיש את זמנו להאכלת גוזלו הרעב המסתתר בתוך סבך הצמחייה הירוקה.",
       "humorous_description": "תפתח את הפה, זה מטוס עם תולעת בדרך אליך!",
       "species_en": "Graceful Prinia",
       "title_en": "Graceful Prinia Feeding its Chick",
@@ -42090,7 +42090,7 @@
       ],
       "description": "סבכי טוחנים קטן מציץ מבעד לענפים הירוקים של עץ פורח.",
       "humorous_description": "סליחה, אפשר להזמין כאן מנה של תולעים או שאני מפריע לישיבת הנהלה?",
-      "species_en": "Greater Whitethroat",
+      "species_en": "Lesser Whitethroat",
       "title_en": "Greater Whitethroat Among the Branches",
       "description_en": "A small Greater Whitethroat peeks through the lush green branches of a flowering tree.",
       "humorous_description_en": "Excuse me, can I order a side of worms here, or am I interrupting a board meeting?",
@@ -42411,7 +42411,7 @@
     },
     "ai": {
       "title": "שחרור מצוי על גזע עץ",
-      "species_hebrew": "שחרור מצוי",
+      "species_hebrew": "שחרור",
       "species_latin": "Turdus merula",
       "category": "wildlife",
       "behavior": [
@@ -42523,7 +42523,7 @@
     },
     "ai": {
       "title": "צבי ארץ ישראלי בריצה בשדה ירוק",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -43549,7 +43549,7 @@
     },
     "ai": {
       "title": "כוס חורבות קורץ בעין",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -43605,7 +43605,7 @@
     },
     "ai": {
       "title": "כוס חורבות נח על אבן",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -43663,7 +43663,7 @@
     },
     "ai": {
       "title": "כוס חורבות עומד על אבן",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -43719,7 +43719,7 @@
     },
     "ai": {
       "title": "כוס חורבות עומד על אבנים",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -44288,7 +44288,7 @@
     },
     "ai": {
       "title": "כוס חורבות במעוף מהיר",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -44345,7 +44345,7 @@
     },
     "ai": {
       "title": "כוס חורבות במעוף מעל נוף הררי",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -44403,7 +44403,7 @@
     },
     "ai": {
       "title": "כוס חורבות מציץ מבין הסלעים",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -44462,7 +44462,7 @@
     },
     "ai": {
       "title": "כוס חורבות עומד על עמוד ברזל",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -44520,7 +44520,7 @@
     },
     "ai": {
       "title": "כוס חורבות עומד על עמוד ברזל",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -44576,7 +44576,7 @@
     },
     "ai": {
       "title": "עפרוני מצוייץ במעוף",
-      "species_hebrew": "עפרוני מצוייץ",
+      "species_hebrew": "עפרוני מצויץ",
       "species_latin": "Galerida cristata",
       "category": "wildlife",
       "behavior": [
@@ -44631,7 +44631,7 @@
     },
     "ai": {
       "title": "עפרוני מצוייץ על סלע",
-      "species_hebrew": "עפרוני מצוייץ",
+      "species_hebrew": "עפרוני מצויץ",
       "species_latin": "Galerida cristata",
       "category": "wildlife",
       "behavior": [
@@ -45149,7 +45149,7 @@
     },
     "ai": {
       "title": "זנב סנונית נאה על פרח",
-      "species_hebrew": "זנב סנונית נאה",
+      "species_hebrew": "זנב-סנונית נאה",
       "species_latin": "Papilio machaon",
       "category": "macro",
       "behavior": [
@@ -45206,7 +45206,7 @@
     },
     "ai": {
       "title": "זנב סנונית על פרח סגול",
-      "species_hebrew": "זנב סנונית נאה",
+      "species_hebrew": "זנב-סנונית נאה",
       "species_latin": "Papilio machaon",
       "category": "macro",
       "behavior": [
@@ -45264,7 +45264,7 @@
     },
     "ai": {
       "title": "זנב סנונית על פרח",
-      "species_hebrew": "זנב סנונית נאה",
+      "species_hebrew": "זנב-סנונית נאה",
       "species_latin": "Papilio machaon",
       "category": "macro",
       "behavior": [
@@ -45322,7 +45322,7 @@
     },
     "ai": {
       "title": "זנב סנונית נאה נח על סלע",
-      "species_hebrew": "זנב סנונית נאה",
+      "species_hebrew": "זנב-סנונית נאה",
       "species_latin": "Papilio machaon",
       "category": "macro",
       "behavior": [
@@ -45436,7 +45436,7 @@
     },
     "ai": {
       "title": "רחף בתעופה",
-      "species_hebrew": "רחף",
+      "species_hebrew": "זבוב רחף",
       "species_latin": "Syrphidae",
       "category": "macro",
       "behavior": [
@@ -45492,7 +45492,7 @@
     },
     "ai": {
       "title": "טקס זיכרון ביום הזיכרון",
-      "species_hebrew": null,
+      "species_hebrew": "",
       "species_latin": null,
       "category": "landscape",
       "behavior": [],
@@ -45658,7 +45658,7 @@
     },
     "ai": {
       "title": "פרפרני עצבק לבנים מתקבצים על גדילן",
-      "species_hebrew": "עצבק לבן",
+      "species_hebrew": "לבנין העוזרר",
       "species_latin": "Aporia crataegi",
       "category": "macro",
       "behavior": [
@@ -46058,7 +46058,7 @@
     },
     "ai": {
       "title": "תנים זהובים במקור מים",
-      "species_hebrew": "תאן זהוב",
+      "species_hebrew": "תן זהוב",
       "species_latin": "Canis aureus",
       "category": "wildlife",
       "behavior": [
@@ -46232,7 +46232,7 @@
     },
     "ai": {
       "title": "צב מים מצוי על גזע עץ",
-      "species_hebrew": "צב מים מצוי",
+      "species_hebrew": "צב ביצות מצוי",
       "species_latin": "Mauremys caspica",
       "category": "wildlife",
       "behavior": [
@@ -46345,7 +46345,7 @@
     },
     "ai": {
       "title": "דבורת הדבש מרחפת מעל פרחים",
-      "species_hebrew": "דבורת הדבש",
+      "species_hebrew": "דבורת-דבש",
       "species_latin": "Apis mellifera",
       "category": "macro",
       "behavior": [
@@ -46461,7 +46461,7 @@
     },
     "ai": {
       "title": "קבצן מצוי עומד על ענף",
-      "species_hebrew": "קבצן מצוי",
+      "species_hebrew": "ירגזי מצוי",
       "species_latin": "Parus major",
       "category": "wildlife",
       "behavior": [
@@ -46573,7 +46573,7 @@
     },
     "ai": {
       "title": "צב מים מתחמם בשמש עם השסעה מושלמת במים",
-      "species_hebrew": "צב מים מצוי",
+      "species_hebrew": "צב ביצות מצוי",
       "species_latin": "Mauremys caspica",
       "category": "wildlife",
       "behavior": [
@@ -46631,7 +46631,7 @@
     },
     "ai": {
       "title": "צב ביצות מתחמם בשמש על גזע",
-      "species_hebrew": "צב ביצות משוחר",
+      "species_hebrew": "צב ביצות אירופי",
       "species_latin": "Emys orbicularis",
       "category": "wildlife",
       "behavior": [
@@ -46746,8 +46746,8 @@
       "date_time_original": "2026:04:19 21:20:30"
     },
     "ai": {
-      "title": "חוגלה על שביל",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים על שביל",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -46760,7 +46760,7 @@
         "טבע ישראלי",
         "חיות בר"
       ],
-      "description": "חוגלה צבעונית עומדת בדריכות על שביל עפר מוקף צמחייה טבעית.",
+      "description": "חוגלת סלעים צבעונית עומדת בדריכות על שביל עפר מוקף צמחייה טבעית.",
       "humorous_description": "מישהו ראה את האוטובוס? אני מחכה פה כבר שעה.",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge on a Path",
@@ -47262,7 +47262,7 @@
     },
     "ai": {
       "title": "שפן סלעים מציץ מבין הסלעים",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -47602,7 +47602,7 @@
     },
     "ai": {
       "title": "לבנין העריוז מוצץ צוף מפרח סגול",
-      "species_hebrew": "לבנין העריוז",
+      "species_hebrew": "לבנין העוזרר",
       "species_latin": "Aporia crataegi",
       "category": "macro",
       "behavior": [
@@ -47660,7 +47660,7 @@
     },
     "ai": {
       "title": "פרפר לבני העיס פאון על פרח",
-      "species_hebrew": "לבני העיס",
+      "species_hebrew": "לבנין העוזרר",
       "species_latin": "Aporia crataegi",
       "category": "macro",
       "behavior": [
@@ -47718,7 +47718,7 @@
     },
     "ai": {
       "title": "פרפר לבנין האציל על פרח",
-      "species_hebrew": "לבנין האציל",
+      "species_hebrew": "לבנין העוזרר",
       "species_latin": "Aporia crataegi",
       "category": "macro",
       "behavior": [
@@ -47776,7 +47776,7 @@
     },
     "ai": {
       "title": "עקצן עם חרק בפה",
-      "species_hebrew": "עקצן",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -48059,7 +48059,7 @@
     },
     "ai": {
       "title": "זמיר ירדן עומד על ענף",
-      "species_hebrew": "זמיר ירדן",
+      "species_hebrew": "זמיר הירדן",
       "species_latin": "Luscinia megarhynchos",
       "category": "wildlife",
       "behavior": [
@@ -48285,7 +48285,7 @@
     },
     "ai": {
       "title": "שפן סלעים על סלע",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -48692,7 +48692,7 @@
     },
     "ai": {
       "title": "עקרונן מצויץ על שיח",
-      "species_hebrew": "עקרונן מצויץ",
+      "species_hebrew": "עפרוני מצויץ",
       "species_latin": "Galerida cristata",
       "category": "wildlife",
       "behavior": [
@@ -48748,7 +48748,7 @@
     },
     "ai": {
       "title": "כוס חורבות במעוף נמוך",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -48865,7 +48865,7 @@
     },
     "ai": {
       "title": "צבי ארץ ישראלי במרעה ירוק",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -49437,7 +49437,7 @@
     },
     "ai": {
       "title": "גבתון מצוי אוסף חומרים לקינון",
-      "species_hebrew": "גבתון מצוי",
+      "species_hebrew": "גיבתון עפרוני",
       "species_latin": "Emberiza calandra",
       "category": "wildlife",
       "behavior": [
@@ -49495,7 +49495,7 @@
     },
     "ai": {
       "title": "גיבתון עצה שר על שיחי",
-      "species_hebrew": "גיבתון עצה",
+      "species_hebrew": "גיבתון גדרות",
       "species_latin": "Emberiza cirlus",
       "category": "wildlife",
       "behavior": [
@@ -49553,7 +49553,7 @@
     },
     "ai": {
       "title": "סיבכי שחור-כיפה על ענף",
-      "species_hebrew": "סיבכי שחור-כיפה",
+      "species_hebrew": "סבכי שחור-כיפה",
       "species_latin": "Sylvia atricapilla",
       "category": "wildlife",
       "behavior": [
@@ -49777,7 +49777,7 @@
     },
     "ai": {
       "title": "סבכי קטן בין ענפים",
-      "species_hebrew": "סבכי קטן",
+      "species_hebrew": "סבכי טוחנים",
       "species_latin": "Sylvia curruca",
       "category": "wildlife",
       "behavior": [
@@ -50468,8 +50468,8 @@
       "date_time_original": "2026:04:12 08:45:49"
     },
     "ai": {
-      "title": "שלת אלעזרי במעוף",
-      "species_hebrew": "שלת אלעזרי",
+      "title": "שלך במעוף",
+      "species_hebrew": "שלך",
       "species_latin": "Pandion haliaetus",
       "category": "wildlife",
       "behavior": [
@@ -50482,9 +50482,9 @@
         "טבע",
         "מעוף"
       ],
-      "description": "שלת אלעזרי פורשת כנפיים בעוצמה ודואה בשמיים הפתוחים.",
+      "description": "שלך פורשת כנפיים בעוצמה ודואה בשמיים הפתוחים.",
       "humorous_description": "",
-      "species_en": "Osprey",
+      "species_en": "Western Osprey",
       "title_en": "Osprey in Flight",
       "description_en": "An Osprey powerfully spreads its wings and soars through the open sky.",
       "humorous_description_en": "",
@@ -50525,8 +50525,8 @@
       "date_time_original": "2026:04:12 08:44:49"
     },
     "ai": {
-      "title": "שלّالك במעוף",
-      "species_hebrew": "שלّالك",
+      "title": "שלך במעוף מעל המים",
+      "species_hebrew": "שלך",
       "species_latin": "Pandion haliaetus",
       "category": "wildlife",
       "behavior": [
@@ -50540,9 +50540,9 @@
         "טבע ישראלי",
         "שלّالك"
       ],
-      "description": "שלّالك דואה ברום השמים וסורק את המים מלמעלה בחיפוש אחר טרف.",
+      "description": "שלך דואה ברום השמים וסורק את המים מלמעלה בחיפוש אחר טרف.",
       "humorous_description": "מישהו ראה איפה שמתי את הדג שלי?",
-      "species_en": "Osprey",
+      "species_en": "Western Osprey",
       "title_en": "Osprey Scanning from Above",
       "description_en": "An Osprey soars high in the sky, scanning the water below in search of prey.",
       "humorous_description_en": "Has anyone seen where I put my fish?",
@@ -50868,8 +50868,8 @@
       "date_time_original": "2026:04:12 07:08:37"
     },
     "ai": {
-      "title": "חוגلة סלעים עומדת על מבנה גבוה",
-      "species_hebrew": "חוגلة סלעים",
+      "title": "חוגלת סלעים עומדת על מבנה גבוה",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -50924,8 +50924,8 @@
       "date_time_original": "2026:04:12 06:40:22"
     },
     "ai": {
-      "title": "חוגلة עורבת על סלע באור ראשון",
-      "species_hebrew": "חוגلة",
+      "title": "חוגלת סלעים עומדת על סלע באור ראשון",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -50982,8 +50982,8 @@
       "date_time_original": "2026:04:12 06:38:33"
     },
     "ai": {
-      "title": "חוגلة האבן על סלע בטבע",
-      "species_hebrew": "חוגلة האבן",
+      "title": "חוגלת סלעים על סלע בטבע",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -50996,7 +50996,7 @@
         "טבע ישראלי",
         "עופות"
       ],
-      "description": "חוגלת האבן עומדת בדריכות על סלע בולט בתאורת שמש רכה של שקיעה או זריחה.",
+      "description": "חוגלת סלעים עומדת בדריכות על סלע בולט בתאורת שמש רכה של שקיעה או זריחה.",
       "humorous_description": "",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge on a Natural Rock",
@@ -51038,8 +51038,8 @@
       "date_time_original": "2026:04:12 06:38:31"
     },
     "ai": {
-      "title": "חוגلة סלעים עומדת על סלע באור זהוב",
-      "species_hebrew": "חוגلة סלעים",
+      "title": "חוגלת סלעים עומדת על סלע באור זהוב",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -51376,7 +51376,7 @@
     },
     "ai": {
       "title": "זמיר מנומנם על ענף",
-      "species_hebrew": "זמיר מנומנם",
+      "species_hebrew": "זמיר הירדן",
       "species_latin": "Luscinia megarhynchos",
       "category": "wildlife",
       "behavior": [
@@ -51940,7 +51940,7 @@
     },
     "ai": {
       "title": "שפן סלעים על הסלע",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -51996,7 +51996,7 @@
     },
     "ai": {
       "title": "שפן סלעים מציץ",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -52052,7 +52052,7 @@
     },
     "ai": {
       "title": "דיוקן שפן סלעים",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -52108,7 +52108,7 @@
     },
     "ai": {
       "title": "שפן סלעים נח על הסלע",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -52164,7 +52164,7 @@
     },
     "ai": {
       "title": "מבט של שפן סלעים",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -52220,7 +52220,7 @@
     },
     "ai": {
       "title": "שפן סלעים בשמש",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -52448,7 +52448,7 @@
     },
     "ai": {
       "title": "דַּחֲלִיל שׂדוֹת על סלע",
-      "species_hebrew": "דחליל שדות",
+      "species_hebrew": "דוחל חום-גרון",
       "species_latin": "Saxicola rubetra",
       "category": "wildlife",
       "behavior": [
@@ -52730,7 +52730,7 @@
     },
     "ai": {
       "title": "צווארון צהוב על ענף",
-      "species_hebrew": "צווארון",
+      "species_hebrew": "סבראש",
       "species_latin": "Jynx torquilla",
       "category": "wildlife",
       "behavior": [
@@ -53121,7 +53121,7 @@
     },
     "ai": {
       "title": "אינטראקציה בין עורבנים",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -53233,7 +53233,7 @@
     },
     "ai": {
       "title": "עורבני במבט סקרן",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -53289,7 +53289,7 @@
     },
     "ai": {
       "title": "עורבני על ענף",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -53852,7 +53852,7 @@
     },
     "ai": {
       "title": "יערון מצוי על ענף",
-      "species_hebrew": "יערון מצוי",
+      "species_hebrew": "שעיר מצוי",
       "species_latin": "Otus scops",
       "category": "wildlife",
       "behavior": [
@@ -54020,7 +54020,7 @@
     },
     "ai": {
       "title": "יקנתן מצוי עם טרף במקורו",
-      "species_hebrew": "יקנתן מצוי",
+      "species_hebrew": "ירגזי מצוי",
       "species_latin": "Parus major",
       "category": "wildlife",
       "behavior": [
@@ -54078,7 +54078,7 @@
     },
     "ai": {
       "title": "קבצן מצוי עם שלל על ענף",
-      "species_hebrew": "קבצן מצוי",
+      "species_hebrew": "ירגזי מצוי",
       "species_latin": "Parus major",
       "category": "wildlife",
       "behavior": [
@@ -54305,8 +54305,8 @@
       "date_time_original": "2026:04:05 10:58:49"
     },
     "ai": {
-      "title": "חוגלה על סלע",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים על סלע",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -54319,7 +54319,7 @@
         "טבע ישראלי",
         "צפרות"
       ],
-      "description": "חוגלה עומדת על סלע בולט בטבע, מוקפת בצמחייה ירוקה.",
+      "description": "חוגלת סלעים עומדת על סלע בולט בטבע, מוקפת בצמחייה ירוקה.",
       "humorous_description": "",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge on a rock",
@@ -54421,7 +54421,7 @@
     },
     "ai": {
       "title": "צבי בטבע הפתוח",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -54477,7 +54477,7 @@
     },
     "ai": {
       "title": "צבי ישראלי בנוף פתוח",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -54535,7 +54535,7 @@
     },
     "ai": {
       "title": "צבי ישראלי במבט ישיר",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -54647,7 +54647,7 @@
     },
     "ai": {
       "title": "כוס חורבות עם שלל בפיו",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -54706,7 +54706,7 @@
     },
     "ai": {
       "title": "כוס חורבות עם טרף",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -54762,7 +54762,7 @@
     },
     "ai": {
       "title": "כוס חורבות במעוף ציד",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -54935,7 +54935,7 @@
     },
     "ai": {
       "title": "כוס חורבות במעוף מול מצוק סלעי",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -54992,7 +54992,7 @@
     },
     "ai": {
       "title": "כוס חורבות על מצוק אדמה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -55105,8 +55105,8 @@
       "date_time_original": "2026:04:05 06:43:23"
     },
     "ai": {
-      "title": "חוגלה בין עשבים",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים בין עשבים",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -55119,7 +55119,7 @@
         "חוגלה",
         "צילום שטח"
       ],
-      "description": "חוגלה צועדת בזהירות בין עשבים יבשים בטבע.",
+      "description": "חוגלת סלעים צועדת בזהירות בין עשבים יבשים בטבע.",
       "humorous_description": "",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge in the Grass",
@@ -55507,7 +55507,7 @@
     },
     "ai": {
       "title": "גיבתון ע눈י על סלע ברקע צהוב",
-      "species_hebrew": "גיבתון ע눈י",
+      "species_hebrew": "גיבתון אדום-מקור",
       "species_latin": "Emberiza caesia",
       "category": "wildlife",
       "behavior": [
@@ -55737,7 +55737,7 @@
     },
     "ai": {
       "title": "אדום חזה עומד על ענף",
-      "species_hebrew": "אדום חזה",
+      "species_hebrew": "אדום-חזה",
       "species_latin": "Erithacus rubecula",
       "category": "wildlife",
       "behavior": [
@@ -55795,7 +55795,7 @@
     },
     "ai": {
       "title": "אדום-חזה על ענף",
-      "species_hebrew": "אדום-חזה אירופי",
+      "species_hebrew": "אדום-חזה",
       "species_latin": "Erithacus rubecula",
       "category": "wildlife",
       "behavior": [
@@ -55963,7 +55963,7 @@
     },
     "ai": {
       "title": "זוג פרושים ירוקים",
-      "species_hebrew": "פרוש ירוק",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56019,7 +56019,7 @@
     },
     "ai": {
       "title": "פרוש ירוק על ענף יבש",
-      "species_hebrew": "פרוש ירוק",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56075,7 +56075,7 @@
     },
     "ai": {
       "title": "זוג פרושים ירוקים",
-      "species_hebrew": "פרוש ירוק",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56131,7 +56131,7 @@
     },
     "ai": {
       "title": "חוחית ירוקה מאכילה גוזל על ענף",
-      "species_hebrew": "חוחית ירוקה",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56190,7 +56190,7 @@
     },
     "ai": {
       "title": "חוחית או ירקון בהאכלה על ענף",
-      "species_hebrew": "ירקון מצוי",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56246,7 +56246,7 @@
     },
     "ai": {
       "title": "פרוש ירוק על ענף",
-      "species_hebrew": "פרוש ירוק",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56302,7 +56302,7 @@
     },
     "ai": {
       "title": "חמרי אדום-ראש על ענף",
-      "species_hebrew": "חמרי אדום-ראש",
+      "species_hebrew": "גיבתון אדום-ראש",
       "species_latin": "Emberiza bruniceps",
       "category": "wildlife",
       "behavior": [
@@ -56358,7 +56358,7 @@
     },
     "ai": {
       "title": "חמרי אדום-ראש בתנועה",
-      "species_hebrew": "חמרי אדום-ראש",
+      "species_hebrew": "גיבתון אדום-ראש",
       "species_latin": "Emberiza bruniceps",
       "category": "wildlife",
       "behavior": [
@@ -56414,7 +56414,7 @@
     },
     "ai": {
       "title": "חמרי אדום-ראש במנוחה",
-      "species_hebrew": "חמרי אדום-ראש",
+      "species_hebrew": "גיבתון אדום-ראש",
       "species_latin": "Emberiza bruniceps",
       "category": "wildlife",
       "behavior": [
@@ -56757,7 +56757,7 @@
     },
     "ai": {
       "title": "גיבתון עפרוני בטבע",
-      "species_hebrew": "גיבתון עפרוני",
+      "species_hebrew": "גיבתון אדום-מקור",
       "species_latin": "Emberiza caesia",
       "category": "wildlife",
       "behavior": [
@@ -56813,7 +56813,7 @@
     },
     "ai": {
       "title": "גיבתון עפרוני במנוחה",
-      "species_hebrew": "גיבתון עפרוני",
+      "species_hebrew": "גיבתון אדום-מקור",
       "species_latin": "Emberiza caesia",
       "category": "wildlife",
       "behavior": [
@@ -56869,7 +56869,7 @@
     },
     "ai": {
       "title": "פרוש הרים צהוב על סלע",
-      "species_hebrew": "פרוש הרים",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -56925,7 +56925,7 @@
     },
     "ai": {
       "title": "ינשוף קטן נח במחילה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -56984,7 +56984,7 @@
     },
     "ai": {
       "title": "כוס חורבות מציץ מהמחילה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -57043,7 +57043,7 @@
     },
     "ai": {
       "title": "צבי ארץ-ישראלי בין פרחים",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -57099,7 +57099,7 @@
     },
     "ai": {
       "title": "צבי ארץ-ישראלי בשטח",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -57542,7 +57542,7 @@
     },
     "ai": {
       "title": "צבי בשדה",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -57600,7 +57600,7 @@
     },
     "ai": {
       "title": "מבט של צבי",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -57658,7 +57658,7 @@
     },
     "ai": {
       "title": "צבאים בפריחה",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -57716,7 +57716,7 @@
     },
     "ai": {
       "title": "צמד צבאים בשטח פתוח",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -57773,7 +57773,7 @@
     },
     "ai": {
       "title": "גבתון עומד על צמח קוצני",
-      "species_hebrew": "גבתון עפרוני",
+      "species_hebrew": "גיבתון עפרוני",
       "species_latin": "Emberiza calandra",
       "category": "wildlife",
       "behavior": [
@@ -58670,7 +58670,7 @@
     },
     "ai": {
       "title": "שפן סלע מציץ",
-      "species_hebrew": "שפן סלעים",
+      "species_hebrew": "שפן סלע",
       "species_latin": "Procavia capensis",
       "category": "wildlife",
       "behavior": [
@@ -58838,7 +58838,7 @@
     },
     "ai": {
       "title": "גבתון עציצים במעוף תאורה אחורית",
-      "species_hebrew": "גבתון עציצים",
+      "species_hebrew": "גיבתון גדרות",
       "species_latin": "Emberiza cirlus",
       "category": "wildlife",
       "behavior": [
@@ -59068,7 +59068,7 @@
     },
     "ai": {
       "title": "מבט של צבי",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -59355,7 +59355,7 @@
     },
     "ai": {
       "title": "כוס חורבות עומד על אבן",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -59857,7 +59857,7 @@
     },
     "ai": {
       "title": "דבורה בטיסה לעבר פרח",
-      "species_hebrew": "דבורת דבש",
+      "species_hebrew": "דבורת-דבש",
       "species_latin": "Apis mellifera",
       "category": "macro",
       "behavior": [
@@ -60024,7 +60024,7 @@
     },
     "ai": {
       "title": "צופית בתעופה",
-      "species_hebrew": "צופית",
+      "species_hebrew": "צופית בוהקת",
       "species_latin": "Cinnyris osea",
       "category": "wildlife",
       "behavior": [
@@ -60081,7 +60081,7 @@
     },
     "ai": {
       "title": "צופית נקבה בין הפרחים",
-      "species_hebrew": "צופית",
+      "species_hebrew": "צופית בוהקת",
       "species_latin": "Cinnyris osea",
       "category": "wildlife",
       "behavior": [
@@ -60137,7 +60137,7 @@
     },
     "ai": {
       "title": "צופית בוהקת על רוזמרין",
-      "species_hebrew": "צופית",
+      "species_hebrew": "צופית בוהקת",
       "species_latin": "Cinnyris osea",
       "category": "wildlife",
       "behavior": [
@@ -60756,7 +60756,7 @@
     },
     "ai": {
       "title": "אנפית סופיות מתנערת ממים",
-      "species_hebrew": "אנפית סופיות",
+      "species_hebrew": "אנפית סוף",
       "species_latin": "Ardeola ralloides",
       "category": "wildlife",
       "behavior": [
@@ -60813,7 +60813,7 @@
     },
     "ai": {
       "title": "אנפית סופسוף בלבוש קיץ במים",
-      "species_hebrew": "אנפית סופسוף",
+      "species_hebrew": "אנפית סוף",
       "species_latin": "Ardeola ralloides",
       "category": "wildlife",
       "behavior": [
@@ -60828,7 +60828,7 @@
         "עופות מים",
         "חיות בר"
       ],
-      "description": "אנפית סופסוף אלגנטית פוסעת בדריכות במים רדודים בעוד רגליה יוצרות התזת מים קטנה.",
+      "description": "אנפית סוף אלגנטית פוסעת בדריכות במים רדודים בעוד רגליה יוצרות התזת מים קטנה.",
       "humorous_description": "",
       "species_en": "Squacco Heron",
       "title_en": "Summer-Plumaged Squacco Heron in the Shallows",
@@ -60872,7 +60872,7 @@
     },
     "ai": {
       "title": "אנפית סופיות בציד",
-      "species_hebrew": "אנפית סופיות",
+      "species_hebrew": "אנפית סוף",
       "species_latin": "Ardeola ralloides",
       "category": "wildlife",
       "behavior": [
@@ -61048,7 +61048,7 @@
     },
     "ai": {
       "title": "אנפית סופיות צודה דג במים",
-      "species_hebrew": "אנפית סופיות",
+      "species_hebrew": "אנפית סוף",
       "species_latin": "Ardeola ralloides",
       "category": "wildlife",
       "behavior": [
@@ -61671,7 +61671,7 @@
     },
     "ai": {
       "title": "עורבני במבט בוחן",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -62224,7 +62224,7 @@
     },
     "ai": {
       "title": "ארוחת בוקר של לבנית",
-      "species_hebrew": "לבנית בקר",
+      "species_hebrew": "אנפית בקר",
       "species_latin": "Bubulcus ibis",
       "category": "wildlife",
       "behavior": [
@@ -62510,7 +62510,7 @@
     },
     "ai": {
       "title": "עלעל בפריחה",
-      "species_hebrew": "עלעל",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -62568,7 +62568,7 @@
     },
     "ai": {
       "title": "מבט ממוקד של עלעל",
-      "species_hebrew": "עלעל",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -62626,7 +62626,7 @@
     },
     "ai": {
       "title": "עלעל בין פריחת השקד",
-      "species_hebrew": "עלעל",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -63079,7 +63079,7 @@
     },
     "ai": {
       "title": "המראה אל האופק",
-      "species_hebrew": "סבכי שחור-כיפה",
+      "species_hebrew": "קאק",
       "species_latin": "Corvus monedula",
       "category": "wildlife",
       "behavior": [
@@ -63135,7 +63135,7 @@
     },
     "ai": {
       "title": "סקרנות בשדה הירוק",
-      "species_hebrew": "סבכי שחור-כיפה",
+      "species_hebrew": "קאק",
       "species_latin": "Corvus monedula",
       "category": "wildlife",
       "behavior": [
@@ -63191,7 +63191,7 @@
     },
     "ai": {
       "title": "מבט חודר מהמחילות",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -63754,7 +63754,7 @@
     },
     "ai": {
       "title": "מבט של צבי ישראלי",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -66266,8 +66266,8 @@
       "date_time_original": "2026:02:13 06:37:10"
     },
     "ai": {
-      "title": "חוגלה בטבע",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים בטבע",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -66280,7 +66280,7 @@
         "טבע",
         "ציפורים"
       ],
-      "description": "חוגלה עומדת על סלע בתוך צמחייה ים-תיכונית וצופה אל הסביבה.",
+      "description": "חוגלת סלעים עומדת על סלע בתוך צמחייה ים-תיכונית וצופה אל הסביבה.",
       "humorous_description": "כשאתה עומד על הסלע ומחכה שמישהו יבוא להגיד לך כמה שאתה פוטוגני.",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge in the Wild",
@@ -67787,7 +67787,7 @@
     },
     "ai": {
       "title": "מעוף החרטומן",
-      "species_hebrew": "חרטומן ביצות",
+      "species_hebrew": "חרטומית ביצות",
       "species_latin": "Gallinago gallinago",
       "category": "wildlife",
       "behavior": [
@@ -68587,7 +68587,7 @@
     },
     "ai": {
       "title": "עלביון בטבע",
-      "species_hebrew": "עלביון",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -68815,7 +68815,7 @@
     },
     "ai": {
       "title": "כנפיים פרושות",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -68873,7 +68873,7 @@
     },
     "ai": {
       "title": "מבט חטוף בטיסה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -68931,7 +68931,7 @@
     },
     "ai": {
       "title": "המראה מתוך המחילה",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -69491,7 +69491,7 @@
     },
     "ai": {
       "title": "תוכי על ענף",
-      "species_hebrew": "דררה",
+      "species_hebrew": "דררה מצויה",
       "species_latin": "Psittacula krameri",
       "category": "wildlife",
       "behavior": [
@@ -70576,7 +70576,7 @@
     },
     "ai": {
       "title": "צבי בדהירה",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -70632,7 +70632,7 @@
     },
     "ai": {
       "title": "צבי בזינוק",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -70689,7 +70689,7 @@
     },
     "ai": {
       "title": "צבי ארץ-ישראלי במבט ישיר",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -70857,8 +70857,8 @@
       "date_time_original": "2026:01:29 11:59:12"
     },
     "ai": {
-      "title": "חוגלה על סלע",
-      "species_hebrew": "חוגלה",
+      "title": "חוגלת סלעים על סלע",
+      "species_hebrew": "חוגלת סלעים",
       "species_latin": "Alectoris chukar",
       "category": "wildlife",
       "behavior": [
@@ -70872,7 +70872,7 @@
         "סלעים",
         "צפרות"
       ],
-      "description": "חוגלה עומדת על סלע בולט בנוף סלעי.",
+      "description": "חוגלת סלעים עומדת על סלע בולט בנוף סלעי.",
       "humorous_description": "תראו אותי, אני המלך של ערימת האבנים הזו!",
       "species_en": "Chukar Partridge",
       "title_en": "Chukar Partridge on a Rock",
@@ -71265,7 +71265,7 @@
     },
     "ai": {
       "title": "צבי ארץ ישראלי",
-      "species_hebrew": "צבי ארץ ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -71433,7 +71433,7 @@
     },
     "ai": {
       "title": "קנרית על קוצים",
-      "species_hebrew": "קנרית",
+      "species_hebrew": "תפוחית מצויה",
       "species_latin": "Linaria cannabina",
       "category": "wildlife",
       "behavior": [
@@ -71489,7 +71489,7 @@
     },
     "ai": {
       "title": "פרוש הרים בטבע",
-      "species_hebrew": "פרוש הרים",
+      "species_hebrew": "תפוחית מצויה",
       "species_latin": "Linaria cannabina",
       "category": "wildlife",
       "behavior": [
@@ -71713,7 +71713,7 @@
     },
     "ai": {
       "title": "צבי ישראלי במבט בוחן",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -71769,7 +71769,7 @@
     },
     "ai": {
       "title": "עורבני במבט סקרן",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -71938,7 +71938,7 @@
     },
     "ai": {
       "title": "פרוש ירוק במנוחה",
-      "species_hebrew": "פרוש ירוק",
+      "species_hebrew": "ירקון",
       "species_latin": "Chloris chloris",
       "category": "wildlife",
       "behavior": [
@@ -75502,7 +75502,7 @@
     },
     "ai": {
       "title": "קבצן מצוי בין הקנים",
-      "species_hebrew": "קבצן מצוי",
+      "species_hebrew": "ירגזי מצוי",
       "species_latin": "Parus major",
       "category": "wildlife",
       "behavior": [
@@ -75728,7 +75728,7 @@
     },
     "ai": {
       "title": "צופית בוהקת על פרחים",
-      "species_hebrew": "צופית",
+      "species_hebrew": "צופית בוהקת",
       "species_latin": "Cinnyris osea",
       "category": "wildlife",
       "behavior": [
@@ -75784,7 +75784,7 @@
     },
     "ai": {
       "title": "עלעלת פורשת כנף",
-      "species_hebrew": "עלעלת",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -75840,7 +75840,7 @@
     },
     "ai": {
       "title": "עלעלת בחיפוש מזון",
-      "species_hebrew": "עלעלת",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -75896,7 +75896,7 @@
     },
     "ai": {
       "title": "עלעלת בין הפרחים",
-      "species_hebrew": "עלעלת",
+      "species_hebrew": "עלווית חורף",
       "species_latin": "Phylloscopus collybita",
       "category": "wildlife",
       "behavior": [
@@ -78328,7 +78328,7 @@
     },
     "ai": {
       "title": "סעודה של עורבני",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -79458,7 +79458,7 @@
     },
     "ai": {
       "title": "תוכיפז על חבל",
-      "species_hebrew": "תוכיפז",
+      "species_hebrew": "תפוחית מצויה",
       "species_latin": "Linaria cannabina",
       "category": "wildlife",
       "behavior": [
@@ -79682,7 +79682,7 @@
     },
     "ai": {
       "title": "עמידה יציבה על הסלע",
-      "species_hebrew": "גבתון עפרוני",
+      "species_hebrew": "גיבתון עפרוני",
       "species_latin": "Emberiza calandra",
       "category": "wildlife",
       "behavior": [
@@ -79961,7 +79961,7 @@
     },
     "ai": {
       "title": "עורבני צועק",
-      "species_hebrew": "עורבני",
+      "species_hebrew": "עורבני שחור-כיפה",
       "species_latin": "Garrulus glandarius",
       "category": "wildlife",
       "behavior": [
@@ -80018,7 +80018,7 @@
     },
     "ai": {
       "title": "מבט מלמעלה",
-      "species_hebrew": "חוחיות",
+      "species_hebrew": "חוחית",
       "species_latin": "Carduelis carduelis",
       "category": "wildlife",
       "behavior": [
@@ -80074,7 +80074,7 @@
     },
     "ai": {
       "title": "ציפור בשלווה",
-      "species_hebrew": "חוחיות",
+      "species_hebrew": "חוחית",
       "species_latin": "Carduelis carduelis",
       "category": "wildlife",
       "behavior": [
@@ -80130,7 +80130,7 @@
     },
     "ai": {
       "title": "ציפור קטנה על ענף",
-      "species_hebrew": "חוחיות",
+      "species_hebrew": "חוחית",
       "species_latin": "Carduelis carduelis",
       "category": "wildlife",
       "behavior": [
@@ -80186,7 +80186,7 @@
     },
     "ai": {
       "title": "מבט חודר של צבי",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -80300,7 +80300,7 @@
     },
     "ai": {
       "title": "משפחת צבאים בטבע",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -80356,7 +80356,7 @@
     },
     "ai": {
       "title": "משפחה ביום גשום",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -80412,7 +80412,7 @@
     },
     "ai": {
       "title": "מבט סקרן מהשיחים",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -80468,7 +80468,7 @@
     },
     "ai": {
       "title": "מנוחה על ענף",
-      "species_hebrew": "דוחל חום-גרון",
+      "species_hebrew": "דוחל שחור-גרון",
       "species_latin": "Saxicola rubicola",
       "category": "wildlife",
       "behavior": [
@@ -80524,7 +80524,7 @@
     },
     "ai": {
       "title": "תצפית מראש הקוץ",
-      "species_hebrew": "דוחל חום-גרון",
+      "species_hebrew": "דוחל שחור-גרון",
       "species_latin": "Saxicola rubicola",
       "category": "wildlife",
       "behavior": [
@@ -80881,7 +80881,7 @@
       ],
       "description": "שרקרק גמדי אוחז בדבורה במקורו רגע לפני הבליעה.",
       "humorous_description": "סליחה, יש לך אולי קצת דבש על הפרצוף?",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Flying Lunch",
       "description_en": "A Green Bee-eater holds a bee in its beak just before swallowing.",
       "humorous_description_en": "Excuse me, do you have a little honey on your face?",
@@ -80923,7 +80923,7 @@
     },
     "ai": {
       "title": "שרקרק ירוק זולל חרק",
-      "species_hebrew": "שרקרק ירוק",
+      "species_hebrew": "שרקרק גמדי",
       "species_latin": "Merops orientalis",
       "category": "wildlife",
       "behavior": [
@@ -80938,7 +80938,7 @@
       ],
       "description": "שרקרק ירוק עומד על כבל ומעיף חרק אל תוך פקיו פתוחים בתאורה אחורית מרשימה.",
       "humorous_description": "ארוחת צהריים מהירה בדרייב-אין של הטבע.",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater Devouring an Insect",
       "description_en": "A Green Bee-eater stands on a wire, tossing an insect into its open beak with striking backlighting.",
       "humorous_description_en": "Fast food at nature's drive-in.",
@@ -80996,7 +80996,7 @@
       ],
       "description": "שרקרק גמדי תופס חרק במקורו בזמן עמידה על כבל חשמל.",
       "humorous_description": "הנה הגיע המשלוח שלי, בדיוק בזמן!",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Flying Lunch",
       "description_en": "A Green Bee-eater catches an insect in its beak while perched on an electrical wire.",
       "humorous_description_en": "My delivery has arrived, right on time!",
@@ -81038,7 +81038,7 @@
     },
     "ai": {
       "title": "שרקרק ירוק צד דבורה",
-      "species_hebrew": "שרקרק ירוק",
+      "species_hebrew": "שרקרק גמדי",
       "species_latin": "Merops orientalis",
       "category": "wildlife",
       "behavior": [
@@ -81055,7 +81055,7 @@
       ],
       "description": "שרקרק ירוק פוער את מקורו לקראת דבורה מרחפת באוויר ברגע דרמטי של צייד בטבע.",
       "humorous_description": "כשאתה מנסה לתפוס את החטיף האחרון בשקית בלי להשתמש בידיים.",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Green Bee-eater Hunting a Bee",
       "description_en": "A Green Bee-eater opens its beak toward a bee hovering in the air during a dramatic moment of hunting in the wild.",
       "humorous_description_en": "When you try to catch the last snack in the bag without using your hands.",
@@ -81487,7 +81487,7 @@
     },
     "ai": {
       "title": "עגורים אפורים בערפל הבוקר",
-      "species_hebrew": "עגur אפור",
+      "species_hebrew": "עגור אפור",
       "species_latin": "Grus grus",
       "category": "wildlife",
       "behavior": [
@@ -81780,7 +81780,7 @@
     },
     "ai": {
       "title": "כפתן במים רגועים",
-      "species_hebrew": "כפתן",
+      "species_hebrew": "כפן לבן",
       "species_latin": "Platalea leucorodia",
       "category": "wildlife",
       "behavior": [
@@ -81954,7 +81954,7 @@
     },
     "ai": {
       "title": "עגורים בערפל אפור",
-      "species_hebrew": "עגور אפור",
+      "species_hebrew": "עגור אפור",
       "species_latin": "Grus grus",
       "category": "wildlife",
       "behavior": [
@@ -84161,7 +84161,7 @@
     },
     "ai": {
       "title": "מבט של צבי באור הזהב",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -84220,7 +84220,7 @@
     },
     "ai": {
       "title": "זריחה מעל גג רעפים ונוף הררי",
-      "species_hebrew": null,
+      "species_hebrew": "",
       "species_latin": null,
       "category": "landscape",
       "behavior": [],
@@ -85359,7 +85359,7 @@
     },
     "ai": {
       "title": "יסעורים מצויים בקרב מים מרתק",
-      "species_hebrew": "יסעור מצוי",
+      "species_hebrew": "יאורית מצרית",
       "species_latin": "Alopochen aegyptiaca",
       "category": "wildlife",
       "behavior": [
@@ -85534,7 +85534,7 @@
     },
     "ai": {
       "title": "כרם שלכת צהוב ביום ערפילי",
-      "species_hebrew": "גפן היין",
+      "species_hebrew": "גפן",
       "species_latin": "Vitis vinifera",
       "category": "landscape",
       "behavior": [
@@ -85984,7 +85984,7 @@
     },
     "ai": {
       "title": "חסידן אירופי על גזע עץ",
-      "species_hebrew": "חסידן",
+      "species_hebrew": "סיטה אירופית",
       "species_latin": "Sitta europaea",
       "category": "wildlife",
       "behavior": [
@@ -86040,7 +86040,7 @@
     },
     "ai": {
       "title": "חッית עצים מטפסת על גזע",
-      "species_hebrew": "חッית עצים",
+      "species_hebrew": "סיטה אירופית",
       "species_latin": "Sitta europaea",
       "category": "wildlife",
       "behavior": [
@@ -86053,7 +86053,7 @@
         "חיות בר",
         "חית עצים"
       ],
-      "description": "חית עצים סקרנית מטפסת במיומנות על גזע עץ מחוספס ומחפשת מזון בסביבתה הטבעית.",
+      "description": "סיטה אירופית סקרנית מטפסת במיומנות על גזע עץ מחוספס ומחפשת מזון בסביבתה הטבעית.",
       "humorous_description": "אני לא מחפש אוכל, אני פשוט בודק אם העץ הזה יציב מספיק לנדל\"ן שלי.",
       "species_en": "Eurasian Nuthatch",
       "title_en": "Eurasian Nuthatch Climbing",
@@ -86828,7 +86828,7 @@
     },
     "ai": {
       "title": "שקיעה כתומה מעל הרי יהודה",
-      "species_hebrew": null,
+      "species_hebrew": "",
       "species_latin": null,
       "category": "landscape",
       "behavior": [],
@@ -87282,7 +87282,7 @@
     },
     "ai": {
       "title": "מבט חודר",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -87454,7 +87454,7 @@
     },
     "ai": {
       "title": "צבי ארץ-ישראלי חד-קרן",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -87513,7 +87513,7 @@
     },
     "ai": {
       "title": "חד-קרן של המדבר",
-      "species_hebrew": "צבי ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -87571,7 +87571,7 @@
     },
     "ai": {
       "title": "הנחיתה המושלמת",
-      "species_hebrew": "כוס חורבות",
+      "species_hebrew": "כוס החורבות",
       "species_latin": "Athene noctua",
       "category": "wildlife",
       "behavior": [
@@ -87744,7 +87744,7 @@
     },
     "ai": {
       "title": "עבודה קשה בחמניה",
-      "species_hebrew": "דבורת דבש",
+      "species_hebrew": "דבורת-דבש",
       "species_latin": "Apis mellifera",
       "category": "macro",
       "behavior": [
@@ -88033,7 +88033,7 @@
     },
     "ai": {
       "title": "בין המחטים",
-      "species_hebrew": "סיבכי שחור-כיפה",
+      "species_hebrew": "סבכי שחור-כיפה",
       "species_latin": "Sylvia atricapilla",
       "category": "wildlife",
       "behavior": [
@@ -88542,7 +88542,7 @@
     },
     "ai": {
       "title": "צבי ארץ-ישראלי בין הכלניות",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -88601,7 +88601,7 @@
     },
     "ai": {
       "title": "ניגוח קרניים בין צבאים ארץ-ישראליים",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -88660,7 +88660,7 @@
     },
     "ai": {
       "title": "דו-קרב בשדה הפרחים",
-      "species_hebrew": "צבי ארץ-ישראלי",
+      "species_hebrew": "צבי ארצישראלי",
       "species_latin": "Gazella gazella",
       "category": "wildlife",
       "behavior": [
@@ -89184,7 +89184,7 @@
       ],
       "description": "שרקרק גמדי אוחז בדבורה במקורו בעודו יושב על ענף יבש.",
       "humorous_description": "אני רק מנסה ליהנות מהחטיף שלי, אפשר קצת פרטיות?",
-      "species_en": "Green Bee-eater",
+      "species_en": "Asian Green Bee-eater",
       "title_en": "Flying Lunch",
       "description_en": "A Green Bee-eater holding a bee in its beak while perched on a dry branch.",
       "humorous_description_en": "I am just trying to enjoy my snack, can I have some privacy?",
@@ -89845,7 +89845,7 @@
     },
     "ai": {
       "title": "פרפור נחלים בגאון מעוף",
-      "species_hebrew": "פרפור נחלים",
+      "species_hebrew": "פרפור עקוד",
       "species_latin": "Ceryle rudis",
       "category": "wildlife",
       "behavior": [
@@ -90138,7 +90138,7 @@
     },
     "ai": {
       "title": "דבורת-דבש לוגמת צוף מפרח בר",
-      "species_hebrew": "דבורת-דבש מערבית",
+      "species_hebrew": "דבורת-דבש",
       "species_latin": "Apis mellifera",
       "category": "macro",
       "behavior": [
