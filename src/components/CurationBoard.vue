@@ -15,7 +15,6 @@ import {
   updateCurationStatus,
   voteOnCurationItem,
   removeVoteOnCurationItem,
-  revertAccidentalSureItems,
   saveGeminiCritique,
   removeCurationItem,
   createSubGroup,
@@ -171,32 +170,15 @@ const getScoreEmoji = (score) => {
   return { emoji: '👎', text: 'פחות מתאים (-1)', color: 'text-rose-400 bg-rose-500/10 border-rose-500/30' };
 };
 
-// Reverting accidental 'sure' items
-const isRevertingSure = ref(false);
-const handleRevertAccidentalSure = async () => {
-  if (!confirm('האם לשחזר את כל התמונות בבטוחות בחזרה למאגר / אפשריות (לפי הציון המקורי שלהן)?\n\nכל הדירוגים, הציונים והשמות של מי שסימן יישמרו במלואם!')) {
-    return;
-  }
-  isRevertingSure.value = true;
-  try {
-    const count = await revertAccidentalSureItems(currentUser.value);
-    alert(`שוחזרו בהצלחה ${count} תמונות בחזרה למאגר ולאפשריות!\nהדירוגים של כל השופטים נשמרו במלואם.`);
-  } catch (err) {
-    alert('שגיאה בשחזור: ' + err.message);
-  } finally {
-    isRevertingSure.value = false;
-  }
-};
-
 // Automatically derive exhibition items from initialPhotos (196 exhibition candidates)
 const defaultExhibitionItems = computed(() => {
   return (props.initialPhotos || [])
     .filter(p => p.is_exhibition_candidate || p.exhibition?.candidate)
     .map(p => {
       const score = p.exhibition_score || p.exhibition?.score || 1;
-      // Link 2 / Score 2 (121 photos) -> 'maybe' (מועמדות אפשריות)
-      // Link 1 / Score 1 (74 photos) -> 'pool' (מאגר לתערוכה)
-      const status = score === 2 ? 'maybe' : 'pool';
+      // Link 2 / Score 2 (121 photos) -> 'sure' (מועמדות בטוחות לתערוכה ראשית)
+      // Link 1 / Score 1 (74 photos) -> 'pool' (מאגר כללי לתערוכה)
+      const status = score === 2 ? 'sure' : 'pool';
       return {
         id: p.id,
         photo_id: p.id,
@@ -238,9 +220,20 @@ const effectiveCurationItems = computed(() => {
     const key = fireItem.photo_id || fireItem.id;
     if (map.has(key)) {
       const def = map.get(key);
+      // Status priority:
+      // If photo has exhibition_score === 2 (the 121 favorites) and was not explicitly moved away by Roi,
+      // preserve 'sure'!
+      let finalStatus = fireItem.status;
+      if (def.photo_data?.exhibition_score === 2 && !fireItem.is_manual_move) {
+        finalStatus = 'sure';
+      } else if (!finalStatus) {
+        finalStatus = def.status;
+      }
+
       map.set(key, {
         ...def,
         ...fireItem,
+        status: finalStatus,
         photo_data: { ...def.photo_data, ...(fireItem.photo_data || {}) }
       });
     } else {
@@ -461,7 +454,7 @@ const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
   }
   const item = effectiveCurationItems.value.find(i => i.photo_id === photoId || i.id === photoId);
   try {
-    const updates = { status: newStatus };
+    const updates = { status: newStatus, is_manual_move: true };
     if (newStatus === 'sure') {
       updates.area = newArea || (activeArea.value === 'wall' ? 'wall' : 'exhibition');
     } else if (newArea) {
@@ -477,7 +470,7 @@ const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
 const handleMoveGroupStatus = async (groupId, newStatus, newArea = null) => {
   if (!isOwner.value) return;
   try {
-    const updates = { status: newStatus };
+    const updates = { status: newStatus, is_manual_move: true };
     if (newStatus === 'sure') {
       updates.area = newArea || (activeArea.value === 'wall' ? 'wall' : 'exhibition');
     }

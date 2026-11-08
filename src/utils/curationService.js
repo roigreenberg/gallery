@@ -94,7 +94,7 @@ export const batchAddPhotosToCuration = async (photos, area = 'pool', status = '
 /**
  * Update curation item status or area
  */
-export const updateCurationStatus = async (photoId, { area, status, groupId = null, groupName = null }, photoData = null) => {
+export const updateCurationStatus = async (photoId, { area, status, groupId = null, groupName = null, is_manual_move }, photoData = null) => {
   if (!db) throw new Error('Database not connected');
   const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
   const docRef = doc(db, 'curation_items', cleanId);
@@ -106,6 +106,7 @@ export const updateCurationStatus = async (photoId, { area, status, groupId = nu
   if (status !== undefined) updates.status = status;
   if (groupId !== undefined) updates.group_id = groupId;
   if (groupName !== undefined) updates.group_name = groupName;
+  if (is_manual_move !== undefined) updates.is_manual_move = is_manual_move;
 
   if (photoData) {
     const snap = await getDoc(docRef);
@@ -117,6 +118,7 @@ export const updateCurationStatus = async (photoId, { area, status, groupId = nu
         status: status || 'pool',
         group_id: groupId,
         group_name: groupName,
+        is_manual_move: is_manual_move ?? true,
         votes: {},
         ai_critique: null,
         notes: '',
@@ -153,20 +155,17 @@ export const voteOnCurationItem = async (photoId, user, score, photoData = null)
 
   const snap = await getDoc(docRef);
   if (!snap.exists() && photoData) {
-    // CRITICAL: Voting MUST NEVER promote a photo to 'sure' (מועמדות בטוחות)!
-    // Only explicit action by the owner can move photos between statuses.
-    // Default status: 'maybe' for exhibition_score === 2, or 'pool' for score === 1.
-    const initialStatus = photoData.status && photoData.status !== 'sure'
-      ? photoData.status
-      : (photoData.exhibition_score === 2 ? 'maybe' : 'pool');
+    // CRITICAL: Voting MUST NEVER modify status or area.
+    // Default status: 'sure' for score 2, 'pool' for score 1.
+    const initialStatus = photoData.status || (photoData.exhibition_score === 2 ? 'sure' : 'pool');
 
     await setDoc(docRef, {
       photo_id: photoId,
       photo_data: photoData,
       area: photoData.area || 'exhibition',
       status: initialStatus,
-      group_id: null,
-      group_name: null,
+      group_id: photoData.group_id || null,
+      group_name: photoData.group_name || null,
       votes: {
         [user.uid]: voterInfo
       },
