@@ -218,34 +218,29 @@ const processQueue = async () => {
         const cleanName = item.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
         item.titleHe = cleanName;
 
-        // 4. Run Gemini AI for new photo
-        if (key) {
-          item.statusText = 'מנתח באמצעות Gemini AI...';
-          try {
-            const aiData = await generatePhotoMetadataWithGemini(displayWebP.blob, exifData, key);
-            item.titleHe = aiData.title || item.titleHe;
-            item.titleEn = aiData.title_en || '';
-            item.speciesHe = aiData.species_hebrew || '';
-            item.speciesEn = aiData.species_en || '';
-            item.speciesLa = aiData.species_latin || '';
-            item.category = aiData.category || 'wildlife';
-            item.descHe = aiData.description || '';
-            item.descEn = aiData.description_en || '';
-            item.humorHe = aiData.humorous_description || '';
-            item.humorEn = aiData.humorous_description_en || '';
-            item.tagsHe = (aiData.tags || []).join(', ');
-            item.status = 'ready';
-            item.statusText = 'מוכן לפרסום (זוהה ע״י AI)';
-          } catch (aiErr) {
-            console.warn('Gemini tagging failed for queue item:', aiErr);
-            item.errorMessage = `שגיאת AI: ${aiErr.message}`;
-            errorMessage.value = `שימו לב: ניתוח ה-AI נתקל בשגיאה (${aiErr.message}). באפשרותך ללחוץ 'הפעל זיהוי AI' או לערוך ידנית.`;
-            item.status = 'ready';
-            item.statusText = 'מוכן לפרסום (ללא AI)';
-          }
-        } else {
+        // 4. Run Gemini AI via Worker proxy for new photo
+        item.statusText = 'מנתח באמצעות Gemini AI...';
+        try {
+          const aiData = await generatePhotoMetadataWithGemini(displayWebP.blob, exifData);
+          item.titleHe = aiData.title || item.titleHe;
+          item.titleEn = aiData.title_en || '';
+          item.speciesHe = aiData.species_hebrew || '';
+          item.speciesEn = aiData.species_en || '';
+          item.speciesLa = aiData.species_latin || '';
+          item.category = aiData.category || 'wildlife';
+          item.descHe = aiData.description || '';
+          item.descEn = aiData.description_en || '';
+          item.humorHe = aiData.humorous_description || '';
+          item.humorEn = aiData.humorous_description_en || '';
+          item.tagsHe = (aiData.tags || []).join(', ');
           item.status = 'ready';
-          item.statusText = 'מוכן לפרסום';
+          item.statusText = 'מוכן לפרסום (זוהה ע״י AI)';
+        } catch (aiErr) {
+          console.warn('Gemini tagging failed for queue item:', aiErr);
+          item.errorMessage = `שגיאת AI: ${aiErr.message}`;
+          errorMessage.value = `שימו לב: ניתוח ה-AI נתקל בשגיאה (${aiErr.message}). באפשרותך ללחוץ 'הפעל זיהוי AI' או לערוך ידנית.`;
+          item.status = 'ready';
+          item.statusText = 'מוכן לפרסום (ללא AI)';
         }
       }
     } catch (err) {
@@ -263,12 +258,6 @@ const processQueue = async () => {
 // Re-run AI analysis on the currently selected item
 const triggerAiAnalysisForItem = async (item) => {
   if (!item) return;
-  const key = geminiApiKey.value.trim() || (await getGeminiApiKey(props.currentUser));
-  if (!key) {
-    showKeyInput.value = true;
-    errorMessage.value = 'נא להזין מפתח Gemini כדי לבצע ניתוח AI.';
-    return;
-  }
 
   item.isAiAnalyzing = true;
   errorMessage.value = '';
@@ -281,7 +270,7 @@ const triggerAiAnalysisForItem = async (item) => {
       item.thumbBlob = (await resizeImageToWebP(item.file, 600, 0.82)).blob;
     }
 
-    const aiData = await generatePhotoMetadataWithGemini(blob, item.exif, key);
+    const aiData = await generatePhotoMetadataWithGemini(blob, item.exif);
     item.titleHe = aiData.title || item.titleHe;
     item.titleEn = aiData.title_en || item.titleEn;
     item.speciesHe = aiData.species_hebrew || item.speciesHe;

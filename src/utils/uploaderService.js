@@ -215,10 +215,12 @@ export const uploadBlobToR2 = async (blob, objectKey) => {
 };
 
 /**
- * Analyze image and generate bilingual metadata using Gemini API
+ * Analyze image and generate bilingual metadata using Gemini AI via secure Worker proxy
  */
-export const generatePhotoMetadataWithGemini = async (imageDisplayBlob, exifData, apiKey) => {
-  if (!apiKey) throw new Error('Gemini API key is required');
+export const generatePhotoMetadataWithGemini = async (imageDisplayBlob, exifData, _optionalKey = '') => {
+  if (!auth?.currentUser) {
+    throw new Error('יש להתחבר עם חשבון מנהל (Google) על מנת להשתמש ב-AI');
+  }
 
   // Convert blob to base64
   const base64Data = await new Promise((resolve) => {
@@ -230,74 +232,38 @@ export const generatePhotoMetadataWithGemini = async (imageDisplayBlob, exifData
     reader.readAsDataURL(imageDisplayBlob);
   });
 
-  const prompt = `אתה בוט מומחה לצילום טבע, זואולוגיה ובוטניקה בישראל עבור גלריית הצילום של רועי גרינברג.
-נתח את התצלום המצורף והחזר אך ורק אובייקט JSON תקין (ללא markdown וללא הערות) במבנה הבא:
+  const idToken = await auth.currentUser.getIdToken();
 
-{
-  "title": "כותרת קולעת בעברית",
-  "title_en": "Fitting Title in English",
-  "species_hebrew": "שם המין בעברית (מדויק)",
-  "species_latin": "Scientific Latin Name",
-  "species_en": "Official English Name",
-  "category": "wildlife", // אחת מתוך: wildlife, landscape, macro, astrophotography
-  "description": "תיאור טבעי ומקצועי של הפריים, ההתנהגות והאור (2-3 משפטים בעברית)",
-  "description_en": "Professional and evocative description of the scene in English (2-3 sentences)",
-  "humorous_description": "משפט משעשע, שנון והומוריסטי בגוף ראשון או מנקודת מבט הומוריסטית של בעל החיים",
-  "humorous_description_en": "Witty, humorous English caption capturing the exact same comedic spirit",
-  "tags": ["תגית1", "תגית2", "תגית3"],
-  "tags_en": ["tag1", "tag2", "tag3"]
-}
-
-נתוני צילום נוספים לחילוץ הקשר:
-מצלמה: ${exifData.camera || ''}, עדשה: ${exifData.lens || ''}, תאריך: ${exifData.date || ''}.`;
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
-
-  await logEvent(LOG_LEVELS.INFO, 'ai', 'Sending photo to Gemini AI for bilingual tagging...', {
-    camera: exifData.camera,
-    lens: exifData.lens
+  await logEvent(LOG_LEVELS.INFO, 'ai', 'Sending photo to Cloudflare Worker for Gemini AI analysis...', {
+    camera: exifData?.camera,
+    lens: exifData?.lens
   });
 
-  const response = await fetch(url, {
+  const response = await fetch(`${R2_CONFIG.workerUrl}/analyze`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Authorization': `Bearer ${idToken}`,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
-      contents: [{
-        parts: [
-          { text: prompt },
-          {
-            inline_data: {
-              mime_type: 'image/webp',
-              data: base64Data
-            }
-          }
-        ]
-      }],
-      generationConfig: {
-        response_mime_type: 'application/json'
-      }
+      base64Data,
+      exifData
     })
   });
 
   if (!response.ok) {
-    const errText = await response.text();
-    await logEvent(LOG_LEVELS.ERROR, 'ai', `Gemini API returned error ${response.status}`, { error: errText });
-    throw new Error(`Gemini API error: ${response.status} - ${errText}`);
+    let errText = `Status ${response.status}`;
+    try {
+      const errJson = await response.json();
+      if (errJson.error) errText = errJson.error;
+    } catch (e) {
+      errText = await response.text();
+    }
+    await logEvent(LOG_LEVELS.ERROR, 'ai', `Worker AI analysis returned error`, { error: errText });
+    throw new Error(`AI error: ${errText}`);
   }
 
-  const result = await response.json();
-  const rawJson = result.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!rawJson) {
-    await logEvent(LOG_LEVELS.ERROR, 'ai', 'No JSON text in Gemini response', { result });
-    throw new Error('No JSON output from Gemini');
-  }
-
-  let cleanJson = rawJson.trim();
-  const jsonMatch = cleanJson.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    cleanJson = jsonMatch[0];
-  }
-  const parsed = JSON.parse(cleanJson);
+  const parsed = await response.json();
 
   // Cross-reference species with species_registry.json if possible
   if (parsed.species_latin) {
