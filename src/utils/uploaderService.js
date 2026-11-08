@@ -10,8 +10,8 @@ export const R2_CONFIG = {
   accountId: '17810f22ce3ee57341e89107ed1c2913',
   bucketName: 'my-photo-gallery',
   publicUrl: 'https://pub-d8a9140bbd28466cb778bf724fb793b0.r2.dev',
-  accessKeyId: 'a8f1004c8a901986701a97d3b4a00321',
-  secretAccessKey: 'b1c46e07f2ccb8e2de8a09b29d6e44e6ac0dac9e8afac921f8d495641f9dd3aa'
+  accessKeyId: '',
+  secretAccessKey: ''
 };
 
 /**
