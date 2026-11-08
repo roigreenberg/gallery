@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import {
   extractExifFromFile,
   resizeImageToWebP,
-  uploadBlobToStorage,
+  uploadBlobToR2,
   generatePhotoMetadataWithGemini,
   saveNewPhotoRecord
 } from '../utils/uploaderService.js';
@@ -82,10 +82,10 @@ const handleFileSelect = async (e) => {
       aspectRatio: displayWebP.aspectRatio
     };
 
-    // 4. Upload to Firebase Storage
-    processingStep.value = 'מעלה קבצים לענן (Storage)...';
-    const dispUrl = await uploadBlobToStorage(displayWebP.blob, `photos/display/${photoId.value}.webp`);
-    const thUrl = await uploadBlobToStorage(thumbWebP.blob, `photos/thumbs/${photoId.value}.webp`);
+    // 4. Upload to Cloudflare R2
+    processingStep.value = 'מעלה קבצים ישירות ל-Cloudflare R2...';
+    const dispUrl = await uploadBlobToR2(displayWebP.blob, `photos/display/${photoId.value}.webp`);
+    const thUrl = await uploadBlobToR2(thumbWebP.blob, `photos/thumbs/${photoId.value}.webp`);
     displayUrl.value = dispUrl;
     thumbUrl.value = thUrl;
 

@@ -24,7 +24,6 @@ import {
   serverTimestamp,
   increment
 } from 'firebase/firestore';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyA42fi1KrzhQ1BEUwT-HmxyVLYa9ThH6Aw",
@@ -42,20 +41,18 @@ export const OWNER_EMAIL = 'roigreenberg@gmail.com';
 let app = null;
 let auth = null;
 let db = null;
-let storage = null;
 
 if (typeof window !== 'undefined') {
   try {
     app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
-    storage = getStorage(app);
   } catch (err) {
     console.error('Firebase initialization error:', err);
   }
 }
 
-export { app, auth, db, storage };
+export { app, auth, db };
 
 // Auth helpers
 export const isUserOwner = (user) => {

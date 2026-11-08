@@ -1,9 +1,17 @@
-// uploaderService.js - Client-Side Owner Photo Processing & Upload Pipeline
+// uploaderService.js - Client-Side Owner Photo Processing & Cloudflare R2 Upload Pipeline
 import exifr from 'exifr';
-import { db, storage, isUserOwner } from './firebase.js';
-import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { db, isUserOwner } from './firebase.js';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import speciesRegistry from '../data/species_registry.json';
+
+export const R2_CONFIG = {
+  accountId: '17810f22ce3ee57341e89107ed1c2913',
+  bucketName: 'my-photo-gallery',
+  publicUrl: 'https://pub-d8a9140bbd28466cb778bf724fb793b0.r2.dev',
+  accessKeyId: 'a8f1004c8a901986701a97d3b4a00321',
+  secretAccessKey: 'b1c46e07f2ccb8e2de8a09b29d6e44e6ac0dac9e8afac921f8d495641f9dd3aa'
+};
 
 /**
  * Extract EXIF metadata from raw File
@@ -162,16 +170,30 @@ export const resizeImageToWebP = (file, maxDimension, quality = 0.85) => {
 };
 
 /**
- * Upload WebP Blob to Firebase Storage
+ * Upload WebP Blob directly to Cloudflare R2
  */
-export const uploadBlobToStorage = async (blob, path) => {
-  if (!storage) throw new Error('Firebase Storage is not initialized');
-  const sRef = storageRef(storage, path);
-  const snapshot = await uploadBytes(sRef, blob, {
-    contentType: 'image/webp',
-    cacheControl: 'public, max-age=31536000'
+export const uploadBlobToR2 = async (blob, objectKey) => {
+  const s3 = new S3Client({
+    region: 'auto',
+    endpoint: `https://${R2_CONFIG.accountId}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId: R2_CONFIG.accessKeyId,
+      secretAccessKey: R2_CONFIG.secretAccessKey
+    }
   });
-  return await getDownloadURL(snapshot.ref);
+
+  const arrayBuffer = await blob.arrayBuffer();
+  const cleanKey = objectKey.replace(/^\//, '');
+  const command = new PutObjectCommand({
+    Bucket: R2_CONFIG.bucketName,
+    Key: cleanKey,
+    Body: new Uint8Array(arrayBuffer),
+    ContentType: 'image/webp',
+    CacheControl: 'public, max-age=31536000'
+  });
+
+  await s3.send(command);
+  return `${R2_CONFIG.publicUrl}/${cleanKey}`;
 };
 
 /**
