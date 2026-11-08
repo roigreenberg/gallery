@@ -7,7 +7,7 @@ import {
   generatePhotoMetadataWithGemini,
   saveNewPhotoRecord
 } from '../utils/uploaderService.js';
-import { getGeminiApiKey } from '../utils/geminiCurator.js';
+import { getGeminiApiKey, saveGeminiApiKey } from '../utils/geminiCurator.js';
 import { addPhotoToCuration } from '../utils/curationService.js';
 import { logEvent, LOG_LEVELS, subscribeToSystemLogs } from '../utils/loggerService.js';
 
@@ -58,10 +58,29 @@ const liveLogs = ref([]);
 const showLiveLogs = ref(false);
 let unsubLogs = null;
 
-onMounted(() => {
+// Gemini API Key management
+const geminiApiKey = ref('');
+const isKeyConfigured = ref(false);
+const showKeyInput = ref(false);
+
+const handleSaveKey = async () => {
+  if (!geminiApiKey.value.trim()) return;
+  await saveGeminiApiKey(geminiApiKey.value.trim(), props.currentUser);
+  isKeyConfigured.value = true;
+  showKeyInput.value = false;
+  await logEvent(LOG_LEVELS.SUCCESS, 'auth', 'Gemini API key configured and saved to Firestore secrets');
+};
+
+onMounted(async () => {
   unsubLogs = subscribeToSystemLogs((logs) => {
     liveLogs.value = logs.slice(0, 8);
   }, 10);
+
+  const key = await getGeminiApiKey(props.currentUser);
+  if (key) {
+    geminiApiKey.value = key;
+    isKeyConfigured.value = true;
+  }
 });
 
 onUnmounted(() => {
@@ -236,8 +255,51 @@ const handlePublish = async () => {
       </header>
 
       <!-- Modal Body -->
-      <div class="flex-1 overflow-y-auto p-6 space-y-6">
+      <div class="flex-1 overflow-y-auto p-6 space-y-5">
         
+        <!-- Gemini Key Banner (Configurable once, saves to Firestore) -->
+        <div class="p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-2xl text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-indigo-300 flex items-center gap-1.5">
+              <span>🤖</span>
+              <span>חיבור אוצר הבינה המלאכותית (Gemini API)</span>
+            </span>
+            <button
+              v-if="isKeyConfigured"
+              type="button"
+              @click="showKeyInput = !showKeyInput"
+              class="text-indigo-400 hover:text-white text-[11px] underline cursor-pointer"
+            >
+              {{ showKeyInput ? 'הסתר הגדרות' : 'ערוך מפתח API' }}
+            </button>
+          </div>
+
+          <div v-if="!isKeyConfigured || showKeyInput" class="space-y-2 pt-1 border-t border-indigo-500/20">
+            <p class="text-[11px] text-slate-300">
+              הדבק את מפתח ה-Gemini שלך פעם אחת בלבד. הוא יישמר בחשבון הבעלים שלך ב-Firestore:
+            </p>
+            <div class="flex items-center gap-2">
+              <input
+                v-model="geminiApiKey"
+                type="password"
+                placeholder="הדבק מפתח Gemini..."
+                class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-indigo-400"
+              />
+              <button
+                type="button"
+                @click="handleSaveKey"
+                class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition cursor-pointer shrink-0"
+              >
+                שמור
+              </button>
+            </div>
+          </div>
+          <div v-else class="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
+            <span>✓</span>
+            <span>Gemini מחובר ומזהה אוטומטית מיני בעלי חיים וכותרות בכל העלאה</span>
+          </div>
+        </div>
+
         <!-- File Picker -->
         <div v-if="!selectedFile" class="border-2 border-dashed border-slate-700 hover:border-sky-500 rounded-2xl p-8 text-center cursor-pointer transition bg-slate-950/40">
           <label class="cursor-pointer space-y-2 block">
