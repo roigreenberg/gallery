@@ -2,7 +2,7 @@
   "_metadata": {
     "version": "1.0.0",
     "description": "Canonical species registry with official English & Hebrew names for Roi Greenberg Gallery",
-    "total_species": 240
+    "total_species": 243
   },
   "by_latin": {
     "vulpes vulpes": {
@@ -2404,6 +2404,107 @@
       "group": "invertebrates",
       "aliases_he": [
         "נחושתית הקוצים"
+      ]
+    },
+    "ardea purpurea": {
+      "key": "Ardea purpurea",
+      "latin": "Ardea purpurea",
+      "hebrew": "אנפה ארגמנית",
+      "english": "Purple Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה ארגמנית"
+      ]
+    },
+    "lucilia sericata": {
+      "key": "Lucilia sericata",
+      "latin": "Lucilia sericata",
+      "hebrew": "זבוב ירוק",
+      "english": "Common Green Bottle Fly",
+      "group": "macro",
+      "aliases_he": [
+        "זבוב ירוק"
+      ]
+    },
+    "lanius meridionalis": {
+      "key": "Lanius meridionalis",
+      "latin": "Lanius meridionalis",
+      "hebrew": "חנקן נומי",
+      "english": "Southern Grey Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן נומי"
+      ]
+    },
+    "coccidae": {
+      "key": "Coccidae",
+      "latin": "Coccidae",
+      "hebrew": "כנימת מגן",
+      "english": "Scale Insect",
+      "group": "macro",
+      "aliases_he": [
+        "כנימת מגן"
+      ]
+    },
+    "burhinus oedicnemus": {
+      "key": "Burhinus oedicnemus",
+      "latin": "Burhinus oedicnemus",
+      "hebrew": "כרוון מצוי",
+      "english": "Eurasian Stone-curlew",
+      "group": "birds",
+      "aliases_he": [
+        "כרוון מצוי"
+      ]
+    },
+    "sylvia": {
+      "key": "Sylvia",
+      "latin": "Sylvia",
+      "hebrew": "סבכי",
+      "english": "Sylvia Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי"
+      ]
+    },
+    "monticola solitarius": {
+      "key": "Monticola solitarius",
+      "latin": "Monticola solitarius",
+      "hebrew": "סלעית כחולה",
+      "english": "Blue Rock Thrush",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית כחולה",
+        "צוקית בודדת"
+      ]
+    },
+    "potamon potamios": {
+      "key": "Potamon potamios",
+      "latin": "Potamon potamios",
+      "hebrew": "סרטן נחלים",
+      "english": "Freshwater Crab",
+      "group": "wildlife",
+      "aliases_he": [
+        "סרטן נחלים"
+      ]
+    },
+    "buteo buteo": {
+      "key": "Buteo buteo",
+      "latin": "Buteo buteo",
+      "hebrew": "עקב חורף",
+      "english": "Common Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "עקב חורף"
+      ]
+    },
+    "acrocephalus scirpaceus": {
+      "key": "Acrocephalus scirpaceus",
+      "latin": "Acrocephalus scirpaceus",
+      "hebrew": "קנית קטנה",
+      "english": "Eurasian Reed Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "קנית קטנה"
       ]
     }
   },
@@ -5822,6 +5923,107 @@
       "group": "invertebrates",
       "aliases_he": [
         "נחושתית הקוצים"
+      ]
+    },
+    "אנפה ארגמנית": {
+      "key": "Ardea purpurea",
+      "latin": "Ardea purpurea",
+      "hebrew": "אנפה ארגמנית",
+      "english": "Purple Heron",
+      "group": "birds",
+      "aliases_he": [
+        "אנפה ארגמנית"
+      ]
+    },
+    "זבוב ירוק": {
+      "key": "Lucilia sericata",
+      "latin": "Lucilia sericata",
+      "hebrew": "זבוב ירוק",
+      "english": "Common Green Bottle Fly",
+      "group": "macro",
+      "aliases_he": [
+        "זבוב ירוק"
+      ]
+    },
+    "חנקן נומי": {
+      "key": "Lanius meridionalis",
+      "latin": "Lanius meridionalis",
+      "hebrew": "חנקן נומי",
+      "english": "Southern Grey Shrike",
+      "group": "birds",
+      "aliases_he": [
+        "חנקן נומי"
+      ]
+    },
+    "כנימת מגן": {
+      "key": "Coccidae",
+      "latin": "Coccidae",
+      "hebrew": "כנימת מגן",
+      "english": "Scale Insect",
+      "group": "macro",
+      "aliases_he": [
+        "כנימת מגן"
+      ]
+    },
+    "כרוון מצוי": {
+      "key": "Burhinus oedicnemus",
+      "latin": "Burhinus oedicnemus",
+      "hebrew": "כרוון מצוי",
+      "english": "Eurasian Stone-curlew",
+      "group": "birds",
+      "aliases_he": [
+        "כרוון מצוי"
+      ]
+    },
+    "סבכי": {
+      "key": "Sylvia",
+      "latin": "Sylvia",
+      "hebrew": "סבכי",
+      "english": "Sylvia Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "סבכי"
+      ]
+    },
+    "סלעית כחולה": {
+      "key": "Monticola solitarius",
+      "latin": "Monticola solitarius",
+      "hebrew": "סלעית כחולה",
+      "english": "Blue Rock Thrush",
+      "group": "birds",
+      "aliases_he": [
+        "סלעית כחולה",
+        "צוקית בודדת"
+      ]
+    },
+    "סרטן נחלים": {
+      "key": "Potamon potamios",
+      "latin": "Potamon potamios",
+      "hebrew": "סרטן נחלים",
+      "english": "Freshwater Crab",
+      "group": "wildlife",
+      "aliases_he": [
+        "סרטן נחלים"
+      ]
+    },
+    "עקב חורף": {
+      "key": "Buteo buteo",
+      "latin": "Buteo buteo",
+      "hebrew": "עקב חורף",
+      "english": "Common Buzzard",
+      "group": "birds",
+      "aliases_he": [
+        "עקב חורף"
+      ]
+    },
+    "קנית קטנה": {
+      "key": "Acrocephalus scirpaceus",
+      "latin": "Acrocephalus scirpaceus",
+      "hebrew": "קנית קטנה",
+      "english": "Eurasian Reed Warbler",
+      "group": "birds",
+      "aliases_he": [
+        "קנית קטנה"
       ]
     }
   },

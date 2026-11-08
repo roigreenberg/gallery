@@ -17,6 +17,7 @@ __pycache__/
 *.log
 no_latin.json
 unique_species_raw.json
+adobe_album_*.json
 
 # Binary media files - NEVER commit large photos to Git
 public/photos/
