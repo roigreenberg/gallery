@@ -8,6 +8,9 @@ export default defineConfig({
   base: '/gallery',
   integrations: [vue()],
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    define: {
+      'import.meta.env.PUBLIC_GEMINI_API_KEY': JSON.stringify(process.env.GEMINI_API_KEY || '')
+    }
   }
 });

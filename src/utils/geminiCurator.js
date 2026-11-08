@@ -78,7 +78,7 @@ export const requestPhotoCritique = async (photo, apiKey) => {
 3. 🖼️ **התאמה להדפסה גדולה בתערוכה** (האם הפריים מתאים להדפסה ברוחב מטר ומעלה? נקודות לשים לב אליהן)
 4. 💡 **הכרעה והמלצת אוצר**: האם התמונה הזו היא מועמדת בטוחה (חובה), אפשרית, או מתאימה יותר לקיר תמונות?`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -127,7 +127,7 @@ ${photosListText}
 2. 🏆 **הכרעת האוצר - המנצחת**: איזו תמונה היא הטובה ביותר לתערוכה ראשית ולמה?
 3. 🥈 **המלצה למקום השני**: האם לשמור אותה כחלופה או להעביר אותה לקיר תמונות?`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',

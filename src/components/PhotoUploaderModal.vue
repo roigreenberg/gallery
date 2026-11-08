@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import {
   extractExifFromFile,
   resizeImageToWebP,
@@ -9,6 +9,7 @@ import {
 } from '../utils/uploaderService.js';
 import { getGeminiApiKey } from '../utils/geminiCurator.js';
 import { addPhotoToCuration } from '../utils/curationService.js';
+import { logEvent, LOG_LEVELS, subscribeToSystemLogs } from '../utils/loggerService.js';
 
 const props = defineProps({
   currentUser: {
@@ -52,6 +53,21 @@ const thumbUrl = ref('');
 const extractedExif = ref({});
 const dimensions = ref({});
 
+// Live Firestore Logs
+const liveLogs = ref([]);
+const showLiveLogs = ref(false);
+let unsubLogs = null;
+
+onMounted(() => {
+  unsubLogs = subscribeToSystemLogs((logs) => {
+    liveLogs.value = logs.slice(0, 8);
+  }, 10);
+});
+
+onUnmounted(() => {
+  if (unsubLogs) unsubLogs();
+});
+
 const handleFileSelect = async (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -91,7 +107,9 @@ const handleFileSelect = async (e) => {
 
     // 5. Generate metadata via Gemini API
     processingStep.value = 'מנתח תמונה באמצעות Gemini (זיהוי מין, כותרות, תיאורים והומור בעברית ובאנגלית)...';
-    const apiKey = await getGeminiApiKey(props.currentUser);
+    const apiKey = (await getGeminiApiKey(props.currentUser)) || 
+      (typeof import.meta !== 'undefined' ? import.meta.env?.PUBLIC_GEMINI_API_KEY : '');
+
     if (apiKey) {
       try {
         const aiData = await generatePhotoMetadataWithGemini(displayWebP.blob, exifData, apiKey);
@@ -107,11 +125,25 @@ const handleFileSelect = async (e) => {
         humorEn.value = aiData.humorous_description_en || '';
         tagsHe.value = (aiData.tags || []).join(', ');
       } catch (aiErr) {
-        console.warn('Gemini metadata generation failed, you can enter manually:', aiErr);
+        console.warn('Gemini metadata generation failed:', aiErr);
+        await logEvent(LOG_LEVELS.WARN, 'uploader', `Gemini tagging error: ${aiErr.message}`);
+        errorMessage.value = `שימו לב: ניתוח ה-AI החזיר שגיאה (${aiErr.message}), אך התמונה הועלתה בהצלחה ל-R2! באפשרותך לערוך את הפרטים ידנית.`;
       }
+    } else {
+      await logEvent(LOG_LEVELS.WARN, 'uploader', 'No Gemini API key found for tagging');
+    }
+
+    // Fallback title if AI was empty
+    const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+    if (!titleHe.value) {
+      titleHe.value = cleanFileName;
     }
 
     processingStep.value = 'הניתוח הושלם! בדוק את הנתונים ולחץ "פרסם".';
+    await logEvent(LOG_LEVELS.INFO, 'uploader', `Photo preprocessed ready for publish: ${photoId.value}`, {
+      fileName: file.name,
+      camera: exifData.camera
+    });
   } catch (err) {
     console.error('Processing error:', err);
     errorMessage.value = `שגיאה בעיבוד התמונה: ${err.message}`;
@@ -220,6 +252,35 @@ const handlePublish = async () => {
         <div v-if="isProcessing" class="bg-sky-950/40 border border-sky-500/30 rounded-2xl p-5 text-center space-y-3">
           <div class="w-8 h-8 rounded-full border-2 border-sky-400 border-t-transparent animate-spin mx-auto"></div>
           <p class="text-xs sm:text-sm text-sky-200 font-medium">{{ processingStep }}</p>
+        </div>
+
+        <!-- Live System Logs Accordion -->
+        <div class="border border-slate-800 rounded-xl bg-slate-950/60 overflow-hidden text-xs">
+          <button
+            type="button"
+            @click="showLiveLogs = !showLiveLogs"
+            class="w-full px-3.5 py-2 flex items-center justify-between text-slate-400 hover:text-slate-200 cursor-pointer bg-slate-950/80 transition"
+          >
+            <span class="flex items-center gap-2 font-mono">
+              <span>📜 לוגים חיים (Firebase)</span>
+              <span class="px-1.5 py-0.2 bg-slate-800 rounded text-[10px] text-sky-400">{{ liveLogs.length }}</span>
+            </span>
+            <span class="text-[10px] text-slate-500">{{ showLiveLogs ? 'הסתר ▲' : 'הצג ▼' }}</span>
+          </button>
+
+          <div v-if="showLiveLogs" class="p-3 space-y-1.5 max-h-36 overflow-y-auto font-mono text-[11px] border-t border-slate-800/80">
+            <div
+              v-for="log in liveLogs"
+              :key="log.id"
+              class="flex items-start gap-2 leading-tight py-0.5 border-b border-slate-900/60"
+              :class="log.level === 'error' ? 'text-rose-400' : (log.level === 'warn' ? 'text-amber-300' : (log.level === 'success' ? 'text-emerald-400' : 'text-slate-300'))"
+            >
+              <span class="text-[10px] text-slate-500 shrink-0">[{{ log.client_time }}]</span>
+              <span class="shrink-0 uppercase text-[9px] px-1 rounded font-bold" :class="log.level === 'error' ? 'bg-rose-950 border border-rose-800' : (log.level === 'success' ? 'bg-emerald-950 border border-emerald-800' : 'bg-slate-800')">{{ log.category }}</span>
+              <span class="truncate flex-1">{{ log.message }}</span>
+            </div>
+            <div v-if="liveLogs.length === 0" class="text-slate-500 italic">אין עדיין לוגים במערכת</div>
+          </div>
         </div>
 
         <!-- Error & Success Banners -->

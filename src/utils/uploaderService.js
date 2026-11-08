@@ -4,6 +4,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { db, isUserOwner } from './firebase.js';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import speciesRegistry from '../data/species_registry.json';
+import { logEvent, LOG_LEVELS } from './loggerService.js';
 
 export const R2_CONFIG = {
   accountId: '17810f22ce3ee57341e89107ed1c2913',
@@ -192,8 +193,15 @@ export const uploadBlobToR2 = async (blob, objectKey) => {
     CacheControl: 'public, max-age=31536000'
   });
 
-  await s3.send(command);
-  return `${R2_CONFIG.publicUrl}/${cleanKey}`;
+  try {
+    await s3.send(command);
+    const publicUrl = `${R2_CONFIG.publicUrl}/${cleanKey}`;
+    await logEvent(LOG_LEVELS.SUCCESS, 'r2', `Uploaded to R2: ${cleanKey}`, { size: arrayBuffer.byteLength, publicUrl });
+    return publicUrl;
+  } catch (err) {
+    await logEvent(LOG_LEVELS.ERROR, 'r2', `R2 upload failed: ${cleanKey}`, { error: err.message });
+    throw err;
+  }
 };
 
 /**
@@ -233,7 +241,12 @@ export const generatePhotoMetadataWithGemini = async (imageDisplayBlob, exifData
 נתוני צילום נוספים לחילוץ הקשר:
 מצלמה: ${exifData.camera || ''}, עדשה: ${exifData.lens || ''}, תאריך: ${exifData.date || ''}.`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
+
+  await logEvent(LOG_LEVELS.INFO, 'ai', 'Sending photo to Gemini AI for bilingual tagging...', {
+    camera: exifData.camera,
+    lens: exifData.lens
+  });
 
   const response = await fetch(url, {
     method: 'POST',
@@ -258,14 +271,24 @@ export const generatePhotoMetadataWithGemini = async (imageDisplayBlob, exifData
 
   if (!response.ok) {
     const errText = await response.text();
+    await logEvent(LOG_LEVELS.ERROR, 'ai', `Gemini API returned error ${response.status}`, { error: errText });
     throw new Error(`Gemini API error: ${response.status} - ${errText}`);
   }
 
   const result = await response.json();
   const rawJson = result.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!rawJson) throw new Error('No JSON output from Gemini');
+  if (!rawJson) {
+    await logEvent(LOG_LEVELS.ERROR, 'ai', 'No JSON text in Gemini response', { result });
+    throw new Error('No JSON output from Gemini');
+  }
 
-  const parsed = JSON.parse(rawJson);
+  const cleanJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  const parsed = JSON.parse(cleanJson);
+
+  await logEvent(LOG_LEVELS.SUCCESS, 'ai', `Gemini AI analysis complete: ${parsed.title || ''}`, {
+    species: parsed.species_hebrew || '',
+    category: parsed.category || ''
+  });
 
   // Cross-reference species with species_registry.json if possible
   if (parsed.species_latin && speciesRegistry[parsed.species_latin]) {
@@ -288,6 +311,11 @@ export const saveNewPhotoRecord = async (photoData, user) => {
     ...photoData,
     uploaded_by: user.email,
     created_at: serverTimestamp()
+  });
+
+  await logEvent(LOG_LEVELS.SUCCESS, 'firestore', `Saved new photo to Firestore: ${photoData.title || docRef.id}`, {
+    id: docRef.id,
+    photo_id: photoData.id
   });
 
   return docRef.id;
