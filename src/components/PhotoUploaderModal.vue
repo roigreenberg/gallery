@@ -80,7 +80,22 @@ const handleSaveKey = async () => {
 };
 
 const triggerAiAnalysis = async () => {
-  if (!currentDisplayBlob.value) return;
+  let blob = currentDisplayBlob.value;
+  if (!blob && selectedFile.value) {
+    try {
+      const res = await resizeImageToWebP(selectedFile.value, 2048, 0.88);
+      blob = res.blob;
+      currentDisplayBlob.value = blob;
+    } catch (e) {
+      console.warn('Failed to resize for AI:', e);
+    }
+  }
+
+  if (!blob) {
+    errorMessage.value = 'נא לבחור קובץ תמונה תחילה.';
+    return;
+  }
+
   const key = geminiApiKey.value.trim() || (await getGeminiApiKey(props.currentUser));
   if (!key) {
     showKeyInput.value = true;
@@ -91,7 +106,7 @@ const triggerAiAnalysis = async () => {
   isAiAnalyzing.value = true;
   errorMessage.value = '';
   try {
-    const aiData = await generatePhotoMetadataWithGemini(currentDisplayBlob.value, extractedExif.value, key);
+    const aiData = await generatePhotoMetadataWithGemini(blob, extractedExif.value, key);
     titleHe.value = aiData.title || '';
     titleEn.value = aiData.title_en || '';
     speciesHe.value = aiData.species_hebrew || '';
@@ -103,6 +118,8 @@ const triggerAiAnalysis = async () => {
     humorHe.value = aiData.humorous_description || '';
     humorEn.value = aiData.humorous_description_en || '';
     tagsHe.value = (aiData.tags || []).join(', ');
+    successMessage.value = 'פרטי התמונה והמין זוהו בהצלחה ע״י הבינה המלאכותית!';
+    setTimeout(() => { successMessage.value = ''; }, 4000);
   } catch (err) {
     console.error('Manual AI analysis error:', err);
     errorMessage.value = `שגיאה בניתוח AI: ${err.message}`;

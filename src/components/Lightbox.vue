@@ -19,6 +19,8 @@ import {
   ZoomOut
 } from 'lucide-vue-next';
 import PhotoInteractions from './PhotoInteractions.vue';
+import { subscribeToAuth, isUserOwner } from '../utils/firebase.js';
+import { replacePhotoImage, deletePhotoPermanently } from '../utils/uploaderService.js';
 
 const props = defineProps({
   photo: {
@@ -35,7 +37,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close', 'select-tag', 'navigate']);
+const emit = defineEmits(['close', 'select-tag', 'navigate', 'photo-updated', 'photo-deleted']);
 
 // Drawer toggle state (always open by default so details are immediately visible)
 const showDrawer = ref(true);
@@ -385,16 +387,99 @@ watch(() => props.photo, () => {
   checkAndPreloadCurrent();
 }, { immediate: true });
 
+// Owner authentication & controls
+const currentUser = ref(null);
+const isOwner = computed(() => isUserOwner(currentUser.value));
+let unsubAuth = null;
+
+// Replace image state
+const replaceFileInput = ref(null);
+const isReplacing = ref(false);
+const replaceStatus = ref('');
+const replaceError = ref('');
+const replaceSuccess = ref('');
+
+const triggerReplaceFileInput = () => {
+  if (replaceFileInput.value) {
+    replaceFileInput.value.click();
+  }
+};
+
+const handleReplaceFileChange = async (e) => {
+  const file = e.target.files?.[0];
+  if (!file || !props.photo || !currentUser.value) return;
+
+  isReplacing.value = true;
+  replaceError.value = '';
+  replaceSuccess.value = '';
+  replaceStatus.value = props.currentLang === 'en' 
+    ? 'Converting to high-res WebP & uploading to R2...' 
+    : 'ממיר ל-WebP ברזולוציה גבוהה ומעלה ל-Cloudflare R2...';
+
+  try {
+    const result = await replacePhotoImage(props.photo, file, currentUser.value);
+    isHighResLoaded.value = false;
+    replaceSuccess.value = props.currentLang === 'en'
+      ? 'Image replaced successfully! All likes, comments, and details preserved.'
+      : 'התמונה הוחלפה בהצלחה! כל הלייקים, התגובות והפרטים נשמרו.';
+
+    emit('photo-updated', {
+      photoId: props.photo.id,
+      displayUrl: result.displayUrl,
+      thumbUrl: result.thumbUrl,
+      exif: result.exif
+    });
+
+    setTimeout(() => {
+      replaceSuccess.value = '';
+    }, 6000);
+  } catch (err) {
+    console.error('Failed to replace photo image:', err);
+    replaceError.value = (props.currentLang === 'en' ? 'Failed to replace image: ' : 'שגיאה בהחלפת התמונה: ') + err.message;
+  } finally {
+    isReplacing.value = false;
+    replaceStatus.value = '';
+    if (e.target) e.target.value = '';
+  }
+};
+
+// Delete photo state
+const showDeleteConfirm = ref(false);
+const isDeleting = ref(false);
+const deleteError = ref('');
+
+const confirmDeletePhoto = async () => {
+  if (!props.photo || !currentUser.value) return;
+
+  isDeleting.value = true;
+  deleteError.value = '';
+
+  try {
+    await deletePhotoPermanently(props.photo, currentUser.value);
+    showDeleteConfirm.value = false;
+    emit('photo-deleted', props.photo.id);
+  } catch (err) {
+    console.error('Failed to delete photo:', err);
+    deleteError.value = (props.currentLang === 'en' ? 'Failed to delete photo: ' : 'שגיאה במחיקת התמונה: ') + err.message;
+  } finally {
+    isDeleting.value = false;
+  }
+};
+
 onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('keydown', handleKeyDown);
   }
   checkAndPreloadCurrent();
+  unsubAuth = subscribeToAuth((user) => {
+    currentUser.value = user;
+  });
 });
 
 onUnmounted(() => {
   if (slowTimer) clearTimeout(slowTimer);
   window.removeEventListener('keydown', handleKeyDown);
+  if (unsubAuth) unsubAuth();
 });
 </script>
 
@@ -738,8 +823,117 @@ onUnmounted(() => {
 
             <!-- Social Interactions: Likes, Comments, Add to Curation -->
             <PhotoInteractions :photo="photo" :current-lang="currentLang" />
+
+            <!-- Owner Management Actions (Replace image / Delete photo) -->
+            <div v-if="isOwner" class="p-3.5 bg-amber-950/20 border border-amber-500/30 rounded-2xl space-y-3">
+              <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+                <span class="flex items-center gap-1.5">
+                  <span>👑</span>
+                  <span>{{ currentLang === 'en' ? 'Owner Photo Studio' : 'ניהול תמונה (בעלים)' }}</span>
+                </span>
+                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-mono">{{ photo.id }}</span>
+              </div>
+
+              <!-- Notifications -->
+              <div v-if="replaceStatus" class="p-2.5 rounded-lg bg-sky-950/70 border border-sky-600/40 text-sky-200 text-xs flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full border-2 border-sky-400 border-t-transparent animate-spin shrink-0"></span>
+                <span>{{ replaceStatus }}</span>
+              </div>
+              <div v-if="replaceSuccess" class="p-2.5 rounded-lg bg-emerald-950/70 border border-emerald-600/40 text-emerald-200 text-xs">
+                ✓ {{ replaceSuccess }}
+              </div>
+              <div v-if="replaceError" class="p-2.5 rounded-lg bg-rose-950/70 border border-rose-600/40 text-rose-200 text-xs">
+                ⚠️ {{ replaceError }}
+              </div>
+
+              <!-- Hidden file input for replacement -->
+              <input
+                ref="replaceFileInput"
+                type="file"
+                accept="image/*"
+                class="hidden"
+                @change="handleReplaceFileChange"
+              />
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <!-- Replace Image Button -->
+                <button
+                  type="button"
+                  @click="triggerReplaceFileInput"
+                  :disabled="isReplacing"
+                  class="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 hover:text-white font-medium text-xs transition cursor-pointer disabled:opacity-50"
+                  :title="currentLang === 'en' ? 'Upload a newly edited file to replace this photo while keeping all likes & comments' : 'העלה גרסה חדשה לתמונה זו תוך שמירת כל הלייקים, התגובות והפרטים'"
+                >
+                  <span>🔄</span>
+                  <span>{{ currentLang === 'en' ? 'Replace Image' : 'החלף תמונה' }}</span>
+                </button>
+
+                <!-- Delete Photo Button -->
+                <button
+                  type="button"
+                  @click="showDeleteConfirm = true"
+                  :disabled="isReplacing"
+                  class="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-600/40 text-rose-300 hover:text-rose-100 font-medium text-xs transition cursor-pointer disabled:opacity-50"
+                  :title="currentLang === 'en' ? 'Delete this photo from the website' : 'מחק תמונה זו מהאתר'"
+                >
+                  <span>🗑️</span>
+                  <span>{{ currentLang === 'en' ? 'Delete Photo' : 'מחק תמונה' }}</span>
+                </button>
+              </div>
+            </div>
           </aside>
         </Transition>
+      </div>
+
+      <!-- Delete Confirmation Dialog -->
+      <div
+        v-if="showDeleteConfirm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+        @click.self="showDeleteConfirm = false"
+      >
+        <div class="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-right" :dir="currentLang === 'en' ? 'ltr' : 'rtl'">
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-full bg-rose-950/80 border border-rose-600/40 flex items-center justify-center text-rose-400 text-lg shrink-0">⚠️</span>
+            <div>
+              <h4 class="text-sm font-bold text-white">
+                {{ currentLang === 'en' ? 'Permanently Delete Photo?' : 'מחיקת תמונה לצמיתות' }}
+              </h4>
+              <p class="text-xs text-slate-400">
+                {{ currentLang === 'en' ? 'This action cannot be undone.' : 'פעולה זו אינה ניתנת לביטול.' }}
+              </p>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed bg-slate-950 p-3 rounded-xl border border-slate-800">
+            {{ currentLang === 'en' 
+              ? `Are you sure you want to remove "${photo.title_en || photo.title}" from the gallery?` 
+              : `האם אתה בטוח שברצונך להסיר את התמונה "${photo.title}" מהאתר?` }}
+          </p>
+
+          <div v-if="deleteError" class="text-xs text-rose-300 bg-rose-950/60 p-2 rounded border border-rose-700">
+            {{ deleteError }}
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button
+              type="button"
+              @click="showDeleteConfirm = false"
+              :disabled="isDeleting"
+              class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition cursor-pointer"
+            >
+              {{ currentLang === 'en' ? 'Cancel' : 'ביטול' }}
+            </button>
+            <button
+              type="button"
+              @click="confirmDeletePhoto"
+              :disabled="isDeleting"
+              class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-lg shadow-rose-900/40 disabled:opacity-50"
+            >
+              <span v-if="isDeleting" class="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+              <span>{{ currentLang === 'en' ? 'Yes, Delete Photo' : 'כן, מחק תמונה' }}</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </Transition>

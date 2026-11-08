@@ -6,6 +6,7 @@ import Lightbox from './Lightbox.vue';
 import SelectionModal from './SelectionModal.vue';
 import { CATEGORIES, getCategoryLabel } from '../utils/i18n.js';
 import { subscribeToAllLikes } from '../utils/interactionsService.js';
+import { subscribeToPhotoOverrides } from '../utils/uploaderService.js';
 import { db } from '../utils/firebase.js';
 import { collection, onSnapshot } from 'firebase/firestore';
 
@@ -93,8 +94,31 @@ const toggleLang = () => {
 const customPhotos = ref([]);
 let unsubCustomPhotos = null;
 
+// Photo overrides (replaced images or deleted photos)
+const photoOverrides = ref({});
+let unsubOverrides = null;
+
 const allRawPhotos = computed(() => {
-  return [...customPhotos.value, ...props.initialPhotos];
+  const overrides = photoOverrides.value;
+  // Exclude deleted photos
+  const filteredCustom = customPhotos.value.filter(p => !overrides[p.id]?.deleted);
+  const filteredInitial = props.initialPhotos.filter(p => !overrides[p.id]?.deleted);
+
+  const applyOverrides = (item) => {
+    const ov = overrides[item.id];
+    if (!ov) return item;
+    return {
+      ...item,
+      display_url: ov.display_url || item.display_url,
+      thumb_url: ov.thumb_url || item.thumb_url,
+      width: ov.width || item.width,
+      height: ov.height || item.height,
+      aspect_ratio: ov.aspect_ratio || item.aspect_ratio,
+      exif: ov.exif ? { ...(item.exif || {}), ...ov.exif } : item.exif
+    };
+  };
+
+  return [...filteredCustom.map(applyOverrides), ...filteredInitial.map(applyOverrides)];
 });
 
 // Normalize raw photo records to standard flat format used by components
@@ -182,6 +206,8 @@ const normalizedPhotos = computed(() => {
 
     return {
       id: p.id || p.filename || String(Math.random()),
+      is_custom: Boolean(p.is_custom || p.firestore_id),
+      firestore_id: p.firestore_id || (p.is_custom ? p.id : null),
       title: titleHe,
       title_en: titleEn,
       species_he: speciesHe,
@@ -654,6 +680,9 @@ onMounted(() => {
   unsubAllLikes = subscribeToAllLikes((map) => {
     likesMap.value = map;
   });
+  unsubOverrides = subscribeToPhotoOverrides((ov) => {
+    photoOverrides.value = ov;
+  });
   if (db) {
     unsubCustomPhotos = onSnapshot(collection(db, 'custom_photos'), (snap) => {
       const list = [];
@@ -672,6 +701,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (unsubAllLikes) unsubAllLikes();
   if (unsubCustomPhotos) unsubCustomPhotos();
+  if (unsubOverrides) unsubOverrides();
   if (observer) {
     observer.disconnect();
     observer = null;
@@ -731,6 +761,23 @@ const openPhoto = (photo) => {
 
 const closePhoto = () => {
   activePhoto.value = null;
+};
+
+const handlePhotoDeleted = (photoId) => {
+  if (activePhoto.value && activePhoto.value.id === photoId) {
+    closePhoto();
+  }
+};
+
+const handlePhotoUpdated = ({ photoId, displayUrl, thumbUrl, exif }) => {
+  if (activePhoto.value && activePhoto.value.id === photoId) {
+    activePhoto.value = {
+      ...activePhoto.value,
+      display: displayUrl,
+      thumbnail: thumbUrl,
+      exif: exif ? { ...activePhoto.value.exif, ...exif } : activePhoto.value.exif
+    };
+  }
 };
 
 const selectTagFromLightbox = (tag) => {
@@ -886,6 +933,8 @@ const navigateToPhoto = (photo) => {
       @close="closePhoto"
       @navigate="navigateToPhoto"
       @select-tag="selectTagFromLightbox"
+      @photo-updated="handlePhotoUpdated"
+      @photo-deleted="handlePhotoDeleted"
     />
   </div>
 </template>

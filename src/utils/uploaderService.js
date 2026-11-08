@@ -2,7 +2,7 @@
 import exifr from 'exifr';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { db, isUserOwner } from './firebase.js';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import speciesRegistry from '../data/species_registry.json';
 import { logEvent, LOG_LEVELS } from './loggerService.js';
 
@@ -288,20 +288,28 @@ export const generatePhotoMetadataWithGemini = async (imageDisplayBlob, exifData
     throw new Error('No JSON output from Gemini');
   }
 
-  const cleanJson = rawJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  let cleanJson = rawJson.trim();
+  const jsonMatch = cleanJson.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    cleanJson = jsonMatch[0];
+  }
   const parsed = JSON.parse(cleanJson);
+
+  // Cross-reference species with species_registry.json if possible
+  if (parsed.species_latin) {
+    const latKey = parsed.species_latin.trim().toLowerCase();
+    const reg = speciesRegistry.by_latin?.[latKey];
+    if (reg) {
+      if (reg.hebrew) parsed.species_hebrew = reg.hebrew;
+      if (reg.english) parsed.species_en = reg.english;
+      if (reg.latin) parsed.species_latin = reg.latin;
+    }
+  }
 
   await logEvent(LOG_LEVELS.SUCCESS, 'ai', `Gemini AI analysis complete: ${parsed.title || ''}`, {
     species: parsed.species_hebrew || '',
     category: parsed.category || ''
   });
-
-  // Cross-reference species with species_registry.json if possible
-  if (parsed.species_latin && speciesRegistry[parsed.species_latin]) {
-    const reg = speciesRegistry[parsed.species_latin];
-    if (reg.he) parsed.species_hebrew = reg.he;
-    if (reg.en) parsed.species_en = reg.en;
-  }
 
   return parsed;
 };
@@ -325,4 +333,109 @@ export const saveNewPhotoRecord = async (photoData, user) => {
   });
 
   return docRef.id;
+};
+
+/**
+ * Replace the image file of an existing photo (preserving all metadata, likes, comments & ID)
+ */
+export const replacePhotoImage = async (photo, newFile, user) => {
+  if (!db || !isUserOwner(user)) throw new Error('Only the site owner can replace photos');
+
+  await logEvent(LOG_LEVELS.INFO, 'replace', `Starting photo image replacement for: ${photo.id}`);
+
+  // 1. Generate new high-res & thumb WebP files
+  const displayWebP = await resizeImageToWebP(newFile, 2048, 0.88);
+  const thumbWebP = await resizeImageToWebP(newFile, 600, 0.82);
+
+  // 2. Upload to Cloudflare R2 with cache-busting timestamp
+  const versionTs = Date.now();
+  const displayKey = `photos/display/${photo.id}_v${versionTs}.webp`;
+  const thumbKey = `photos/thumbs/${photo.id}_v${versionTs}.webp`;
+
+  const newDisplayUrl = await uploadBlobToR2(displayWebP.blob, displayKey);
+  const newThumbUrl = await uploadBlobToR2(thumbWebP.blob, thumbKey);
+
+  // 3. Extract new EXIF if available from the new file
+  let newExif = null;
+  try {
+    newExif = await extractExifFromFile(newFile);
+  } catch (e) {
+    console.warn('Could not extract EXIF from replacement file:', e);
+  }
+
+  const updatePayload = {
+    display_url: newDisplayUrl,
+    thumb_url: newThumbUrl,
+    width: displayWebP.width,
+    height: displayWebP.height,
+    aspect_ratio: displayWebP.aspectRatio,
+    updated_at: serverTimestamp()
+  };
+
+  if (newExif && newExif.camera && newExif.camera !== 'לא ידוע') {
+    updatePayload.exif = newExif;
+  }
+
+  // 4. Update in Firestore
+  if (photo.is_custom || photo.firestore_id) {
+    const docId = photo.firestore_id || photo.id;
+    await updateDoc(doc(db, 'custom_photos', docId), updatePayload);
+  } else {
+    // Static catalog photo override
+    await setDoc(doc(db, 'photo_overrides', photo.id), updatePayload, { merge: true });
+  }
+
+  await logEvent(LOG_LEVELS.SUCCESS, 'replace', `Photo image replaced successfully: ${photo.id}`, {
+    displayUrl: newDisplayUrl
+  });
+
+  return {
+    displayUrl: newDisplayUrl,
+    thumbUrl: newThumbUrl,
+    width: displayWebP.width,
+    height: displayWebP.height,
+    aspectRatio: displayWebP.aspectRatio,
+    exif: newExif || photo.exif
+  };
+};
+
+/**
+ * Permanently delete a photo from the gallery (requires owner confirmation)
+ */
+export const deletePhotoPermanently = async (photo, user) => {
+  if (!db || !isUserOwner(user)) throw new Error('Only the site owner can delete photos');
+
+  await logEvent(LOG_LEVELS.WARN, 'delete', `Deleting photo: ${photo.id}`);
+
+  if (photo.is_custom || photo.firestore_id) {
+    const docId = photo.firestore_id || photo.id;
+    await deleteDoc(doc(db, 'custom_photos', docId));
+  } else {
+    await setDoc(doc(db, 'photo_overrides', photo.id), {
+      deleted: true,
+      deleted_at: serverTimestamp()
+    }, { merge: true });
+  }
+
+  await logEvent(LOG_LEVELS.SUCCESS, 'delete', `Photo deleted successfully: ${photo.id}`);
+  return true;
+};
+
+/**
+ * Real-time listener for photo overrides (replaced images or deleted photos)
+ */
+export const subscribeToPhotoOverrides = (callback) => {
+  if (!db) {
+    callback({});
+    return () => {};
+  }
+  return onSnapshot(collection(db, 'photo_overrides'), (snapshot) => {
+    const overrides = {};
+    snapshot.forEach((docSnap) => {
+      overrides[docSnap.id] = docSnap.data();
+    });
+    callback(overrides);
+  }, (err) => {
+    console.warn('photo_overrides listener error:', err);
+  });
 };
