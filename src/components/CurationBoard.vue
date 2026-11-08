@@ -15,6 +15,7 @@ import {
   updateCurationStatus,
   voteOnCurationItem,
   removeVoteOnCurationItem,
+  revertAccidentalSureItems,
   saveGeminiCritique,
   removeCurationItem,
   createSubGroup,
@@ -136,6 +137,55 @@ const calculateScore = (votes = {}) => {
 
 const countVotes = (votes = {}) => {
   return Object.keys(votes).length;
+};
+
+// Voter Details Modal State
+const showVotersModal = ref(false);
+const activeVotersPhoto = ref(null);
+
+const openVotersModal = (photoItem) => {
+  activeVotersPhoto.value = photoItem;
+  showVotersModal.value = true;
+};
+
+const closeVotersModal = () => {
+  showVotersModal.value = false;
+  activeVotersPhoto.value = null;
+};
+
+const getVotersList = (votes = {}) => {
+  return Object.entries(votes || {}).map(([uid, v]) => ({
+    uid,
+    score: v.score,
+    name: v.user_name || v.user_email?.split('@')[0] || 'מדרג',
+    email: v.user_email || '',
+    photo: v.user_photo || '',
+    timestamp: v.timestamp ? new Date(v.timestamp).toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' }) : ''
+  })).sort((a, b) => b.score - a.score);
+};
+
+const getScoreEmoji = (score) => {
+  if (score === 2) return { emoji: '🔥', text: 'חובה בתערוכה (+2)', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' };
+  if (score === 1) return { emoji: '👍', text: 'מוצלחת מאוד (+1)', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' };
+  if (score === 0) return { emoji: '🤔', text: 'מתלבט (0)', color: 'text-slate-400 bg-slate-500/10 border-slate-500/30' };
+  return { emoji: '👎', text: 'פחות מתאים (-1)', color: 'text-rose-400 bg-rose-500/10 border-rose-500/30' };
+};
+
+// Reverting accidental 'sure' items
+const isRevertingSure = ref(false);
+const handleRevertAccidentalSure = async () => {
+  if (!confirm('האם לשחזר את כל התמונות בבטוחות בחזרה למאגר / אפשריות (לפי הציון המקורי שלהן)?\n\nכל הדירוגים, הציונים והשמות של מי שסימן יישמרו במלואם!')) {
+    return;
+  }
+  isRevertingSure.value = true;
+  try {
+    const count = await revertAccidentalSureItems(currentUser.value);
+    alert(`שוחזרו בהצלחה ${count} תמונות בחזרה למאגר ולאפשריות!\nהדירוגים של כל השופטים נשמרו במלואם.`);
+  } catch (err) {
+    alert('שגיאה בשחזור: ' + err.message);
+  } finally {
+    isRevertingSure.value = false;
+  }
 };
 
 // Automatically derive exhibition items from initialPhotos (196 exhibition candidates)
@@ -865,6 +915,19 @@ const handleExecuteImport = async () => {
             <span>תת-קבוצה (ראש בראש)</span>
           </button>
 
+          <!-- Revert Accidental Sure Button (Owner only) -->
+          <button
+            v-if="isOwner && sureCount > 0"
+            type="button"
+            @click="handleRevertAccidentalSure"
+            :disabled="isRevertingSure"
+            class="px-3 py-2 rounded-xl bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 text-xs font-bold border border-amber-600/40 transition shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            title="שחזר את כל התמונות בבטוחות בחזרה לאפשריות ומאגר (הדירוגים יישמרו)"
+          >
+            <span>↩️</span>
+            <span>{{ isRevertingSure ? 'משחזר...' : 'שחזר בטוחות למאגר' }}</span>
+          </button>
+
           <!-- Gemini Key Config -->
           <button
             type="button"
@@ -1002,14 +1065,18 @@ const handleExecuteImport = async () => {
                   {{ item.photo_data?.species_he || 'תמונה' }}
                 </span>
 
-                <!-- Net Score Badge -->
-                <span
-                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md"
+                <!-- Net Score Badge (Clickable for voter details) -->
+                <button
+                  type="button"
+                  @click.stop="openVotersModal(item)"
+                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md hover:scale-105 transition cursor-pointer"
                   :class="calculateScore(item.votes) > 0 ? 'bg-emerald-950/90 text-emerald-300 border border-emerald-500/40' : (calculateScore(item.votes) < 0 ? 'bg-rose-950/90 text-rose-300 border border-rose-500/40' : 'bg-slate-900 text-slate-300 border border-slate-700')"
+                  title="לחץ לצפייה בפירוט מי סימן ומה הציון"
                 >
                   <span>ציון:</span>
                   <span class="font-mono">{{ calculateScore(item.votes) }}</span>
-                </span>
+                  <span v-if="countVotes(item.votes) > 0" class="text-[10px] text-slate-300">({{ countVotes(item.votes) }}) 👥</span>
+                </button>
               </div>
 
               <!-- Title & EXIF -->
@@ -1071,7 +1138,29 @@ const handleExecuteImport = async () => {
                 >
                   👎
                 </button>
-                <span class="text-[10px] text-slate-400 font-mono pr-1">({{ countVotes(item.votes) }})</span>
+                <button
+                  type="button"
+                  @click.stop="openVotersModal(item)"
+                  class="text-[10px] text-slate-400 hover:text-amber-300 font-mono pr-1 flex items-center gap-0.5 cursor-pointer transition"
+                  title="לחץ לצפייה בפירוט מי סימן"
+                >
+                  <span>({{ countVotes(item.votes) }})</span>
+                  <span v-if="countVotes(item.votes) > 0" class="text-amber-400">👥</span>
+                </button>
+              </div>
+
+              <!-- Voter preview chip -->
+              <div
+                v-if="countVotes(item.votes) > 0"
+                @click.stop="openVotersModal(item)"
+                class="flex items-center gap-1.5 px-2 py-1 bg-slate-950/60 rounded-lg border border-slate-800/80 hover:border-slate-700 cursor-pointer transition text-[10px]"
+                title="לחץ לצפייה בפירוט המלא של המדרגים"
+              >
+                <span class="text-slate-400 shrink-0 font-medium">סומן ע״י:</span>
+                <span class="text-slate-200 truncate font-semibold">
+                  {{ getVotersList(item.votes).map(v => `${v.name} ${getScoreEmoji(v.score).emoji}`).join(', ') }}
+                </span>
+                <span class="text-amber-400/80 mr-auto text-[9px] shrink-0 font-bold">פירוט ❯</span>
               </div>
 
               <!-- Gemini Consultation Button -->
@@ -1189,12 +1278,17 @@ const handleExecuteImport = async () => {
                 <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-sky-300 border border-sky-500/40 font-bold">
                   {{ item.photo_data?.species_he || 'תמונה' }}
                 </span>
-                <span
-                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md"
+                <button
+                  type="button"
+                  @click.stop="openVotersModal(item)"
+                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md hover:scale-105 transition cursor-pointer"
                   :class="calculateScore(item.votes) > 0 ? 'bg-emerald-950/90 text-emerald-300 border border-emerald-500/40' : (calculateScore(item.votes) < 0 ? 'bg-rose-950/90 text-rose-300 border border-rose-500/40' : 'bg-slate-900 text-slate-300 border border-slate-700')"
+                  title="לחץ לצפייה בפירוט מי סימן ומה הציון"
                 >
+                  <span>ציון:</span>
                   <span class="font-mono">{{ calculateScore(item.votes) }}</span>
-                </span>
+                  <span v-if="countVotes(item.votes) > 0" class="text-[10px] text-slate-300">({{ countVotes(item.votes) }}) 👥</span>
+                </button>
               </div>
 
               <div>
@@ -1208,7 +1302,29 @@ const handleExecuteImport = async () => {
                 <button @click="handleVote(item.id, 1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 1 }" title="👍 מוצלחת (+1)">👍</button>
                 <button @click="handleVote(item.id, 0)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-slate-400 bg-slate-700': currentUser && item.votes?.[currentUser.uid]?.score === 0 }" title="🤔 מתלבט (0)">🤔</button>
                 <button @click="handleVote(item.id, -1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': currentUser && item.votes?.[currentUser.uid]?.score === -1 }" title="👎 פחות מתאים (-1)">👎</button>
-                <span class="text-[10px] text-slate-400 font-mono pr-1">({{ countVotes(item.votes) }})</span>
+                <button
+                  type="button"
+                  @click.stop="openVotersModal(item)"
+                  class="text-[10px] text-slate-400 hover:text-amber-300 font-mono pr-1 flex items-center gap-0.5 cursor-pointer transition"
+                  title="לחץ לצפייה בפירוט מי סימן"
+                >
+                  <span>({{ countVotes(item.votes) }})</span>
+                  <span v-if="countVotes(item.votes) > 0" class="text-amber-400">👥</span>
+                </button>
+              </div>
+
+              <!-- Voter preview chip -->
+              <div
+                v-if="countVotes(item.votes) > 0"
+                @click.stop="openVotersModal(item)"
+                class="flex items-center gap-1.5 px-2 py-1 bg-slate-950/60 rounded-lg border border-slate-800/80 hover:border-slate-700 cursor-pointer transition text-[10px]"
+                title="לחץ לצפייה בפירוט המלא של המדרגים"
+              >
+                <span class="text-slate-400 shrink-0 font-medium">סומן ע״י:</span>
+                <span class="text-slate-200 truncate font-semibold">
+                  {{ getVotersList(item.votes).map(v => `${v.name} ${getScoreEmoji(v.score).emoji}`).join(', ') }}
+                </span>
+                <span class="text-amber-400/80 mr-auto text-[9px] shrink-0 font-bold">פירוט ❯</span>
               </div>
 
               <button
@@ -1319,11 +1435,15 @@ const handleExecuteImport = async () => {
                 <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-slate-300 border border-slate-700 font-bold">
                   {{ item.photo_data?.species_he || 'תמונה' }}
                 </span>
-                <span
-                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md bg-slate-900 text-slate-300 border border-slate-700"
+                <button
+                  type="button"
+                  @click.stop="openVotersModal(item)"
+                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md bg-slate-900 text-slate-300 border border-slate-700 hover:scale-105 transition cursor-pointer"
+                  title="לחץ לצפייה בפירוט מי סימן ומה הציון"
                 >
                   <span class="font-mono">{{ calculateScore(item.votes) }}</span>
-                </span>
+                  <span v-if="countVotes(item.votes) > 0" class="text-[10px] text-slate-400">({{ countVotes(item.votes) }}) 👥</span>
+                </button>
               </div>
 
               <div>
@@ -1337,7 +1457,29 @@ const handleExecuteImport = async () => {
                 <button @click="handleVote(item.id, 1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 1 }" title="👍 מוצלחת (+1)">👍</button>
                 <button @click="handleVote(item.id, 0)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-slate-400 bg-slate-700': currentUser && item.votes?.[currentUser.uid]?.score === 0 }" title="🤔 מתלבט (0)">🤔</button>
                 <button @click="handleVote(item.id, -1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': currentUser && item.votes?.[currentUser.uid]?.score === -1 }" title="👎 פחות מתאים (-1)">👎</button>
-                <span class="text-[10px] text-slate-400 font-mono pr-1">({{ countVotes(item.votes) }})</span>
+                <button
+                  type="button"
+                  @click.stop="openVotersModal(item)"
+                  class="text-[10px] text-slate-400 hover:text-amber-300 font-mono pr-1 flex items-center gap-0.5 cursor-pointer transition"
+                  title="לחץ לצפייה בפירוט מי סימן"
+                >
+                  <span>({{ countVotes(item.votes) }})</span>
+                  <span v-if="countVotes(item.votes) > 0" class="text-amber-400">👥</span>
+                </button>
+              </div>
+
+              <!-- Voter preview chip -->
+              <div
+                v-if="countVotes(item.votes) > 0"
+                @click.stop="openVotersModal(item)"
+                class="flex items-center gap-1.5 px-2 py-1 bg-slate-950/60 rounded-lg border border-slate-800/80 hover:border-slate-700 cursor-pointer transition text-[10px]"
+                title="לחץ לצפייה בפירוט המלא של המדרגים"
+              >
+                <span class="text-slate-400 shrink-0 font-medium">סומן ע״י:</span>
+                <span class="text-slate-200 truncate font-semibold">
+                  {{ getVotersList(item.votes).map(v => `${v.name} ${getScoreEmoji(v.score).emoji}`).join(', ') }}
+                </span>
+                <span class="text-amber-400/80 mr-auto text-[9px] shrink-0 font-bold">פירוט ❯</span>
               </div>
 
               <div v-if="isOwner" class="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-900">
@@ -2305,6 +2447,101 @@ const handleExecuteImport = async () => {
             {{ selectionExistingGroupId ? 'הוסף לקבוצה קיימת' : 'צור תת-קבוצה ואחד' }}
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: DETAILED VOTER BREAKDOWN FOR A PHOTO              -->
+    <!-- ======================================================== -->
+    <div
+      v-if="showVotersModal && activeVotersPhoto"
+      class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+      @click="closeVotersModal"
+    >
+      <div
+        class="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        @click.stop
+      >
+        <!-- Modal Header -->
+        <header class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+          <div class="flex items-center gap-3">
+            <img
+              :src="activeVotersPhoto.photo_data?.thumbnail || activeVotersPhoto.photo_data?.display"
+              class="w-12 h-12 rounded-xl object-cover border border-slate-700 shadow"
+            />
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <span>{{ activeVotersPhoto.photo_data?.title || 'תמונה' }}</span>
+              </h3>
+              <p class="text-[11px] text-slate-400">
+                {{ activeVotersPhoto.photo_data?.species_he || 'תמונה' }} • {{ countVotes(activeVotersPhoto.votes) }} מדרגים
+              </p>
+            </div>
+          </div>
+          <button @click="closeVotersModal" class="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 cursor-pointer text-lg">✕</button>
+        </header>
+
+        <!-- Score summary banner -->
+        <div class="p-3 bg-slate-950/40 border-b border-slate-800 flex items-center justify-between text-xs">
+          <span class="text-slate-400 font-medium">ציון משוקלל מצטבר:</span>
+          <span
+            class="px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-sm"
+            :class="calculateScore(activeVotersPhoto.votes) > 0 ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' : (calculateScore(activeVotersPhoto.votes) < 0 ? 'bg-rose-950 text-rose-300 border border-rose-500/40' : 'bg-slate-800 text-slate-300 border border-slate-700')"
+          >
+            {{ calculateScore(activeVotersPhoto.votes) > 0 ? '+' : '' }}{{ calculateScore(activeVotersPhoto.votes) }}
+          </span>
+        </div>
+
+        <!-- Modal Body: Voters List -->
+        <div class="p-4 max-h-[60vh] overflow-y-auto space-y-2.5">
+          <div v-if="countVotes(activeVotersPhoto.votes) === 0" class="text-center py-8 text-xs text-slate-500 italic">
+            עדיין אין דירוגים לתמונה זו
+          </div>
+          <div
+            v-for="voter in getVotersList(activeVotersPhoto.votes)"
+            :key="voter.uid"
+            class="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 transition"
+          >
+            <!-- Voter Identity -->
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img
+                v-if="voter.photo"
+                :src="voter.photo"
+                class="w-9 h-9 rounded-full border border-slate-700 object-cover shrink-0"
+              />
+              <div
+                v-else
+                class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 shrink-0"
+              >
+                {{ voter.name.slice(0, 1) }}
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                  <span>{{ voter.name }}</span>
+                  <span v-if="voter.email === 'roigreenberg@gmail.com'" class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">אוצר ראשי</span>
+                </p>
+                <p class="text-[10px] text-slate-400 truncate">{{ voter.email }}</p>
+                <p v-if="voter.timestamp" class="text-[9px] text-slate-500">{{ voter.timestamp }}</p>
+              </div>
+            </div>
+
+            <!-- Score Badge -->
+            <div
+              class="px-2.5 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 shrink-0"
+              :class="getScoreEmoji(voter.score).color"
+            >
+              <span>{{ getScoreEmoji(voter.score).emoji }}</span>
+              <span class="text-[11px]">{{ getScoreEmoji(voter.score).text }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <footer class="p-3 border-t border-slate-800 flex justify-end bg-slate-950/30">
+          <button @click="closeVotersModal" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-xl cursor-pointer">
+            סגור
+          </button>
+        </footer>
       </div>
     </div>
 

@@ -6,6 +6,7 @@ import {
 import {
   doc,
   getDoc,
+  getDocs,
   setDoc,
   updateDoc,
   collection,
@@ -142,23 +143,32 @@ export const voteOnCurationItem = async (photoId, user, score, photoData = null)
   const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
   const docRef = doc(db, 'curation_items', cleanId);
 
+  const voterInfo = {
+    score,
+    user_name: user.displayName || user.email?.split('@')[0] || 'מדרג',
+    user_photo: user.photoURL || '',
+    user_email: user.email || '',
+    timestamp: Date.now()
+  };
+
   const snap = await getDoc(docRef);
   if (!snap.exists() && photoData) {
+    // CRITICAL: Voting MUST NEVER promote a photo to 'sure' (מועמדות בטוחות)!
+    // Only explicit action by the owner can move photos between statuses.
+    // Default status: 'maybe' for exhibition_score === 2, or 'pool' for score === 1.
+    const initialStatus = photoData.status && photoData.status !== 'sure'
+      ? photoData.status
+      : (photoData.exhibition_score === 2 ? 'maybe' : 'pool');
+
     await setDoc(docRef, {
       photo_id: photoId,
       photo_data: photoData,
-      area: 'exhibition',
-      status: (photoData.exhibition_score === 2) ? 'sure' : 'maybe',
+      area: photoData.area || 'exhibition',
+      status: initialStatus,
       group_id: null,
       group_name: null,
       votes: {
-        [user.uid]: {
-          score,
-          user_name: user.displayName || user.email.split('@')[0],
-          user_photo: user.photoURL || '',
-          user_email: user.email,
-          timestamp: Date.now()
-        }
+        [user.uid]: voterInfo
       },
       ai_critique: null,
       notes: '',
@@ -168,18 +178,47 @@ export const voteOnCurationItem = async (photoId, user, score, photoData = null)
     return;
   }
 
+  // If document already exists, ONLY update this user's vote.
+  // NEVER modify status or area on a vote!
   await setDoc(docRef, {
     votes: {
-      [user.uid]: {
-        score,
-        user_name: user.displayName || user.email.split('@')[0],
-        user_photo: user.photoURL || '',
-        user_email: user.email,
-        timestamp: Date.now()
-      }
+      [user.uid]: voterInfo
     },
     updated_at: serverTimestamp()
   }, { merge: true });
+};
+
+/**
+ * Restore photos that were accidentally promoted to 'sure' by votes back to their intended initial status ('maybe' or 'pool').
+ * Preserves all votes, voter identities, notes, and AI critiques intact.
+ */
+export const revertAccidentalSureItems = async (user) => {
+  if (!db || !isUserOwner(user)) throw new Error('Only the owner can revert sure items');
+
+  const colRef = collection(db, 'curation_items');
+  const q = query(colRef, where('status', '==', 'sure'));
+  const snap = await getDocs(q);
+
+  let count = 0;
+  const updates = [];
+
+  snap.forEach(d => {
+    const data = d.data();
+    // 2 -> 'maybe' (מועמדות אפשריות), 1 or other -> 'pool' (מאגר לתערוכה)
+    const origScore = data.photo_data?.exhibition_score || 1;
+    const targetStatus = origScore === 2 ? 'maybe' : 'pool';
+
+    updates.push(
+      updateDoc(d.ref, {
+        status: targetStatus,
+        updated_at: serverTimestamp()
+      })
+    );
+    count++;
+  });
+
+  await Promise.all(updates);
+  return count;
 };
 
 /**
