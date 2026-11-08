@@ -52,6 +52,8 @@ const displayUrl = ref('');
 const thumbUrl = ref('');
 const extractedExif = ref({});
 const dimensions = ref({});
+const currentDisplayBlob = ref(null);
+const isAiAnalyzing = ref(false);
 
 // Live Firestore Logs
 const liveLogs = ref([]);
@@ -64,11 +66,49 @@ const isKeyConfigured = ref(false);
 const showKeyInput = ref(false);
 
 const handleSaveKey = async () => {
-  if (!geminiApiKey.value.trim()) return;
-  await saveGeminiApiKey(geminiApiKey.value.trim(), props.currentUser);
+  const key = geminiApiKey.value.trim();
+  if (!key) return;
+  await saveGeminiApiKey(key, props.currentUser);
   isKeyConfigured.value = true;
   showKeyInput.value = false;
   await logEvent(LOG_LEVELS.SUCCESS, 'auth', 'Gemini API key configured and saved to Firestore secrets');
+
+  // If a photo was already selected, immediately run AI analysis!
+  if (currentDisplayBlob.value && !titleHe.value) {
+    await triggerAiAnalysis();
+  }
+};
+
+const triggerAiAnalysis = async () => {
+  if (!currentDisplayBlob.value) return;
+  const key = geminiApiKey.value.trim() || (await getGeminiApiKey(props.currentUser));
+  if (!key) {
+    showKeyInput.value = true;
+    errorMessage.value = 'נא להזין מפתח Gemini בתיבה למעלה כדי לבצע ניתוח AI.';
+    return;
+  }
+
+  isAiAnalyzing.value = true;
+  errorMessage.value = '';
+  try {
+    const aiData = await generatePhotoMetadataWithGemini(currentDisplayBlob.value, extractedExif.value, key);
+    titleHe.value = aiData.title || '';
+    titleEn.value = aiData.title_en || '';
+    speciesHe.value = aiData.species_hebrew || '';
+    speciesEn.value = aiData.species_en || '';
+    speciesLa.value = aiData.species_latin || '';
+    category.value = aiData.category || 'wildlife';
+    descHe.value = aiData.description || '';
+    descEn.value = aiData.description_en || '';
+    humorHe.value = aiData.humorous_description || '';
+    humorEn.value = aiData.humorous_description_en || '';
+    tagsHe.value = (aiData.tags || []).join(', ');
+  } catch (err) {
+    console.error('Manual AI analysis error:', err);
+    errorMessage.value = `שגיאה בניתוח AI: ${err.message}`;
+  } finally {
+    isAiAnalyzing.value = false;
+  }
 };
 
 onMounted(async () => {
@@ -111,6 +151,7 @@ const handleFileSelect = async (e) => {
     processingStep.value = 'ממיר ל-WebP ברזולוציה גבוהה (2048px) וממוזערת (600px)...';
     const displayWebP = await resizeImageToWebP(file, 2048, 0.88);
     const thumbWebP = await resizeImageToWebP(file, 600, 0.82);
+    currentDisplayBlob.value = displayWebP.blob;
     dimensions.value = {
       width: displayWebP.width,
       height: displayWebP.height,
@@ -363,6 +404,24 @@ const handlePublish = async () => {
               <p><strong class="text-white">עדשה:</strong> {{ extractedExif.lens || 'לא צוין' }}</p>
               <p><strong class="text-white">חשיפה:</strong> {{ extractedExif.aperture }} • {{ extractedExif.shutterSpeed }} • ISO {{ extractedExif.iso }}</p>
             </div>
+          </div>
+
+          <!-- Manual AI Trigger Button -->
+          <div class="flex items-center justify-between bg-indigo-950/40 p-3 rounded-xl border border-indigo-500/40">
+            <div>
+              <span class="text-xs font-bold text-indigo-200 block">זיהוי אוטומטי של בעל חיים וכותרות (Gemini)</span>
+              <span class="text-[11px] text-slate-400 block">ממלא אוטומטית שמות מינים בעברית ובאנגלית, תיאורים והומור</span>
+            </div>
+            <button
+              type="button"
+              @click="triggerAiAnalysis"
+              :disabled="isAiAnalyzing"
+              class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-xs transition cursor-pointer flex items-center gap-2 shadow-md shrink-0"
+            >
+              <span v-if="isAiAnalyzing" class="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+              <span v-else>✨</span>
+              <span>{{ isAiAnalyzing ? 'ג\'ימיני מנתח...' : 'הפעל זיהוי AI כעת' }}</span>
+            </button>
           </div>
 
           <!-- Bilingual Titles -->

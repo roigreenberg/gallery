@@ -14,7 +14,7 @@ export const getGeminiApiKey = async (user) => {
   // 1. Check local storage cache
   try {
     const local = localStorage.getItem('curator_gemini_key');
-    if (local && local.startsWith('AIzaSy')) return local;
+    if (local && local.trim().length > 10) return local.trim();
   } catch (e) {}
 
   // 2. If user is owner, try to fetch from Firestore admin_config/secrets

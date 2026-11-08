@@ -19,22 +19,10 @@ export const R2_CONFIG = {
  */
 export const extractExifFromFile = async (file) => {
   try {
-    const rawExif = await exifr.parse(file, [
-      'Make',
-      'Model',
-      'LensModel',
-      'LensMake',
-      'FocalLength',
-      'FNumber',
-      'ExposureTime',
-      'ISO',
-      'DateTimeOriginal',
-      'CreateDate',
-      'ImageWidth',
-      'ImageHeight'
-    ]);
+    const rawExif = await exifr.parse(file, { tiff: true, xmp: true, exif: true });
 
     if (!rawExif) {
+      await logEvent(LOG_LEVELS.WARN, 'exif', `No EXIF metadata found in file: ${file.name}`);
       return {
         camera: 'לא ידוע',
         camera_model: '',
@@ -51,20 +39,30 @@ export const extractExifFromFile = async (file) => {
       };
     }
 
-    // Format shutter speed (e.g., 1/1600s)
+    // Format shutter speed (e.g., 1/1600s or 0.5s)
     let shutterStr = '';
-    if (rawExif.ExposureTime) {
-      if (rawExif.ExposureTime < 1) {
-        shutterStr = `1/${Math.round(1 / rawExif.ExposureTime)}s`;
+    const expTime = rawExif.ExposureTime || (rawExif.ShutterSpeedValue ? 1 / Math.pow(2, rawExif.ShutterSpeedValue) : null);
+    if (expTime) {
+      if (expTime < 1) {
+        shutterStr = `1/${Math.round(1 / expTime)}s`;
       } else {
-        shutterStr = `${rawExif.ExposureTime}s`;
+        shutterStr = `${expTime}s`;
       }
     }
 
-    const apertureStr = rawExif.FNumber ? `f/${rawExif.FNumber}` : '';
+    const rawAperture = rawExif.FNumber || (rawExif.ApertureValue ? Math.pow(2, rawExif.ApertureValue / 2) : null);
+    const apertureStr = rawAperture ? `f/${Number(rawAperture).toFixed(1).replace(/\.0$/, '')}` : '';
     const focalStr = rawExif.FocalLength ? `${Math.round(rawExif.FocalLength)}mm` : '';
-    const cameraStr = rawExif.Model ? `${rawExif.Make || ''} ${rawExif.Model}`.trim() : (rawExif.Make || 'לא ידוע');
-    const lensStr = rawExif.LensModel || 'לא צוין';
+    
+    const make = (rawExif.Make || '').trim();
+    let model = (rawExif.Model || '').trim();
+    let cameraStr = model;
+    if (make && !model.toLowerCase().includes(make.toLowerCase())) {
+      cameraStr = `${make} ${model}`.trim();
+    }
+    if (!cameraStr) cameraStr = make || 'לא ידוע';
+
+    const lensStr = rawExif.LensModel || rawExif.Lens || rawExif.LensType || 'לא צוין';
     const isoStr = rawExif.ISO ? String(rawExif.ISO) : '';
 
     let dateStr = '';
@@ -82,6 +80,14 @@ export const extractExifFromFile = async (file) => {
         rawDateStr = `${yyyy}:${mm}:${dd} ${hh}:${min}:${ss}`;
       }
     }
+
+    await logEvent(LOG_LEVELS.INFO, 'exif', `EXIF parsed successfully from ${file.name}`, {
+      camera: cameraStr,
+      lens: lensStr,
+      aperture: apertureStr,
+      shutter: shutterStr,
+      iso: isoStr
+    });
 
     return {
       camera: cameraStr,
