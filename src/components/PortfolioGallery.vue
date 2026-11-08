@@ -114,6 +114,8 @@ const allRawPhotos = computed(() => {
       width: ov.width || item.width,
       height: ov.height || item.height,
       aspect_ratio: ov.aspect_ratio || item.aspect_ratio,
+      versions: ov.versions || item.versions || [],
+      active_version_id: ov.active_version_id || item.active_version_id || null,
       exif: ov.exif ? { ...(item.exif || {}), ...ov.exif } : item.exif
     };
   };
@@ -218,6 +220,9 @@ const normalizedPhotos = computed(() => {
       categoryEn,
       category: categoryHe,
       is_featured: Boolean(p.is_featured),
+      is_exhibition_candidate: Boolean(p.is_exhibition_candidate || p.exhibition?.candidate),
+      exhibition_score: Number(p.exhibition_score || p.exhibition?.score || 0),
+      is_shortlisted: Boolean(p.exhibition_score === 2 || p.exhibition?.shortlisted),
       description: descHe,
       description_en: descEn,
       humorous_description: rawHumorHe,
@@ -234,6 +239,8 @@ const normalizedPhotos = computed(() => {
       height: p.dimensions?.height || p.height || 1366,
       tags: allPhotoTagsHe,
       tags_en: allPhotoTagsEn.length > 0 ? allPhotoTagsEn : allPhotoTagsHe,
+      versions: p.versions || [],
+      active_version_id: p.active_version_id || null,
       exif: {
         camera: exif.camera_model || exif.camera || 'Canon EOS',
         lens: exif.lens_model || exif.lens || '',
@@ -329,6 +336,10 @@ const filteredPhotos = computed(() => {
     // 1. Category check
     if (isFeatured) {
       if (!photo.is_featured) return false;
+    } else if (activeCategory.value === 'exhibition' || activeCategory.value === 'מועמדות לתערוכה 🏛️' || activeCategory.value === 'Exhibition Candidates 🏛️') {
+      if (!photo.is_exhibition_candidate) return false;
+    } else if (activeCategory.value === 'shortlist' || activeCategory.value === 'נבחרות לתערוכה (+1) 🏆' || activeCategory.value === 'Shortlisted (+1) 🏆') {
+      if (!photo.is_shortlisted) return false;
     } else if (!isAll) {
       const matchCat = (
         photo.categoryKey === activeCategory.value ||

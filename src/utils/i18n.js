@@ -172,6 +172,8 @@ export const translations = {
 
 export const CATEGORIES = [
   { key: 'featured', he: 'נבחרות ⭐', en: 'Featured ⭐' },
+  { key: 'exhibition', he: 'מועמדות לתערוכה 🏛️', en: 'Exhibition Candidates 🏛️' },
+  { key: 'shortlist', he: 'נבחרות לתערוכה (+1) 🏆', en: 'Shortlisted (+1) 🏆' },
   { key: 'all', he: 'הכל', en: 'All' },
   { key: 'wildlife', he: 'טבע וציפורים', en: 'Birds & Wildlife' },
   { key: 'landscape', he: 'נוף', en: 'Landscapes' },

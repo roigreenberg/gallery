@@ -336,7 +336,91 @@ export const saveNewPhotoRecord = async (photoData, user) => {
 };
 
 /**
- * Replace the image file of an existing photo (preserving all metadata, likes, comments & ID)
+ * Extract photo signature from filename and EXIF date
+ */
+export const extractPhotoSignature = (filename, exifDateStr) => {
+  const clean = (filename || '').replace(/\.[^/.]+$/, '').trim();
+
+  // 1. Camera pattern: e.g. RG5_4584, RG7_1437, RG5-1234
+  const camMatch = clean.match(/(RG\d*[-_]\d{4,5})/i);
+  // 2. Phone pattern: e.g. 20261005_182529 or 20261005-182529
+  const phoneMatch = clean.match(/(\d{8}[-_]\d{6})/);
+  // 3. Generic camera code: e.g. DSC_1234, IMG_1234
+  const genMatch = clean.match(/([A-Z]{2,4}[-_]\d{3,5})/i);
+
+  let baseToken = '';
+  if (camMatch) {
+    baseToken = camMatch[1].replace('-', '_').toUpperCase();
+  } else if (phoneMatch) {
+    baseToken = phoneMatch[1].replace('-', '_');
+  } else if (genMatch) {
+    baseToken = genMatch[1].replace('-', '_').toUpperCase();
+  } else {
+    baseToken = clean.toLowerCase();
+  }
+
+  // Extract date (YYYYMMDD) and time (HHMM)
+  let datePart = '';
+  let timePart = '';
+  if (exifDateStr && typeof exifDateStr === 'string') {
+    const m = exifDateStr.match(/^(\d{4})[:\-](\d{2})[:\-](\d{2})\s*(\d{2})?[:\-]?(\d{2})?/);
+    if (m) {
+      datePart = `${m[1]}${m[2]}${m[3]}`;
+      timePart = m[4] && m[5] ? `${m[4]}${m[5]}` : '';
+    }
+  }
+
+  if (!datePart) {
+    const dm = clean.match(/^(\d{8})/);
+    if (dm) datePart = dm[1];
+  }
+
+  return { baseToken, datePart, timePart, clean };
+};
+
+/**
+ * Check if an uploaded file matches an existing photo in the gallery
+ */
+export const findExistingPhotoMatch = (file, exifData, catalogPhotos) => {
+  if (!catalogPhotos || !catalogPhotos.length) return null;
+
+  const newSig = extractPhotoSignature(file.name, exifData?.date_time_original || exifData?.date);
+
+  for (const p of catalogPhotos) {
+    const pId = p.id || '';
+    const pDate = p.exif?.date_time_original || p.exif?.date || '';
+    const pSig = extractPhotoSignature(pId, pDate);
+
+    // Exact ID match (case-insensitive)
+    if (pId.toLowerCase() === newSig.clean.toLowerCase()) {
+      return p;
+    }
+
+    // Camera/Phone base token match (e.g. both RG5_4584)
+    if (newSig.baseToken && pSig.baseToken && newSig.baseToken === pSig.baseToken) {
+      if (newSig.datePart && pSig.datePart) {
+        if (newSig.datePart === pSig.datePart) {
+          // If both have timePart (HHMM), check if within same hour or close
+          if (newSig.timePart && pSig.timePart) {
+            const diff = Math.abs(parseInt(newSig.timePart, 10) - parseInt(pSig.timePart, 10));
+            if (diff <= 30 || newSig.timePart.slice(0, 2) === pSig.timePart.slice(0, 2)) {
+              return p;
+            }
+          } else {
+            return p;
+          }
+        }
+      } else {
+        return p;
+      }
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Replace the image file of an existing photo (preserving all metadata, likes, comments & ID, and archiving history)
  */
 export const replacePhotoImage = async (photo, newFile, user) => {
   if (!db || !isUserOwner(user)) throw new Error('Only the site owner can replace photos');
@@ -363,12 +447,45 @@ export const replacePhotoImage = async (photo, newFile, user) => {
     console.warn('Could not extract EXIF from replacement file:', e);
   }
 
+  // 4. Build version history
+  const existingVersions = Array.isArray(photo.versions) && photo.versions.length > 0 
+    ? [...photo.versions] 
+    : [
+        {
+          version_id: 'v_original',
+          display_url: photo.display || photo.display_url || '',
+          thumb_url: photo.thumbnail || photo.thumb_url || '',
+          width: photo.width || 2048,
+          height: photo.height || 1366,
+          aspect_ratio: photo.aspectRatio || '3/2',
+          created_at: 'מקורית',
+          label: 'גרסה מקורית'
+        }
+      ];
+
+  const newVersionId = `v_${versionTs}`;
+  const newVersionObj = {
+    version_id: newVersionId,
+    display_url: newDisplayUrl,
+    thumb_url: newThumbUrl,
+    width: displayWebP.width,
+    height: displayWebP.height,
+    aspect_ratio: displayWebP.aspectRatio,
+    created_at: new Date().toLocaleDateString('he-IL') + ' ' + new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }),
+    filename: newFile.name,
+    label: `גרסה ${existingVersions.length + 1}`
+  };
+
+  const updatedVersions = [...existingVersions, newVersionObj];
+
   const updatePayload = {
     display_url: newDisplayUrl,
     thumb_url: newThumbUrl,
     width: displayWebP.width,
     height: displayWebP.height,
     aspect_ratio: displayWebP.aspectRatio,
+    versions: updatedVersions,
+    active_version_id: newVersionId,
     updated_at: serverTimestamp()
   };
 
@@ -376,7 +493,7 @@ export const replacePhotoImage = async (photo, newFile, user) => {
     updatePayload.exif = newExif;
   }
 
-  // 4. Update in Firestore
+  // 5. Update in Firestore
   if (photo.is_custom || photo.firestore_id) {
     const docId = photo.firestore_id || photo.id;
     await updateDoc(doc(db, 'custom_photos', docId), updatePayload);
@@ -386,7 +503,8 @@ export const replacePhotoImage = async (photo, newFile, user) => {
   }
 
   await logEvent(LOG_LEVELS.SUCCESS, 'replace', `Photo image replaced successfully: ${photo.id}`, {
-    displayUrl: newDisplayUrl
+    displayUrl: newDisplayUrl,
+    versionId: newVersionId
   });
 
   return {
@@ -395,8 +513,41 @@ export const replacePhotoImage = async (photo, newFile, user) => {
     width: displayWebP.width,
     height: displayWebP.height,
     aspectRatio: displayWebP.aspectRatio,
+    versions: updatedVersions,
+    activeVersionId: newVersionId,
     exif: newExif || photo.exif
   };
+};
+
+/**
+ * Switch which version of a photo is displayed on the website
+ */
+export const switchPhotoVersion = async (photo, targetVersionId, user) => {
+  if (!db || !isUserOwner(user)) throw new Error('Only the owner can switch photo versions');
+
+  const targetVersion = (photo.versions || []).find(v => v.version_id === targetVersionId);
+  if (!targetVersion) throw new Error('Target version not found');
+
+  const updatePayload = {
+    active_version_id: targetVersionId,
+    display_url: targetVersion.display_url,
+    thumb_url: targetVersion.thumb_url,
+    width: targetVersion.width || photo.width,
+    height: targetVersion.height || photo.height,
+    aspect_ratio: targetVersion.aspect_ratio || photo.aspectRatio,
+    updated_at: serverTimestamp()
+  };
+
+  if (photo.is_custom || photo.firestore_id) {
+    const docId = photo.firestore_id || photo.id;
+    await updateDoc(doc(db, 'custom_photos', docId), updatePayload);
+  } else {
+    await setDoc(doc(db, 'photo_overrides', photo.id), updatePayload, { merge: true });
+  }
+
+  await logEvent(LOG_LEVELS.INFO, 'version', `Switched photo ${photo.id} to version ${targetVersionId}`);
+
+  return targetVersion;
 };
 
 /**

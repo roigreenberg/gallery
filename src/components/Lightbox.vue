@@ -20,7 +20,7 @@ import {
 } from 'lucide-vue-next';
 import PhotoInteractions from './PhotoInteractions.vue';
 import { subscribeToAuth, isUserOwner } from '../utils/firebase.js';
-import { replacePhotoImage, deletePhotoPermanently } from '../utils/uploaderService.js';
+import { replacePhotoImage, deletePhotoPermanently, switchPhotoVersion } from '../utils/uploaderService.js';
 
 const props = defineProps({
   photo: {
@@ -466,6 +466,32 @@ const confirmDeletePhoto = async () => {
   }
 };
 
+// Switch version
+const isSwitchingVersion = ref(false);
+const handleSwitchVersion = async (targetVersionId) => {
+  if (!props.photo || !currentUser.value || isSwitchingVersion.value) return;
+  isSwitchingVersion.value = true;
+  replaceError.value = '';
+  try {
+    const v = await switchPhotoVersion(props.photo, targetVersionId, currentUser.value);
+    isHighResLoaded.value = false;
+    emit('photo-updated', {
+      photoId: props.photo.id,
+      displayUrl: v.display_url,
+      thumbUrl: v.thumb_url
+    });
+    replaceSuccess.value = props.currentLang === 'en'
+      ? `Switched to ${v.label || 'version'}`
+      : `התמונה הוחלפה בהצלחה ל-${v.label || 'גרסה נבחרת'}`;
+    setTimeout(() => { replaceSuccess.value = ''; }, 4000);
+  } catch (err) {
+    console.error('Failed to switch version:', err);
+    replaceError.value = (props.currentLang === 'en' ? 'Failed to switch version: ' : 'שגיאה במעבר גרסה: ') + err.message;
+  } finally {
+    isSwitchingVersion.value = false;
+  }
+};
+
 onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('keydown', handleKeyDown);
@@ -708,9 +734,34 @@ onUnmounted(() => {
           >
             <!-- Title and taxonomy -->
             <div>
-              <span class="inline-block px-2.5 py-1 text-xs font-medium text-sky-400 bg-sky-950/60 border border-sky-800/50 rounded-full mb-2">
-                {{ currentLang === 'en' ? (photo.categoryEn || photo.category) : (photo.categoryHe || photo.category) }}
-              </span>
+              <div class="flex items-center gap-2 flex-wrap mb-2">
+                <span class="inline-block px-2.5 py-1 text-xs font-medium text-sky-400 bg-sky-950/60 border border-sky-800/50 rounded-full">
+                  {{ currentLang === 'en' ? (photo.categoryEn || photo.category) : (photo.categoryHe || photo.category) }}
+                </span>
+                <span
+                  v-if="photo.is_shortlisted"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-amber-200 bg-amber-950/80 border border-amber-400/60 rounded-full"
+                  :title="currentLang === 'en' ? 'Shortlisted for Exhibition (+1)' : 'מועמדת מובילה לתערוכה (+1)'"
+                >
+                  <span>🏆</span>
+                  <span>{{ currentLang === 'en' ? 'Exhibition Shortlist (+1)' : 'מועמדת מובילה לתערוכה (+1)' }}</span>
+                </span>
+                <span
+                  v-else-if="photo.is_exhibition_candidate"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-sky-200 bg-sky-950/80 border border-sky-400/60 rounded-full"
+                  :title="currentLang === 'en' ? 'Exhibition Candidate' : 'מועמדת לתערוכה'"
+                >
+                  <span>🏛️</span>
+                  <span>{{ currentLang === 'en' ? 'Exhibition Candidate' : 'מועמדת לתערוכה' }}</span>
+                </span>
+                <span
+                  v-if="photo.is_featured"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-500/50 rounded-full"
+                >
+                  <span>⭐</span>
+                  <span>{{ currentLang === 'en' ? 'Featured' : 'נבחרת' }}</span>
+                </span>
+              </div>
               <h3 class="text-xl font-bold text-white tracking-tight leading-snug">
                 {{ currentLang === 'en' ? (photo.title_en || photo.title) : photo.title }}
               </h3>
@@ -879,6 +930,43 @@ onUnmounted(() => {
                   <span>🗑️</span>
                   <span>{{ currentLang === 'en' ? 'Delete Photo' : 'מחק תמונה' }}</span>
                 </button>
+              </div>
+
+              <!-- Version History (Owner Only) -->
+              <div v-if="photo.versions && photo.versions.length > 1" class="pt-2 border-t border-amber-500/20 space-y-1.5">
+                <span class="text-[11px] font-bold text-amber-200 block flex items-center gap-1.5">
+                  <span>📜</span>
+                  <span>{{ currentLang === 'en' ? `Version History (${photo.versions.length})` : `היסטוריית גרסאות (${photo.versions.length})` }}</span>
+                </span>
+                <div class="space-y-1 max-h-36 overflow-y-auto">
+                  <div
+                    v-for="v in photo.versions"
+                    :key="v.version_id"
+                    class="flex items-center justify-between p-1.5 rounded-lg border text-xs"
+                    :class="(photo.active_version_id === v.version_id || (!photo.active_version_id && v.version_id === 'v_original')) ? 'bg-amber-500/20 border-amber-500/50 text-amber-200' : 'bg-slate-900 border-slate-800 text-slate-300'"
+                  >
+                    <div class="flex items-center gap-2 truncate">
+                      <img :src="v.thumb_url || v.display_url" class="w-7 h-7 object-cover rounded shrink-0 border border-slate-700" />
+                      <div class="truncate text-[11px]">
+                        <span class="font-medium block truncate">{{ v.label || v.filename || 'גרסה' }}</span>
+                        <span class="text-[9px] text-slate-400 block">{{ v.created_at }}</span>
+                      </div>
+                    </div>
+
+                    <span v-if="photo.active_version_id === v.version_id || (!photo.active_version_id && v.version_id === 'v_original')" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold shrink-0">
+                      {{ currentLang === 'en' ? 'Active ✓' : 'מוצגת באתר ✓' }}
+                    </span>
+                    <button
+                      v-else
+                      type="button"
+                      @click="handleSwitchVersion(v.version_id)"
+                      :disabled="isSwitchingVersion"
+                      class="text-[10px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 transition cursor-pointer shrink-0"
+                    >
+                      {{ currentLang === 'en' ? 'Show this' : 'הצג גרסה זו' }}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </aside>

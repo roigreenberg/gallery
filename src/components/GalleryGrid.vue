@@ -128,6 +128,20 @@ const handleImageLoad = (id) => {
           :class="currentLang === 'en' ? 'top-3 left-3' : 'top-3 right-3'"
         >
           <span
+            v-if="photo.is_shortlisted"
+            class="px-2 py-0.5 text-[11px] font-bold text-amber-200 bg-amber-950/80 backdrop-blur-md rounded-full border border-amber-400/60 shadow-sm shrink-0"
+            :title="currentLang === 'en' ? 'Shortlisted for Exhibition (+1)' : 'מועמדת מובילה לתערוכה (+1)'"
+          >
+            🏆 +1
+          </span>
+          <span
+            v-else-if="photo.is_exhibition_candidate"
+            class="px-2 py-0.5 text-[11px] font-bold text-sky-200 bg-sky-950/80 backdrop-blur-md rounded-full border border-sky-400/60 shadow-sm shrink-0"
+            :title="currentLang === 'en' ? 'Exhibition Candidate' : 'מועמדת לתערוכה'"
+          >
+            🏛️
+          </span>
+          <span
             v-if="photo.is_featured"
             class="px-2 py-0.5 text-[11px] font-bold text-amber-300 bg-amber-950/80 backdrop-blur-md rounded-full border border-amber-500/50 shadow-sm shrink-0"
             :title="currentLang === 'en' ? 'Featured photo' : 'תמונה נבחרת'"
