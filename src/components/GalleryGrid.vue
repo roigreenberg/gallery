@@ -11,6 +11,10 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  likesMap: {
+    type: Object,
+    default: () => ({})
+  },
   showCaptions: {
     type: Boolean,
     default: false
@@ -141,6 +145,16 @@ const handleImageLoad = (id) => {
           <!-- Category badge -->
           <span class="inline-block px-2.5 py-1 text-[11px] font-medium tracking-wide text-slate-200 bg-slate-950/75 backdrop-blur-md rounded-full border border-white/10 shadow-sm shrink-0">
             {{ currentLang === 'en' ? (photo.categoryEn || photo.category) : (photo.categoryHe || photo.category) }}
+          </span>
+
+          <!-- Like count badge if liked -->
+          <span
+            v-if="likesMap[photo.id]?.count > 0"
+            class="px-2 py-0.5 text-[11px] font-semibold text-rose-300 bg-slate-950/85 backdrop-blur-md rounded-full border border-rose-500/40 shadow-sm flex items-center gap-1 shrink-0"
+            :title="currentLang === 'en' ? `${likesMap[photo.id].count} likes` : `${likesMap[photo.id].count} לייקים`"
+          >
+            <span class="text-xs">❤️</span>
+            <span>{{ likesMap[photo.id].count }}</span>
           </span>
         </div>
 

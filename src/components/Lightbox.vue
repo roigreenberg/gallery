@@ -18,6 +18,7 @@ import {
   ZoomIn,
   ZoomOut
 } from 'lucide-vue-next';
+import PhotoInteractions from './PhotoInteractions.vue';
 
 const props = defineProps({
   photo: {
@@ -734,6 +735,9 @@ onUnmounted(() => {
                 </button>
               </div>
             </div>
+
+            <!-- Social Interactions: Likes, Comments, Add to Curation -->
+            <PhotoInteractions :photo="photo" :current-lang="currentLang" />
           </aside>
         </Transition>
       </div>

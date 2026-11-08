@@ -5,6 +5,9 @@ import GalleryGrid from './GalleryGrid.vue';
 import Lightbox from './Lightbox.vue';
 import SelectionModal from './SelectionModal.vue';
 import { CATEGORIES, getCategoryLabel } from '../utils/i18n.js';
+import { subscribeToAllLikes } from '../utils/interactionsService.js';
+import { db } from '../utils/firebase.js';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 const props = defineProps({
   initialPhotos: {
@@ -86,11 +89,19 @@ const toggleLang = () => {
   setLang(currentLang.value === 'en' ? 'he' : 'en');
 };
 
+// Custom uploaded photos from Firestore
+const customPhotos = ref([]);
+let unsubCustomPhotos = null;
+
+const allRawPhotos = computed(() => {
+  return [...customPhotos.value, ...props.initialPhotos];
+});
+
 // Normalize raw photo records to standard flat format used by components
 const normalizedPhotos = computed(() => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-  return props.initialPhotos.map(p => {
+  return allRawPhotos.value.map(p => {
     // Check if fields are nested under .ai (output of process_photos.py) or top-level
     const ai = p.ai || {};
     const exif = p.exif || {};
@@ -219,12 +230,17 @@ const categories = computed(() => {
   }));
 });
 
+// Likes Map state from Firestore
+const likesMap = ref({});
+let unsubAllLikes = null;
+
 // Sorting options (reactive based on language)
 const sortOptions = computed(() => {
   if (currentLang.value === 'en') {
     return [
       { value: 'capture_desc', label: 'Date taken (Newest first)' },
       { value: 'capture_asc', label: 'Date taken (Oldest first)' },
+      { value: 'likes_desc', label: 'Most Liked (❤️)' },
       { value: 'animal_asc', label: 'Species name (A to Z)' },
       { value: 'animal_desc', label: 'Species name (Z to A)' },
       { value: 'added_desc', label: 'Date added (Newest first)' },
@@ -234,6 +250,7 @@ const sortOptions = computed(() => {
   return [
     { value: 'capture_desc', label: 'תאריך צילום (מהחדש לישן)' },
     { value: 'capture_asc', label: 'תאריך צילום (מהישן לחדש)' },
+    { value: 'likes_desc', label: 'הכי אהובות (לפי לייקים ❤️)' },
     { value: 'animal_asc', label: 'שם החיה (א׳ עד ת׳)' },
     { value: 'animal_desc', label: 'שם החיה (ת׳ עד א׳)' },
     { value: 'added_desc', label: 'תאריך הוספה (מהחדש לישן)' },
@@ -337,6 +354,12 @@ const sortedPhotos = computed(() => {
       return list.sort((a, b) => b.captureTs.localeCompare(a.captureTs) || b.id.localeCompare(a.id));
     case 'capture_asc':
       return list.sort((a, b) => a.captureTs.localeCompare(b.captureTs) || a.id.localeCompare(b.id));
+    case 'likes_desc':
+      return list.sort((a, b) => {
+        const lA = likesMap.value[a.id]?.count || 0;
+        const lB = likesMap.value[b.id]?.count || 0;
+        return (lB - lA) || b.captureTs.localeCompare(a.captureTs) || b.id.localeCompare(a.id);
+      });
     case 'animal_asc':
       return list.sort((a, b) => {
         const isEn = currentLang.value === 'en';
@@ -628,12 +651,35 @@ onMounted(() => {
   syncStateFromUrl();
   window.addEventListener('popstate', syncStateFromUrl);
   window.addEventListener('roigreenberg-lang-changed', handleExternalLang);
+  unsubAllLikes = subscribeToAllLikes((map) => {
+    likesMap.value = map;
+  });
+  if (db) {
+    unsubCustomPhotos = onSnapshot(collection(db, 'custom_photos'), (snap) => {
+      const list = [];
+      snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+      customPhotos.value = list;
+    }, (err) => console.warn('Custom photos listener error:', err));
+  }
   try {
     const savedCaptions = localStorage.getItem(CAPTIONS_STORAGE_KEY);
     if (savedCaptions === 'true') {
       showCaptions.value = true;
     }
   } catch (e) {}
+});
+
+onUnmounted(() => {
+  if (unsubAllLikes) unsubAllLikes();
+  if (unsubCustomPhotos) unsubCustomPhotos();
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('popstate', syncStateFromUrl);
+    window.removeEventListener('roigreenberg-lang-changed', handleExternalLang);
+  }
 });
 
 watch([activeCategory, searchQuery, activeTag, sortBy, currentLang], () => {
@@ -764,6 +810,7 @@ const navigateToPhoto = (photo) => {
     <GalleryGrid
       :photos="visiblePhotos"
       :selectedIds="selectedPhotoIds"
+      :likesMap="likesMap"
       :showCaptions="showCaptions"
       :currentLang="currentLang"
       @select-photo="openPhoto"

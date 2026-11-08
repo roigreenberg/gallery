@@ -1,5 +1,6 @@
 ---
 // Header.astro - Modern minimalist header for nature photography portfolio with AI disclaimer banner
+import UserAuthButton from './UserAuthButton.vue';
 ---
 
 <!-- AI Beta & Humorous Disclaimer Banner -->
@@ -108,6 +109,9 @@
         <span data-lang="he">English</span>
         <span data-lang="en">עברית</span>
       </button>
+
+      <!-- User Auth (Google Sign-In / User Profile) -->
+      <UserAuthButton client:load />
 
       <a
         href="https://github.com/roigreenberg/gallery"
