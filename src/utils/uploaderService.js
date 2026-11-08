@@ -1,17 +1,13 @@
 // uploaderService.js - Client-Side Owner Photo Processing & Cloudflare R2 Upload Pipeline
 import exifr from 'exifr';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { db, isUserOwner } from './firebase.js';
+import { auth, db, isUserOwner } from './firebase.js';
 import { collection, addDoc, doc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import speciesRegistry from '../data/species_registry.json';
 import { logEvent, LOG_LEVELS } from './loggerService.js';
 
 export const R2_CONFIG = {
-  accountId: '17810f22ce3ee57341e89107ed1c2913',
-  bucketName: 'my-photo-gallery',
-  publicUrl: 'https://pub-d8a9140bbd28466cb778bf724fb793b0.r2.dev',
-  accessKeyId: '',
-  secretAccessKey: ''
+  workerUrl: 'https://gallery-uploader.roigreenberg.workers.dev',
+  publicUrl: 'https://pub-d8a9140bbd28466cb778bf724fb793b0.r2.dev'
 };
 
 /**
@@ -177,48 +173,43 @@ export const resizeImageToWebP = (file, maxDimension, quality = 0.85) => {
 };
 
 /**
- * Upload WebP Blob directly to Cloudflare R2
+ * Upload WebP Blob securely to Cloudflare R2 via authenticated Cloudflare Worker proxy
  */
 export const uploadBlobToR2 = async (blob, objectKey) => {
-  const s3 = new S3Client({
-    region: 'auto',
-    endpoint: `https://${R2_CONFIG.accountId}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId: R2_CONFIG.accessKeyId,
-      secretAccessKey: R2_CONFIG.secretAccessKey
-    }
-  });
-
-  const arrayBuffer = await blob.arrayBuffer();
   const cleanKey = objectKey.replace(/^\//, '');
-  const command = new PutObjectCommand({
-    Bucket: R2_CONFIG.bucketName,
-    Key: cleanKey,
-    Body: new Uint8Array(arrayBuffer),
-    ContentType: 'image/webp',
-    CacheControl: 'public, max-age=31536000'
-  });
+
+  if (!auth?.currentUser) {
+    throw new Error('יש להתחבר עם חשבון מנהל (Google) על מנת להעלות תמונות לגלריה');
+  }
 
   try {
-    await s3.send(command);
-    const publicUrl = `${R2_CONFIG.publicUrl}/${cleanKey}`;
-    await logEvent(LOG_LEVELS.SUCCESS, 'r2', `Uploaded to R2: ${cleanKey}`, { size: arrayBuffer.byteLength, publicUrl });
+    const idToken = await auth.currentUser.getIdToken();
+
+    const response = await fetch(`${R2_CONFIG.workerUrl}?key=${encodeURIComponent(cleanKey)}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${idToken}`,
+        'Content-Type': 'image/webp'
+      },
+      body: blob
+    });
+
+    if (!response.ok) {
+      let errMsg = `Upload failed with status ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.error) errMsg = errorData.error;
+      } catch (e) {}
+      throw new Error(errMsg);
+    }
+
+    const data = await response.json();
+    const publicUrl = data.url || `${R2_CONFIG.publicUrl}/${cleanKey}`;
+    await logEvent(LOG_LEVELS.SUCCESS, 'r2', `Uploaded to R2 via Worker: ${cleanKey}`, { publicUrl });
     return publicUrl;
   } catch (err) {
-    console.warn(`R2 upload directly from browser hit error: ${err.message}. Checking resilient fallback...`);
-    await logEvent(LOG_LEVELS.WARN, 'r2', `R2 direct browser upload failed for ${cleanKey}`, { error: err.message });
-
-    // Resilient fallback: If cross-origin browser upload was blocked (e.g. CORS preflight on R2),
-    // convert the WebP blob to an inline Data URL so the photo is saved & displayed immediately with 0 downtime!
-    if (err.name === 'TypeError' || err.message?.includes('fetch') || err.message?.includes('Network') || err.Code === 'AccessDenied') {
-      const dataUrl = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-      await logEvent(LOG_LEVELS.INFO, 'r2', `Using resilient Data URL storage for: ${cleanKey}`);
-      return dataUrl;
-    }
+    console.error(`Worker upload error for ${cleanKey}:`, err);
+    await logEvent(LOG_LEVELS.ERROR, 'r2', `Worker upload failed for ${cleanKey}`, { error: err.message });
     throw err;
   }
 };
