@@ -255,18 +255,20 @@ export const subscribeToCurationItems = (callback) => {
  *   id: string,
  *   name: string,
  *   area: 'exhibition' | 'wall',
+ *   status: 'sure' | 'maybe' | 'pool' | 'rejected', // Acts as a board card
  *   winner_id: string | null,
  *   ai_comparison: string | null,
  *   created_at,
  *   updated_at
  * }
  */
-export const createSubGroup = async (name, area = 'exhibition') => {
+export const createSubGroup = async (name, area = 'exhibition', status = 'maybe') => {
   if (!db) throw new Error('Database not connected');
   const colRef = collection(db, 'curation_groups');
   const docRef = await addDoc(colRef, {
     name: name.trim(),
     area,
+    status,
     winner_id: null,
     ai_comparison: null,
     created_at: serverTimestamp(),
@@ -287,6 +289,54 @@ export const updateSubGroup = async (groupId, data) => {
 export const deleteSubGroup = async (groupId) => {
   if (!db) return;
   await deleteDoc(doc(db, 'curation_groups', groupId));
+};
+
+/**
+ * Assign a photo to a sub-group
+ */
+export const assignPhotoToGroup = async (photoId, groupId, groupName, photoData = null) => {
+  if (!db) throw new Error('Database not connected');
+  const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
+  const docRef = doc(db, 'curation_items', cleanId);
+
+  const snap = await getDoc(docRef);
+  if (!snap.exists() && photoData) {
+    await setDoc(docRef, {
+      photo_id: photoId,
+      photo_data: photoData,
+      area: 'exhibition',
+      status: 'maybe',
+      group_id: groupId,
+      group_name: groupName,
+      votes: {},
+      ai_critique: null,
+      notes: '',
+      created_at: serverTimestamp(),
+      updated_at: serverTimestamp()
+    });
+    return;
+  }
+
+  await setDoc(docRef, {
+    group_id: groupId,
+    group_name: groupName,
+    updated_at: serverTimestamp()
+  }, { merge: true });
+};
+
+/**
+ * Remove a photo from its sub-group
+ */
+export const removePhotoFromGroup = async (photoId) => {
+  if (!db) throw new Error('Database not connected');
+  const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
+  const docRef = doc(db, 'curation_items', cleanId);
+
+  await setDoc(docRef, {
+    group_id: null,
+    group_name: null,
+    updated_at: serverTimestamp()
+  }, { merge: true });
 };
 
 export const subscribeToSubGroups = (callback) => {

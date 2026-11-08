@@ -19,7 +19,9 @@ import {
   removeCurationItem,
   createSubGroup,
   updateSubGroup,
-  deleteSubGroup
+  deleteSubGroup,
+  assignPhotoToGroup,
+  removePhotoFromGroup
 } from '../utils/curationService.js';
 import {
   getGeminiApiKey,
@@ -27,6 +29,7 @@ import {
   requestPhotoCritique,
   requestGroupComparison
 } from '../utils/geminiCurator.js';
+import CurationGroupCard from './CurationGroupCard.vue';
 
 const props = defineProps({
   initialPhotos: {
@@ -64,6 +67,21 @@ const isImporting = ref(false);
 const showCreateGroupModal = ref(false);
 const newGroupName = ref('');
 const newGroupArea = ref('exhibition');
+const newGroupStatus = ref('maybe'); // 'maybe' | 'sure' | 'pool'
+
+// Sub-Group Decision / Alternative Choice Modal
+const showDecisionModal = ref(false);
+const activeDecisionGroup = ref(null);
+
+// Assign Photo to Group Modal
+const showAssignModal = ref(false);
+const assigningPhoto = ref(null);
+const assignSelectedGroupId = ref('');
+const assignNewGroupName = ref('');
+
+// Add Photo to Group Search (inside decision modal)
+const showAddPhotoToGroupModal = ref(false);
+const addPhotoSearch = ref('');
 
 // Gemini AI State
 const geminiApiKey = ref('');
@@ -199,21 +217,77 @@ const filteredItems = computed(() => {
   });
 });
 
-// Tiers breakdown
-const sureItems = computed(() => filteredItems.value.filter(i => i.status === 'sure'));
-const maybeItems = computed(() => filteredItems.value.filter(i => i.status === 'maybe'));
-const groupItems = computed(() => filteredItems.value.filter(i => i.status === 'group'));
-const poolItems = computed(() => filteredItems.value.filter(i => i.status === 'pool' || !i.status));
-const rejectedItems = computed(() => filteredItems.value.filter(i => i.status === 'rejected'));
+// Helper: get all photos assigned to a sub-group
+const getGroupPhotos = (groupId) => {
+  return effectiveCurationItems.value.filter(i => i.group_id === groupId);
+};
+
+// Helper: get the winning photo object for a sub-group (if chosen)
+const getGroupWinnerPhoto = (group) => {
+  if (!group || !group.winner_id) return null;
+  return effectiveCurationItems.value.find(i => (i.photo_id === group.winner_id || i.id === group.winner_id)) || null;
+};
 
 // Sub-groups for active area
 const activeSubGroups = computed(() => {
   return subGroups.value.filter(g => activeArea.value === 'all' || g.area === activeArea.value);
 });
 
-const getGroupPhotos = (groupId) => {
-  return effectiveCurationItems.value.filter(i => i.group_id === groupId);
+const activeGroupIds = computed(() => new Set(activeSubGroups.value.map(g => g.id)));
+
+// Search filter for groups
+const groupMatchesSearch = (group) => {
+  const q = searchQuery.value.trim().toLowerCase();
+  if (!q) return true;
+  if ((group.name || '').toLowerCase().includes(q)) return true;
+  const photos = getGroupPhotos(group.id);
+  return photos.some(p => {
+    const title = (p.photo_data?.title || '').toLowerCase();
+    const species = (p.photo_data?.species_he || p.photo_data?.species_en || '').toLowerCase();
+    return title.includes(q) || species.includes(q);
+  });
 };
+
+// Sub-groups categorized by column status
+const sureGroups = computed(() => {
+  return activeSubGroups.value.filter(g => g.status === 'sure' && groupMatchesSearch(g));
+});
+const maybeGroups = computed(() => {
+  return activeSubGroups.value.filter(g => (!g.status || g.status === 'maybe') && groupMatchesSearch(g));
+});
+const poolGroups = computed(() => {
+  return activeSubGroups.value.filter(g => g.status === 'pool' && groupMatchesSearch(g));
+});
+const rejectedGroups = computed(() => {
+  return activeSubGroups.value.filter(g => g.status === 'rejected' && groupMatchesSearch(g));
+});
+
+// Standalone photos per column (excluding photos that belong to an active sub-group)
+const surePhotos = computed(() => {
+  return filteredItems.value.filter(i => i.status === 'sure' && (!i.group_id || !activeGroupIds.value.has(i.group_id)));
+});
+const maybePhotos = computed(() => {
+  return filteredItems.value.filter(i => i.status === 'maybe' && (!i.group_id || !activeGroupIds.value.has(i.group_id)));
+});
+const poolPhotos = computed(() => {
+  return filteredItems.value.filter(i => (i.status === 'pool' || !i.status) && (!i.group_id || !activeGroupIds.value.has(i.group_id)));
+});
+const rejectedPhotos = computed(() => {
+  return filteredItems.value.filter(i => i.status === 'rejected' && (!i.group_id || !activeGroupIds.value.has(i.group_id)));
+});
+
+// Total count per column (groups + standalone photos)
+const sureCount = computed(() => sureGroups.value.length + surePhotos.value.length);
+const maybeCount = computed(() => maybeGroups.value.length + maybePhotos.value.length);
+const poolCount = computed(() => poolGroups.value.length + poolPhotos.value.length);
+const rejectedCount = computed(() => rejectedGroups.value.length + rejectedPhotos.value.length);
+
+// Backward-compatibility aliases
+const sureItems = surePhotos;
+const maybeItems = maybePhotos;
+const poolItems = poolPhotos;
+const rejectedItems = rejectedPhotos;
+const groupItems = computed(() => filteredItems.value.filter(i => Boolean(i.group_id)));
 
 // Voting Actions
 const handleVote = async (photoId, score) => {
@@ -238,7 +312,7 @@ const handleVote = async (photoId, score) => {
   }
 };
 
-// Moving between tiers
+// Moving photo between statuses
 const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
   if (!isOwner.value) {
     if (!currentUser.value) {
@@ -250,26 +324,21 @@ const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
   try {
     const updates = { status: newStatus };
     if (newArea) updates.area = newArea;
-    if (newStatus !== 'group') {
-      updates.groupId = null;
-      updates.groupName = null;
-    }
     await updateCurationStatus(photoId, updates, item?.photo_data);
   } catch (err) {
     console.error('Status update error:', err);
   }
 };
 
-// Assign to sub-group
-const handleAssignToGroup = async (photoId, groupId, groupName) => {
+// Moving group between columns
+const handleMoveGroupStatus = async (groupId, newStatus) => {
+  if (!isOwner.value) return;
   try {
-    await updateCurationStatus(photoId, {
-      status: 'group',
-      groupId,
-      groupName
-    });
+    await updateSubGroup(groupId, { status: newStatus });
+    const g = subGroups.value.find(x => x.id === groupId);
+    if (g) g.status = newStatus;
   } catch (err) {
-    console.error('Assign group error:', err);
+    console.error('Move group status error:', err);
   }
 };
 
@@ -278,29 +347,168 @@ const handleSelectGroupWinner = async (group, winnerPhoto) => {
   if (!isOwner.value) return;
   try {
     await updateSubGroup(group.id, { winner_id: winnerPhoto.id });
-    // Move winner to 'sure'
-    await updateCurationStatus(winnerPhoto.id, {
-      status: 'sure',
-      groupId: group.id,
-      groupName: group.name
-    });
+    group.winner_id = winnerPhoto.id;
   } catch (err) {
     console.error('Pick winner error:', err);
   }
 };
 
-// Drag & Drop
-const draggedPhotoId = ref(null);
+// Clear group winner (revert to undecided)
+const handleClearGroupWinner = async (group) => {
+  if (!isOwner.value) return;
+  try {
+    await updateSubGroup(group.id, { winner_id: null });
+    group.winner_id = null;
+  } catch (err) {
+    console.error('Clear winner error:', err);
+  }
+};
 
-const handleDragStart = (e, photoId) => {
-  draggedPhotoId.value = photoId;
+// Remove photo from group (make it standalone again)
+const handleRemoveFromGroup = async (photoId) => {
+  if (!isOwner.value) return;
+  try {
+    await removePhotoFromGroup(photoId);
+    if (activeDecisionGroup.value && activeDecisionGroup.value.winner_id === photoId) {
+      await updateSubGroup(activeDecisionGroup.value.id, { winner_id: null });
+      activeDecisionGroup.value.winner_id = null;
+    }
+  } catch (err) {
+    console.error('Remove from group error:', err);
+  }
+};
+
+// Delete sub-group
+const handleDeleteGroup = async (groupId) => {
+  if (!isOwner.value) return;
+  if (!confirm('האם אתה בטוח שברצונך לפרק תת-קבוצה זו? התמונות יישארו בלוח כעצמאיות.')) return;
+  try {
+    const photos = getGroupPhotos(groupId);
+    for (const p of photos) {
+      await removePhotoFromGroup(p.photo_id || p.id);
+    }
+    await deleteSubGroup(groupId);
+    if (activeDecisionGroup.value?.id === groupId) {
+      closeDecisionModal();
+    }
+  } catch (err) {
+    console.error('Delete group error:', err);
+  }
+};
+
+// Decision Modal openers
+const openDecisionModal = (group) => {
+  activeDecisionGroup.value = group;
+  showDecisionModal.value = true;
+};
+
+const closeDecisionModal = () => {
+  showDecisionModal.value = false;
+  activeDecisionGroup.value = null;
+};
+
+// Assign Photo Modal openers
+const openAssignPhotoModal = (photoItem) => {
+  assigningPhoto.value = photoItem;
+  assignSelectedGroupId.value = activeSubGroups.value[0]?.id || '';
+  assignNewGroupName.value = '';
+  showAssignModal.value = true;
+};
+
+const closeAssignModal = () => {
+  showAssignModal.value = false;
+  assigningPhoto.value = null;
+};
+
+const handleConfirmAssign = async () => {
+  if (!assigningPhoto.value) return;
+  try {
+    let targetGroupId = assignSelectedGroupId.value;
+    let targetGroupName = '';
+
+    if (!targetGroupId && assignNewGroupName.value.trim()) {
+      targetGroupId = await createSubGroup(
+        assignNewGroupName.value.trim(),
+        assigningPhoto.value.area || activeArea.value || 'exhibition',
+        assigningPhoto.value.status || 'maybe'
+      );
+      targetGroupName = assignNewGroupName.value.trim();
+    } else {
+      const g = subGroups.value.find(x => x.id === targetGroupId);
+      targetGroupName = g ? g.name : '';
+    }
+
+    if (targetGroupId) {
+      await assignPhotoToGroup(
+        assigningPhoto.value.photo_id || assigningPhoto.value.id,
+        targetGroupId,
+        targetGroupName,
+        assigningPhoto.value.photo_data
+      );
+    }
+    closeAssignModal();
+  } catch (err) {
+    console.error('Assign photo error:', err);
+  }
+};
+
+// Add photo to active group inside decision modal
+const addPhotosAvailable = computed(() => {
+  if (!activeDecisionGroup.value) return [];
+  const existingIds = new Set(getGroupPhotos(activeDecisionGroup.value.id).map(p => p.photo_id || p.id));
+  const q = addPhotoSearch.value.trim().toLowerCase();
+  return (props.initialPhotos || [])
+    .filter(p => !existingIds.has(p.id))
+    .filter(p => {
+      if (!q) return true;
+      const title = (p.title || p.ai?.title || '').toLowerCase();
+      const species = (p.species_he || p.ai?.species_hebrew || '').toLowerCase();
+      return title.includes(q) || species.includes(q);
+    })
+    .slice(0, 24);
+});
+
+const handleAddPhotoToActiveGroup = async (photo) => {
+  if (!activeDecisionGroup.value || !isOwner.value) return;
+  try {
+    await assignPhotoToGroup(photo.id, activeDecisionGroup.value.id, activeDecisionGroup.value.name, {
+      id: photo.id,
+      title: photo.title || photo.filename,
+      thumbnail: photo.thumb_url || photo.thumbnail,
+      display: photo.display_url || photo.display,
+      species_he: photo.species_he,
+      species_en: photo.species_en,
+      category: photo.category,
+      exif: photo.exif || {}
+    });
+    showAddPhotoToGroupModal.value = false;
+    addPhotoSearch.value = '';
+  } catch (err) {
+    console.error('Add photo to active group error:', err);
+  }
+};
+
+// Drag & Drop
+const draggedItem = ref(null); // { type: 'photo' | 'group', id: string }
+
+const handleDragPhotoStart = (e, photoId) => {
+  draggedItem.value = { type: 'photo', id: photoId };
+  e.dataTransfer.effectAllowed = 'move';
+};
+
+const handleDragGroupStart = (e, groupId) => {
+  draggedItem.value = { type: 'group', id: groupId };
   e.dataTransfer.effectAllowed = 'move';
 };
 
 const handleDrop = async (newStatus) => {
-  if (!draggedPhotoId.value || !isOwner.value) return;
-  await handleMoveStatus(draggedPhotoId.value, newStatus);
-  draggedPhotoId.value = null;
+  if (!draggedItem.value || !isOwner.value) return;
+  if (draggedItem.value.type === 'photo') {
+    await handleMoveStatus(draggedItem.value.id, newStatus);
+  } else if (draggedItem.value.type === 'group') {
+    await handleMoveGroupStatus(draggedItem.value.id, newStatus);
+  }
+  draggedItem.value = null;
 };
 
 // Sub-group Creation
@@ -308,8 +516,9 @@ const handleCreateGroup = async () => {
   const name = newGroupName.value.trim();
   if (!name) return;
   try {
-    await createSubGroup(name, newGroupArea.value);
+    await createSubGroup(name, newGroupArea.value, newGroupStatus.value);
     newGroupName.value = '';
+    newGroupStatus.value = 'maybe';
     showCreateGroupModal.value = false;
   } catch (err) {
     console.error('Create group error:', err);
@@ -475,7 +684,7 @@ const handleExecuteImport = async () => {
             <span>🖼️</span>
             <span>תערוכה ראשית</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ effectiveCurationItems.filter(i => i.area === 'exhibition').length }}
+              {{ (effectiveCurationItems.filter(i => i.area === 'exhibition' && (!i.group_id || !activeGroupIds.has(i.group_id))).length) + activeSubGroups.filter(g => g.area === 'exhibition').length }}
             </span>
           </button>
 
@@ -488,7 +697,7 @@ const handleExecuteImport = async () => {
             <span>🧱</span>
             <span>קיר תמונות</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ effectiveCurationItems.filter(i => i.area === 'wall').length }}
+              {{ (effectiveCurationItems.filter(i => i.area === 'wall' && (!i.group_id || !activeGroupIds.has(i.group_id))).length) + activeSubGroups.filter(g => g.area === 'wall').length }}
             </span>
           </button>
 
@@ -498,7 +707,7 @@ const handleExecuteImport = async () => {
             class="px-3.5 py-2 rounded-lg text-xs font-medium transition cursor-pointer"
             :class="activeArea === 'all' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'"
           >
-            <span>הכל ({{ effectiveCurationItems.length }})</span>
+            <span>הכל ({{ (effectiveCurationItems.filter(i => !i.group_id || !activeGroupIds.has(i.group_id)).length) + activeSubGroups.length }})</span>
           </button>
         </div>
 
@@ -617,16 +826,37 @@ const handleExecuteImport = async () => {
               <h3 class="font-bold text-amber-300 text-sm">מועמדות בטוחות</h3>
             </div>
             <span class="px-2 py-0.5 bg-amber-950/80 text-amber-300 border border-amber-500/40 rounded-full text-xs font-bold font-mono">
-              {{ sureItems.length }}
+              {{ sureCount }}
             </span>
           </div>
 
           <div class="space-y-3 flex-1 overflow-y-auto max-h-[75vh] pr-1">
+            <!-- Group Candidates in Sure -->
+            <CurationGroupCard
+              v-for="group in sureGroups"
+              :key="'group-' + group.id"
+              :group="group"
+              :photos="getGroupPhotos(group.id)"
+              :winner="getGroupWinnerPhoto(group)"
+              column="sure"
+              :isOwner="isOwner"
+              :currentUser="currentUser"
+              @preview="previewPhoto = $event"
+              @open-decision="openDecisionModal"
+              @select-winner="({ group, photo }) => handleSelectGroupWinner(group, photo)"
+              @clear-winner="handleClearGroupWinner"
+              @compare-ai="handleCompareGroup"
+              @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
+              @drag-start="handleDragGroupStart"
+              @vote="handleVote"
+            />
+
+            <!-- Standalone Photos in Sure -->
             <div
-              v-for="item in sureItems"
+              v-for="item in surePhotos"
               :key="item.id"
               :draggable="isOwner"
-              @dragstart="handleDragStart($event, item.id)"
+              @dragstart="handleDragPhotoStart($event, item.id)"
               class="group bg-slate-950 border border-slate-800 hover:border-amber-500/50 rounded-xl p-3 space-y-2.5 transition shadow-lg relative"
             >
               <!-- Image Preview -->
@@ -719,22 +949,31 @@ const handleExecuteImport = async () => {
                 </button>
                 <button
                   type="button"
-                  @click="handleMoveStatus(item.id, 'rejected')"
-                  class="hover:text-rose-400 cursor-pointer"
+                  @click="openAssignPhotoModal(item)"
+                  class="text-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-0.5 font-semibold"
+                  title="צרף לתת-קבוצה (ראש בראש)"
                 >
-                  פסול ✕
+                  <span>⚔️</span>
+                  <span>קבץ</span>
+                </button>
+                <button
+                  type="button"
+                  @click="handleMoveStatus(item.id, 'pool')"
+                  class="hover:text-slate-200 cursor-pointer"
+                >
+                  למאגר ➡
                 </button>
               </div>
             </div>
 
-            <div v-if="sureItems.length === 0" class="text-center py-12 px-2 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl space-y-1">
+            <div v-if="sureCount === 0" class="text-center py-12 px-2 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl space-y-1">
               <p>טרם נבחרו מועמדות סופיות.</p>
-              <p class="text-[10px] text-slate-600">גרור לכאן תמונה או לחץ ״🌟 קדם לבטוחה״ מתוך 121 המועמדות האפשריות.</p>
+              <p class="text-[10px] text-slate-600">גרור לכאן תמונה או קבוצה, או לחץ ״🌟 קדם לבטוחה״.</p>
             </div>
           </div>
         </div>
 
-        <!-- Column 2: 🤔 מועמדות אפשריות (Maybe / 121 Photos from Link 2) -->
+        <!-- Column 2: 🤔 מועמדות אפשריות (Maybe) -->
         <div
           class="bg-slate-900/60 border border-sky-500/30 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md"
           @dragover.prevent
@@ -746,16 +985,37 @@ const handleExecuteImport = async () => {
               <h3 class="font-bold text-sky-300 text-sm">מועמדות אפשריות</h3>
             </div>
             <span class="px-2 py-0.5 bg-sky-950/80 text-sky-300 border border-sky-500/40 rounded-full text-xs font-bold font-mono">
-              {{ maybeItems.length }}
+              {{ maybeCount }}
             </span>
           </div>
 
           <div class="space-y-3 flex-1 overflow-y-auto max-h-[75vh] pr-1">
+            <!-- Group Candidates in Maybe -->
+            <CurationGroupCard
+              v-for="group in maybeGroups"
+              :key="'group-' + group.id"
+              :group="group"
+              :photos="getGroupPhotos(group.id)"
+              :winner="getGroupWinnerPhoto(group)"
+              column="maybe"
+              :isOwner="isOwner"
+              :currentUser="currentUser"
+              @preview="previewPhoto = $event"
+              @open-decision="openDecisionModal"
+              @select-winner="({ group, photo }) => handleSelectGroupWinner(group, photo)"
+              @clear-winner="handleClearGroupWinner"
+              @compare-ai="handleCompareGroup"
+              @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
+              @drag-start="handleDragGroupStart"
+              @vote="handleVote"
+            />
+
+            <!-- Standalone Photos in Maybe -->
             <div
-              v-for="item in maybeItems"
+              v-for="item in maybePhotos"
               :key="item.id"
               :draggable="isOwner"
-              @dragstart="handleDragStart($event, item.id)"
+              @dragstart="handleDragPhotoStart($event, item.id)"
               class="group bg-slate-950 border border-slate-800 hover:border-sky-500/50 rounded-xl p-3 space-y-2.5 transition shadow-lg"
             >
               <div
@@ -799,8 +1059,17 @@ const handleExecuteImport = async () => {
               </button>
 
               <div v-if="isOwner" class="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-900">
-                <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer">
+                <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer font-bold">
                   🌟 קדם לבטוחה
+                </button>
+                <button
+                  type="button"
+                  @click="openAssignPhotoModal(item)"
+                  class="text-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-0.5 font-semibold"
+                  title="צרף לתת-קבוצה (ראש בראש)"
+                >
+                  <span>⚔️</span>
+                  <span>קבץ</span>
                 </button>
                 <button type="button" @click="handleMoveStatus(item.id, 'pool')" class="text-slate-400 hover:underline cursor-pointer">
                   העבר למאגר ➡
@@ -808,13 +1077,13 @@ const handleExecuteImport = async () => {
               </div>
             </div>
 
-            <div v-if="maybeItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
+            <div v-if="maybeCount === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
               אין מועמדות אפשריות כרגע
             </div>
           </div>
         </div>
 
-        <!-- Column 3: 📥 מאגר לתערוכה (Pool / 74 Photos from Link 1) -->
+        <!-- Column 3: 📥 מאגר לתערוכה (Pool) -->
         <div
           class="bg-slate-900/60 border border-slate-700/60 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md"
           @dragover.prevent
@@ -826,7 +1095,7 @@ const handleExecuteImport = async () => {
               <h3 class="font-bold text-slate-200 text-sm">מאגר לתערוכה</h3>
             </div>
             <span class="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 rounded-full text-xs font-bold font-mono">
-              {{ poolItems.length }}
+              {{ poolCount }}
             </span>
           </div>
 
@@ -835,11 +1104,32 @@ const handleExecuteImport = async () => {
           </p>
 
           <div class="space-y-3 flex-1 overflow-y-auto max-h-[75vh] pr-1">
+            <!-- Group Candidates in Pool -->
+            <CurationGroupCard
+              v-for="group in poolGroups"
+              :key="'group-' + group.id"
+              :group="group"
+              :photos="getGroupPhotos(group.id)"
+              :winner="getGroupWinnerPhoto(group)"
+              column="pool"
+              :isOwner="isOwner"
+              :currentUser="currentUser"
+              @preview="previewPhoto = $event"
+              @open-decision="openDecisionModal"
+              @select-winner="({ group, photo }) => handleSelectGroupWinner(group, photo)"
+              @clear-winner="handleClearGroupWinner"
+              @compare-ai="handleCompareGroup"
+              @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
+              @drag-start="handleDragGroupStart"
+              @vote="handleVote"
+            />
+
+            <!-- Standalone Photos in Pool -->
             <div
-              v-for="item in poolItems"
+              v-for="item in poolPhotos"
               :key="item.id"
               :draggable="isOwner"
-              @dragstart="handleDragStart($event, item.id)"
+              @dragstart="handleDragPhotoStart($event, item.id)"
               class="group bg-slate-950 border border-slate-800 hover:border-slate-600 rounded-xl p-3 space-y-2.5 transition shadow-lg"
             >
               <div
@@ -875,68 +1165,28 @@ const handleExecuteImport = async () => {
                 <button type="button" @click="handleMoveStatus(item.id, 'maybe')" class="text-sky-300 hover:underline cursor-pointer">
                   🤔 קדם לאפשרית ⬅
                 </button>
+                <button
+                  type="button"
+                  @click="openAssignPhotoModal(item)"
+                  class="text-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-0.5 font-semibold"
+                  title="צרף לתת-קבוצה (ראש בראש)"
+                >
+                  <span>⚔️</span>
+                  <span>קבץ</span>
+                </button>
                 <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer">
                   🌟 בטוחה ⬅
                 </button>
               </div>
             </div>
 
-            <div v-if="poolItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
+            <div v-if="poolCount === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
               אין תמונות במאגר כרגע
             </div>
           </div>
         </div>
 
-        <!-- Column 4: ⚔️ תתי-קבוצות וארכיון -->
-        <div class="bg-slate-900/60 border border-purple-500/30 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md">
-          <div class="flex items-center justify-between pb-2 border-b border-purple-500/20">
-            <div class="flex items-center gap-2">
-              <span class="text-base">⚔️</span>
-              <h3 class="font-bold text-purple-300 text-sm">מועמדות מבין כמה</h3>
-            </div>
-            <span class="px-2 py-0.5 bg-purple-950/80 text-purple-300 border border-purple-500/40 rounded-full text-xs font-bold font-mono">
-              {{ groupItems.length }}
-            </span>
-          </div>
-
-          <p class="text-[11px] text-slate-400">
-            תמונות דומות שמתחרות ראש בראש. לחץ על כרטיסיית "זירת השוואות" כדי להכריע ביניהן.
-          </p>
-
-          <div class="space-y-3 flex-1 overflow-y-auto max-h-[75vh] pr-1">
-            <div
-              v-for="item in groupItems"
-              :key="item.id"
-              class="bg-slate-950 border border-purple-500/40 rounded-xl p-3 space-y-2 shadow-lg"
-            >
-              <div class="flex items-center gap-3">
-                <img :src="item.photo_data?.thumbnail" class="w-14 h-14 rounded-lg object-cover cursor-pointer shrink-0" @click="previewPhoto = item.photo_data" />
-                <div class="flex-1 min-w-0">
-                  <span class="inline-block px-1.5 py-0.2 bg-purple-900/60 text-purple-300 rounded text-[10px] font-bold truncate max-w-full">
-                    קבוצה: {{ item.group_name || 'כללי' }}
-                  </span>
-                  <h4 class="text-xs font-bold text-slate-100 truncate mt-0.5">{{ item.photo_data?.title }}</h4>
-                  <p class="text-[10px] text-slate-400">{{ item.photo_data?.species_he }}</p>
-                </div>
-              </div>
-
-              <div v-if="isOwner" class="flex items-center justify-between pt-1 border-t border-slate-900 text-[10px]">
-                <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer">
-                  🏆 בחר כמנצחת
-                </button>
-                <button type="button" @click="handleMoveStatus(item.id, 'maybe')" class="text-slate-400 hover:underline cursor-pointer">
-                  החזר לאפשרית
-                </button>
-              </div>
-            </div>
-
-            <div v-if="groupItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
-              טרם שויכו תמונות לתתי-קבוצות
-            </div>
-          </div>
-        </div>
-
-        <!-- Column 4: ❌ נפסלו (Rejected) -->
+        <!-- Column 4: ❌ נפסלו / בארכיון (Rejected) -->
         <div
           class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md opacity-85 hover:opacity-100 transition"
           @dragover.prevent
@@ -948,13 +1198,34 @@ const handleExecuteImport = async () => {
               <h3 class="font-bold text-slate-400 text-sm">נפסלו / בארכיון</h3>
             </div>
             <span class="px-2 py-0.5 bg-slate-950 text-slate-400 border border-slate-800 rounded-full text-xs font-mono">
-              {{ rejectedItems.length }}
+              {{ rejectedCount }}
             </span>
           </div>
 
           <div class="space-y-2.5 flex-1 overflow-y-auto max-h-[75vh] pr-1">
+            <!-- Group Candidates in Rejected -->
+            <CurationGroupCard
+              v-for="group in rejectedGroups"
+              :key="'group-' + group.id"
+              :group="group"
+              :photos="getGroupPhotos(group.id)"
+              :winner="getGroupWinnerPhoto(group)"
+              column="rejected"
+              :isOwner="isOwner"
+              :currentUser="currentUser"
+              @preview="previewPhoto = $event"
+              @open-decision="openDecisionModal"
+              @select-winner="({ group, photo }) => handleSelectGroupWinner(group, photo)"
+              @clear-winner="handleClearGroupWinner"
+              @compare-ai="handleCompareGroup"
+              @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
+              @drag-start="handleDragGroupStart"
+              @vote="handleVote"
+            />
+
+            <!-- Standalone Photos in Rejected -->
             <div
-              v-for="item in rejectedItems"
+              v-for="item in rejectedPhotos"
               :key="item.id"
               class="flex items-center gap-3 bg-slate-950/60 border border-slate-800/80 rounded-xl p-2"
             >
@@ -963,18 +1234,19 @@ const handleExecuteImport = async () => {
                 <h4 class="text-xs text-slate-300 truncate">{{ item.photo_data?.title }}</h4>
                 <p class="text-[10px] text-slate-500 truncate">{{ item.photo_data?.species_he }}</p>
               </div>
-              <button
-                v-if="isOwner"
-                type="button"
-                @click="handleMoveStatus(item.id, 'maybe')"
-                class="text-xs text-sky-400 hover:text-white px-2 py-1 bg-slate-800 rounded cursor-pointer shrink-0"
-                title="החזר לרשימה"
-              >
-                ↩
-              </button>
+              <div v-if="isOwner" class="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  @click="handleMoveStatus(item.id, 'maybe')"
+                  class="text-xs text-sky-400 hover:text-white px-2 py-1 bg-slate-800 rounded cursor-pointer"
+                  title="החזר לאפשרית"
+                >
+                  ↩
+                </button>
+              </div>
             </div>
 
-            <div v-if="rejectedItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
+            <div v-if="rejectedCount === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
               אין תמונות שנפסלו
             </div>
           </div>
@@ -1262,17 +1534,337 @@ const handleExecuteImport = async () => {
           class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-purple-500"
           @keydown.enter="handleCreateGroup"
         />
-        <div class="flex items-center gap-2">
-          <label class="text-xs text-slate-400">שייך אל:</label>
-          <select v-model="newGroupArea" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
-            <option value="exhibition">תערוכה ראשית</option>
-            <option value="wall">קיר תמונות</option>
-          </select>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-[11px] text-slate-400">שייך אל:</label>
+            <select v-model="newGroupArea" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+              <option value="exhibition">תערוכה ראשית</option>
+              <option value="wall">קיר תמונות</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[11px] text-slate-400">הצב בטור:</label>
+            <select v-model="newGroupStatus" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+              <option value="maybe">🤔 מועמדות אפשריות</option>
+              <option value="sure">🌟 מועמדות בטוחות</option>
+              <option value="pool">📥 מאגר לתערוכה</option>
+            </select>
+          </div>
         </div>
         <div class="flex items-center justify-end gap-2 pt-2">
           <button @click="showCreateGroupModal = false" class="px-4 py-2 text-xs text-slate-400 hover:text-white cursor-pointer">ביטול</button>
           <button @click="handleCreateGroup" :disabled="!newGroupName.trim()" class="px-5 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl cursor-pointer">צור קבוצה</button>
         </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: DECISION & ALTERNATIVE SELECTION IN SUB-GROUP     -->
+    <!-- ======================================================== -->
+    <div
+      v-if="showDecisionModal && activeDecisionGroup"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+      @click="closeDecisionModal"
+    >
+      <div
+        class="bg-slate-900 border border-purple-500/40 rounded-3xl max-w-5xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+        @click.stop
+      >
+        <!-- Modal Header -->
+        <header class="p-5 border-b border-slate-800 flex items-center justify-between bg-purple-950/20">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">⚔️</span>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-bold text-lg text-white">{{ activeDecisionGroup.name }}</h3>
+                <span
+                  class="px-2 py-0.5 rounded-full text-xs font-bold"
+                  :class="activeDecisionGroup.winner_id ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-purple-900/60 text-purple-300 border border-purple-500/30'"
+                >
+                  {{ activeDecisionGroup.winner_id ? '✓ הוכרעה מנצחת' : '🤔 טרם הוכרע' }}
+                </span>
+              </div>
+              <p class="text-xs text-purple-300">
+                {{ getGroupPhotos(activeDecisionGroup.id).length }} תמונות מתחרות על משבצת זו • לחץ ״בחר כמנצחת״ להכרעה
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <!-- AI Compare button inside modal -->
+            <button
+              type="button"
+              @click="handleCompareGroup(activeDecisionGroup)"
+              class="px-3 py-1.5 rounded-xl bg-indigo-950 text-indigo-300 border border-indigo-500/40 hover:bg-indigo-900/80 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <span>🤖</span>
+              <span>שאל את ג'ימיני מי המנצחת</span>
+            </button>
+            <button @click="closeDecisionModal" class="text-slate-400 hover:text-white p-1 cursor-pointer text-lg">✕</button>
+          </div>
+        </header>
+
+        <!-- AI Comparison Result if available -->
+        <div v-if="activeDecisionGroup.ai_comparison" class="px-5 pt-4">
+          <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-xl p-3 text-xs text-indigo-100 leading-relaxed space-y-1">
+            <div class="font-bold text-indigo-300 flex items-center gap-1.5">
+              <span>🤖</span>
+              <span>המלצת ג'ימיני לתערוכה:</span>
+            </div>
+            <p class="whitespace-pre-wrap">{{ activeDecisionGroup.ai_comparison }}</p>
+          </div>
+        </div>
+
+        <!-- Photos Comparison Grid -->
+        <div class="flex-1 overflow-y-auto p-5">
+          <div v-if="getGroupPhotos(activeDecisionGroup.id).length === 0" class="text-center py-16 text-slate-500 text-xs space-y-2">
+            <p>אין תמונות בקבוצה זו כרגע.</p>
+            <button
+              v-if="isOwner"
+              type="button"
+              @click="showAddPhotoToGroupModal = true"
+              class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold cursor-pointer"
+            >
+              + צרף תמונה מתמונות הגלריה
+            </button>
+          </div>
+
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div
+              v-for="photo in getGroupPhotos(activeDecisionGroup.id)"
+              :key="photo.id"
+              class="bg-slate-950 rounded-2xl border p-3.5 space-y-3 transition relative shadow-lg"
+              :class="activeDecisionGroup.winner_id === photo.id ? 'border-amber-400 ring-2 ring-amber-400/40 bg-gradient-to-b from-amber-950/20 to-slate-950' : 'border-slate-800 hover:border-slate-700'"
+            >
+              <!-- Winner Crown / Status Badge -->
+              <div v-if="activeDecisionGroup.winner_id === photo.id" class="absolute -top-3 -right-2 z-10 px-2.5 py-0.5 bg-amber-500 text-slate-950 font-black rounded-full text-xs shadow-lg flex items-center gap-1">
+                <span>👑 המנצחת שנבחרה!</span>
+              </div>
+
+              <!-- Media Preview -->
+              <div
+                class="relative aspect-[3/2] rounded-xl overflow-hidden bg-slate-900 cursor-pointer"
+                @click="previewPhoto = photo.photo_data"
+              >
+                <img :src="photo.photo_data?.thumbnail || photo.photo_data?.display" class="w-full h-full object-cover hover:scale-105 transition duration-300" />
+                <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-purple-300 border border-purple-500/40 font-bold">
+                  {{ photo.photo_data?.species_he || 'תמונה' }}
+                </span>
+                <span
+                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md bg-slate-900 text-slate-300 border border-slate-700"
+                >
+                  <span>ציון:</span>
+                  <span class="font-mono">{{ calculateScore(photo.votes) }}</span>
+                </span>
+              </div>
+
+              <!-- Title & EXIF -->
+              <div>
+                <h4 class="text-sm font-bold text-white truncate">{{ photo.photo_data?.title }}</h4>
+                <p class="text-xs text-slate-400 truncate">
+                  {{ photo.photo_data?.exif?.camera_model }} • {{ photo.photo_data?.exif?.lens_model }}
+                </p>
+                <p v-if="photo.photo_data?.humorous_description" class="text-[11px] text-purple-300 italic mt-1 line-clamp-2">
+                  "{{ photo.photo_data?.humorous_description }}"
+                </p>
+              </div>
+
+              <!-- Voting buttons inside modal -->
+              <div class="flex items-center justify-between bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 text-xs">
+                <button @click="handleVote(photo.id, 2)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-amber-400 bg-amber-500/20': currentUser && photo.votes?.[currentUser.uid]?.score === 2 }" title="🔥 חובה (+2)">🔥</button>
+                <button @click="handleVote(photo.id, 1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': currentUser && photo.votes?.[currentUser.uid]?.score === 1 }" title="👍 מוצלחת (+1)">👍</button>
+                <button @click="handleVote(photo.id, 0)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-slate-400 bg-slate-700': currentUser && photo.votes?.[currentUser.uid]?.score === 0 }" title="🤔 מתלבט (0)">🤔</button>
+                <button @click="handleVote(photo.id, -1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': currentUser && photo.votes?.[currentUser.uid]?.score === -1 }" title="👎 פחות מתאים (-1)">👎</button>
+                <span class="text-[10px] text-slate-400 font-mono pr-1">({{ countVotes(photo.votes) }})</span>
+              </div>
+
+              <!-- Decision Selection Action (Owner only) -->
+              <div v-if="isOwner" class="space-y-1.5 pt-1">
+                <button
+                  v-if="activeDecisionGroup.winner_id === photo.id"
+                  type="button"
+                  @click="handleClearGroupWinner(activeDecisionGroup)"
+                  class="w-full py-2 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400 transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md"
+                >
+                  <span>✓ נבחרה כמנצחת (לחץ לביטול)</span>
+                </button>
+                <button
+                  v-else
+                  type="button"
+                  @click="handleSelectGroupWinner(activeDecisionGroup, photo)"
+                  class="w-full py-2 bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white border border-purple-500/40 font-bold text-xs rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <span>🏆 בחר בתמונה זו כמנצחת</span>
+                </button>
+
+                <div class="flex items-center justify-end pt-1">
+                  <button
+                    type="button"
+                    @click="handleRemoveFromGroup(photo.photo_id || photo.id)"
+                    class="text-[11px] text-slate-400 hover:text-rose-400 transition cursor-pointer"
+                  >
+                    ✕ הסר מתת-קבוצה זו
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <footer class="p-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/60">
+          <div class="flex items-center gap-2">
+            <button
+              v-if="isOwner"
+              type="button"
+              @click="showAddPhotoToGroupModal = true"
+              class="px-3.5 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/60 text-purple-200 border border-purple-500/40 text-xs font-semibold transition cursor-pointer flex items-center gap-1"
+            >
+              <span>➕</span>
+              <span>צרף תמונה נוספת</span>
+            </button>
+            <button
+              v-if="isOwner"
+              type="button"
+              @click="handleDeleteGroup(activeDecisionGroup.id)"
+              class="px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-950/40 text-xs transition cursor-pointer"
+            >
+              🗑️ פרק תת-קבוצה
+            </button>
+          </div>
+
+          <button
+            type="button"
+            @click="closeDecisionModal"
+            class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl cursor-pointer"
+          >
+            סגור
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: ASSIGN A PHOTO TO A SUB-GROUP                     -->
+    <!-- ======================================================== -->
+    <div
+      v-if="showAssignModal && assigningPhoto"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+      @click="closeAssignModal"
+    >
+      <div
+        class="bg-slate-900 border border-purple-500/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl"
+        @click.stop
+      >
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">⚔️</span>
+            <h3 class="font-bold text-base text-white">צירוף תמונה לתת-קבוצה (ראש בראש)</h3>
+          </div>
+          <button @click="closeAssignModal" class="text-slate-400 hover:text-white cursor-pointer">✕</button>
+        </div>
+
+        <!-- Photo being assigned preview -->
+        <div class="flex items-center gap-3 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <img :src="assigningPhoto.photo_data?.thumbnail" class="w-14 h-14 rounded-lg object-cover" />
+          <div class="min-w-0">
+            <h4 class="text-xs font-bold text-white truncate">{{ assigningPhoto.photo_data?.title }}</h4>
+            <p class="text-[10px] text-slate-400">{{ assigningPhoto.photo_data?.species_he }}</p>
+          </div>
+        </div>
+
+        <!-- Option 1: Existing Group -->
+        <div v-if="activeSubGroups.length > 0" class="space-y-1.5">
+          <label class="text-xs text-slate-300 font-semibold">בחר תת-קבוצה קיימת:</label>
+          <select
+            v-model="assignSelectedGroupId"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+          >
+            <option value="">-- בחר קבוצה --</option>
+            <option v-for="g in activeSubGroups" :key="g.id" :value="g.id">
+              {{ g.name }} ({{ getGroupPhotos(g.id).length }} תמונות)
+            </option>
+          </select>
+        </div>
+
+        <div class="text-center text-xs text-slate-500">או</div>
+
+        <!-- Option 2: Create New Group -->
+        <div class="space-y-1.5">
+          <label class="text-xs text-slate-300 font-semibold">צור תת-קבוצה חדשה עם תמונה זו:</label>
+          <input
+            v-model="assignNewGroupName"
+            type="text"
+            placeholder="לדוגמה: שלדג לבן-חזה - בחירת תנוחה"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 focus:outline-none focus:border-purple-500"
+          />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+          <button @click="closeAssignModal" class="px-4 py-2 text-xs text-slate-400 hover:text-white cursor-pointer">ביטול</button>
+          <button
+            @click="handleConfirmAssign"
+            :disabled="!assignSelectedGroupId && !assignNewGroupName.trim()"
+            class="px-5 py-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white font-bold text-xs rounded-xl cursor-pointer"
+          >
+            שייך לתת-קבוצה
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: ADD PHOTO SEARCH (INSIDE DECISION MODAL)           -->
+    <!-- ======================================================== -->
+    <div
+      v-if="showAddPhotoToGroupModal && activeDecisionGroup"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+      @click="showAddPhotoToGroupModal = false"
+    >
+      <div
+        class="bg-slate-900 border border-purple-500/40 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden shadow-2xl"
+        @click.stop
+      >
+        <header class="p-4 border-b border-slate-800 flex items-center justify-between">
+          <h3 class="font-bold text-base text-white">הוספת תמונה לתת-הקבוצה ״{{ activeDecisionGroup.name }}״</h3>
+          <button @click="showAddPhotoToGroupModal = false" class="text-slate-400 hover:text-white cursor-pointer">✕</button>
+        </header>
+
+        <div class="p-4 border-b border-slate-800">
+          <input
+            v-model="addPhotoSearch"
+            type="text"
+            placeholder="חפש לפי שם תמונה או חיה (למשל: ינשוף, שלדג)..."
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500"
+          />
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div
+            v-for="photo in addPhotosAvailable"
+            :key="photo.id"
+            @click="handleAddPhotoToActiveGroup(photo)"
+            class="group bg-slate-950 border border-slate-800 hover:border-purple-500 rounded-xl p-2 space-y-1.5 cursor-pointer transition"
+          >
+            <div class="aspect-[3/2] rounded-lg overflow-hidden bg-slate-900">
+              <img :src="photo.thumb_url || photo.thumbnail || photo.paths?.thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition" />
+            </div>
+            <h5 class="text-xs font-bold text-white truncate">{{ photo.title || photo.filename }}</h5>
+            <p class="text-[10px] text-slate-400 truncate">{{ photo.species_he }}</p>
+            <button
+              type="button"
+              class="w-full py-1 bg-purple-600/30 group-hover:bg-purple-600 text-purple-200 group-hover:text-white rounded text-[10px] font-semibold transition"
+            >
+              + צרף
+            </button>
+          </div>
+        </div>
+
+        <footer class="p-3 border-t border-slate-800 flex justify-end">
+          <button @click="showAddPhotoToGroupModal = false" class="px-4 py-1.5 bg-slate-800 text-slate-300 rounded-xl text-xs cursor-pointer">
+            סגור
+          </button>
+        </footer>
       </div>
     </div>
 
