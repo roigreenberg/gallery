@@ -13,6 +13,7 @@ import {
   where,
   orderBy,
   onSnapshot,
+  getDocs,
   addDoc,
   deleteDoc,
   serverTimestamp,
@@ -28,6 +29,13 @@ export const togglePhotoLike = async (photoId, user) => {
   const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
   const likeDocRef = doc(db, 'photo_likes', cleanId);
 
+  const userInfo = {
+    user_name: user.displayName || (user.email ? user.email.split('@')[0] : 'משתמש'),
+    user_email: user.email || '',
+    user_photo: user.photoURL || '',
+    timestamp: Date.now()
+  };
+
   const snap = await getDoc(likeDocRef);
   let isLiked = false;
   let count = 0;
@@ -40,7 +48,6 @@ export const togglePhotoLike = async (photoId, user) => {
 
     if (isLiked) {
       // Unlike
-      delete likedBy[user.uid];
       const newCount = Math.max(0, count - 1);
       await updateDoc(likeDocRef, {
         [`liked_by.${user.uid}`]: false,
@@ -49,27 +56,55 @@ export const togglePhotoLike = async (photoId, user) => {
       });
       return { isLiked: false, count: newCount };
     } else {
-      // Like
+      // Like with full user details
       await updateDoc(likeDocRef, {
-        [`liked_by.${user.uid}`]: true,
+        [`liked_by.${user.uid}`]: userInfo,
         count: count + 1,
         updated_at: serverTimestamp()
       });
       return { isLiked: true, count: count + 1 };
     }
   } else {
-    // Document does not exist yet -> create
+    // Document does not exist yet -> create with full user details
     await setDoc(likeDocRef, {
       photo_id: photoId,
       count: 1,
       liked_by: {
-        [user.uid]: true
+        [user.uid]: userInfo
       },
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     });
     return { isLiked: true, count: 1 };
   }
+};
+
+/**
+ * Fetch all likes across the gallery with user info
+ */
+export const getAllPhotoLikesWithUsers = async () => {
+  if (!db) return [];
+  const colRef = collection(db, 'photo_likes');
+  const snap = await getDocs(colRef);
+  const results = [];
+  snap.forEach(docSnap => {
+    const data = docSnap.data();
+    const by = data.liked_by || {};
+    const users = Object.keys(by)
+      .filter(uid => by[uid])
+      .map(uid => {
+        if (typeof by[uid] === 'object') {
+          return { uid, ...by[uid] };
+        }
+        return { uid, user_name: 'משתמש רשום' };
+      });
+    results.push({
+      photo_id: data.photo_id || docSnap.id,
+      count: data.count || users.length,
+      users
+    });
+  });
+  return results;
 };
 
 /**

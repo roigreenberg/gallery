@@ -32,6 +32,7 @@ const isOwner = ref(false);
 const likesCount = ref(0);
 const isLiked = ref(false);
 const isLiking = ref(false);
+const likers = ref([]);
 
 const comments = ref([]);
 const newCommentText = ref('');
@@ -57,6 +58,10 @@ const initListeners = (photoId) => {
     } else {
       isLiked.value = false;
     }
+    const by = data.liked_by || {};
+    likers.value = Object.keys(by)
+      .filter(k => by[k] && typeof by[k] === 'object')
+      .map(k => by[k]);
   });
 
   unsubComments = subscribeToPhotoComments(photoId, (items) => {
@@ -159,25 +164,37 @@ const handleAddToCuration = async (area, status) => {
 <template>
   <div class="space-y-4 pt-3 border-t border-slate-800/80">
     <!-- Action Bar: Likes + Add to Curation -->
-    <div class="flex items-center justify-between gap-2">
-      <!-- Like Button -->
-      <button
-        type="button"
-        @click="handleLikeClick"
-        :disabled="isLiking"
-        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer border shadow-sm"
-        :class="isLiked 
-          ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 hover:bg-rose-500/30' 
-          : 'bg-slate-950/60 text-slate-300 border-slate-700/80 hover:text-rose-400 hover:border-rose-500/50 hover:bg-slate-900'"
-      >
-        <span class="text-sm transition-transform active:scale-125" :class="{ 'scale-110': isLiked }">
-          {{ isLiked ? '❤️' : '🤍' }}
+    <div class="flex items-center justify-between gap-2 flex-wrap">
+      <!-- Like Button & Likers info -->
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          @click="handleLikeClick"
+          :disabled="isLiking"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer border shadow-sm"
+          :class="isLiked 
+            ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 hover:bg-rose-500/30' 
+            : 'bg-slate-950/60 text-slate-300 border-slate-700/80 hover:text-rose-400 hover:border-rose-500/50 hover:bg-slate-900'"
+        >
+          <span class="text-sm transition-transform active:scale-125" :class="{ 'scale-110': isLiked }">
+            {{ isLiked ? '❤️' : '🤍' }}
+          </span>
+          <span>{{ likesCount }}</span>
+          <span class="text-[11px] text-slate-400 font-normal">
+            {{ currentLang === 'en' ? (likesCount === 1 ? 'Like' : 'Likes') : (likesCount === 1 ? 'לייק' : 'לייקים') }}
+          </span>
+        </button>
+
+        <span
+          v-if="likers.length > 0"
+          class="text-[11px] text-slate-400 truncate max-w-[150px] sm:max-w-[220px]"
+          :title="likers.map(u => u.user_name || u.user_email).join(', ')"
+        >
+          <span>אהבו: </span>
+          <strong class="text-slate-300 font-medium">{{ likers.map(u => u.user_name || u.user_email).slice(0, 2).join(', ') }}</strong>
+          <span v-if="likers.length > 2"> +{{ likers.length - 2 }}</span>
         </span>
-        <span>{{ likesCount }}</span>
-        <span class="text-[11px] text-slate-400 font-normal">
-          {{ currentLang === 'en' ? (likesCount === 1 ? 'Like' : 'Likes') : (likesCount === 1 ? 'לייק' : 'לייקים') }}
-        </span>
-      </button>
+      </div>
 
       <!-- Add to Curation (Visible to logged in users or owner) -->
       <div v-if="currentUser" class="relative">

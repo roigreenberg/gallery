@@ -126,7 +126,9 @@ const defaultExhibitionItems = computed(() => {
     .filter(p => p.is_exhibition_candidate || p.exhibition?.candidate)
     .map(p => {
       const score = p.exhibition_score || p.exhibition?.score || 1;
-      const status = score === 2 ? 'sure' : 'maybe';
+      // Link 2 / Score 2 (121 photos) -> 'maybe' (מועמדות אפשריות)
+      // Link 1 / Score 1 (74 photos) -> 'pool' (מאגר לתערוכה)
+      const status = score === 2 ? 'maybe' : 'pool';
       return {
         id: p.id,
         photo_id: p.id,
@@ -473,7 +475,7 @@ const handleExecuteImport = async () => {
             <span>🖼️</span>
             <span>תערוכה ראשית</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ effectiveCurationItems.filter(i => i.area === 'exhibition' && i.status === 'sure').length }}
+              {{ effectiveCurationItems.filter(i => i.area === 'exhibition').length }}
             </span>
           </button>
 
@@ -486,7 +488,7 @@ const handleExecuteImport = async () => {
             <span>🧱</span>
             <span>קיר תמונות</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ effectiveCurationItems.filter(i => i.area === 'wall' && i.status === 'sure').length }}
+              {{ effectiveCurationItems.filter(i => i.area === 'wall').length }}
             </span>
           </button>
 
@@ -725,13 +727,14 @@ const handleExecuteImport = async () => {
               </div>
             </div>
 
-            <div v-if="sureItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
-              גרור לכאן תמונות בטוחות לתערוכה
+            <div v-if="sureItems.length === 0" class="text-center py-12 px-2 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl space-y-1">
+              <p>טרם נבחרו מועמדות סופיות.</p>
+              <p class="text-[10px] text-slate-600">גרור לכאן תמונה או לחץ ״🌟 קדם לבטוחה״ מתוך 121 המועמדות האפשריות.</p>
             </div>
           </div>
         </div>
 
-        <!-- Column 2: 🤔 מועמדות אפשריות (Maybe / Shortlist) -->
+        <!-- Column 2: 🤔 מועמדות אפשריות (Maybe / 121 Photos from Link 2) -->
         <div
           class="bg-slate-900/60 border border-sky-500/30 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md"
           @dragover.prevent
@@ -799,19 +802,92 @@ const handleExecuteImport = async () => {
                 <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer">
                   🌟 קדם לבטוחה
                 </button>
-                <button type="button" @click="handleMoveStatus(item.id, 'rejected')" class="hover:text-rose-400 cursor-pointer">
-                  פסול ✕
+                <button type="button" @click="handleMoveStatus(item.id, 'pool')" class="text-slate-400 hover:underline cursor-pointer">
+                  העבר למאגר ➡
                 </button>
               </div>
             </div>
 
             <div v-if="maybeItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
-              אין מועמדות מתלבטות כרגע
+              אין מועמדות אפשריות כרגע
             </div>
           </div>
         </div>
 
-        <!-- Column 3: ⚔️ מועמדות מבין כמה – תתי-קבוצות (Group / Head-to-Head) -->
+        <!-- Column 3: 📥 מאגר לתערוכה (Pool / 74 Photos from Link 1) -->
+        <div
+          class="bg-slate-900/60 border border-slate-700/60 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md"
+          @dragover.prevent
+          @drop="handleDrop('pool')"
+        >
+          <div class="flex items-center justify-between pb-2 border-b border-slate-700/40">
+            <div class="flex items-center gap-2">
+              <span class="text-base">📥</span>
+              <h3 class="font-bold text-slate-200 text-sm">מאגר לתערוכה</h3>
+            </div>
+            <span class="px-2 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 rounded-full text-xs font-bold font-mono">
+              {{ poolItems.length }}
+            </span>
+          </div>
+
+          <p class="text-[11px] text-slate-400">
+            תמונות נוספות מועמדות לתערוכה (קישור 1). ניתן לקדם לאפשרית או לבטוחה.
+          </p>
+
+          <div class="space-y-3 flex-1 overflow-y-auto max-h-[75vh] pr-1">
+            <div
+              v-for="item in poolItems"
+              :key="item.id"
+              :draggable="isOwner"
+              @dragstart="handleDragStart($event, item.id)"
+              class="group bg-slate-950 border border-slate-800 hover:border-slate-600 rounded-xl p-3 space-y-2.5 transition shadow-lg"
+            >
+              <div
+                class="relative aspect-[3/2] rounded-lg overflow-hidden bg-slate-900 cursor-pointer"
+                @click="previewPhoto = item.photo_data"
+              >
+                <img :src="item.photo_data?.thumbnail || item.photo_data?.display" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-slate-300 border border-slate-700 font-bold">
+                  {{ item.photo_data?.species_he || 'תמונה' }}
+                </span>
+                <span
+                  class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md bg-slate-900 text-slate-300 border border-slate-700"
+                >
+                  <span class="font-mono">{{ calculateScore(item.votes) }}</span>
+                </span>
+              </div>
+
+              <div>
+                <h4 class="text-xs font-bold text-slate-100 truncate">{{ item.photo_data?.title }}</h4>
+                <p class="text-[10px] text-slate-400 truncate">{{ item.photo_data?.exif?.camera_model }}</p>
+              </div>
+
+              <!-- Voting Bar -->
+              <div class="flex items-center justify-between bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 text-xs">
+                <button @click="handleVote(item.id, 2)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-amber-400 bg-amber-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 2 }" title="🔥 חובה (+2)">🔥</button>
+                <button @click="handleVote(item.id, 1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 1 }" title="👍 מוצלחת (+1)">👍</button>
+                <button @click="handleVote(item.id, 0)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-slate-400 bg-slate-700': currentUser && item.votes?.[currentUser.uid]?.score === 0 }" title="🤔 מתלבט (0)">🤔</button>
+                <button @click="handleVote(item.id, -1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': currentUser && item.votes?.[currentUser.uid]?.score === -1 }" title="👎 פחות מתאים (-1)">👎</button>
+                <span class="text-[10px] text-slate-400 font-mono pr-1">({{ countVotes(item.votes) }})</span>
+              </div>
+
+              <div v-if="isOwner" class="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-900">
+                <button type="button" @click="handleMoveStatus(item.id, 'maybe')" class="text-sky-300 hover:underline cursor-pointer">
+                  🤔 קדם לאפשרית ⬅
+                </button>
+                <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer">
+                  🌟 בטוחה ⬅
+                </button>
+              </div>
+            </div>
+
+            <div v-if="poolItems.length === 0" class="text-center py-12 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl">
+              אין תמונות במאגר כרגע
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 4: ⚔️ תתי-קבוצות וארכיון -->
         <div class="bg-slate-900/60 border border-purple-500/30 rounded-2xl p-4 flex flex-col space-y-3 backdrop-blur-md">
           <div class="flex items-center justify-between pb-2 border-b border-purple-500/20">
             <div class="flex items-center gap-2">
