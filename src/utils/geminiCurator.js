@@ -6,10 +6,8 @@ const DEFAULT_API_KEY = typeof import.meta !== 'undefined' && import.meta.env?.P
   ? import.meta.env.PUBLIC_GEMINI_API_KEY 
   : '';
 
-// Encoded fallback key so it is always available without triggering plain-text git secret scanning
-const FALLBACK_KEY = typeof atob !== 'undefined'
-  ? atob('QVEuQWI4Uk42SzBDSkZZN091QWVMTHVEUzM5R2g0eXBEMUZCTHF4X21RZGswUXJPODBQbmc=')
-  : '';
+// Fallback key removed for security - keys are loaded exclusively from Firestore admin_config/secrets or local .env
+const FALLBACK_KEY = '';
 
 /**
  * Retrieve Gemini API key:
