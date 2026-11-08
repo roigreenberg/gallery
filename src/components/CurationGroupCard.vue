@@ -36,7 +36,8 @@ const emit = defineEmits([
   'compare-ai',
   'move-status',
   'drag-start',
-  'vote'
+  'vote',
+  'toggle-area'
 ]);
 
 const calculateScore = (votes = {}) => {
@@ -72,12 +73,22 @@ const handleDrag = (e) => {
           {{ group.name }}
         </h4>
       </div>
-      <span
-        class="px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 transition"
-        :class="winner ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-purple-900/60 text-purple-300 border border-purple-500/30'"
-      >
-        {{ winner ? '✓ הוכרע' : `${photos.length} אופציות` }}
-      </span>
+      <div class="flex items-center gap-1 shrink-0">
+        <!-- Area Badge if confirmed in Sure -->
+        <span
+          v-if="column === 'sure'"
+          class="px-1.5 py-0.2 rounded text-[9px] font-bold"
+          :class="(group.area || 'exhibition') === 'wall' ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'bg-indigo-950 text-indigo-300 border border-indigo-500/30'"
+        >
+          {{ (group.area || 'exhibition') === 'wall' ? '🧱 קיר' : '🖼️ תערוכה' }}
+        </span>
+        <span
+          class="px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 transition"
+          :class="winner ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-purple-900/60 text-purple-300 border border-purple-500/30'"
+        >
+          {{ winner ? '✓ הוכרע' : `${photos.length} אופציות` }}
+        </span>
+      </div>
     </div>
 
     <!-- ======================================================== -->
@@ -298,10 +309,17 @@ const handleDrag = (e) => {
       <template v-if="column === 'sure'">
         <button
           type="button"
+          @click="emit('toggle-area', { groupId: group.id, currentArea: group.area || 'exhibition' })"
+          class="text-indigo-300 hover:underline cursor-pointer"
+        >
+          {{ (group.area || 'exhibition') === 'wall' ? 'לתערוכה 🖼️' : 'לקיר 🧱' }}
+        </button>
+        <button
+          type="button"
           @click="emit('move-status', { groupId: group.id, newStatus: 'maybe' })"
           class="hover:text-purple-300 cursor-pointer"
         >
-          העבר לאפשרית ⬅
+          לאפשרית ⬅
         </button>
         <button
           type="button"

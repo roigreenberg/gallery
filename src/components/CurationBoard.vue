@@ -201,13 +201,17 @@ const effectiveCurationItems = computed(() => {
   return Array.from(map.values());
 });
 
-// Filtered items based on area & search
+// Filtered items: Candidate pool (maybe, pool) is SHARED between exhibition and photo wall!
+// Only confirmed 'sure' items are filtered by activeArea (exhibition vs wall).
 const filteredItems = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
   return effectiveCurationItems.value.filter(item => {
-    if (activeArea.value !== 'all' && item.area !== activeArea.value) {
-      return false;
+    // If confirmed in sure, check if it matches current activeArea
+    if (item.status === 'sure' && activeArea.value !== 'all') {
+      const itemArea = item.area || 'exhibition';
+      if (itemArea !== activeArea.value) return false;
     }
+    // Search query match
     if (q) {
       const title = (item.photo_data?.title || '').toLowerCase();
       const species = (item.photo_data?.species_he || item.photo_data?.species_en || '').toLowerCase();
@@ -228,9 +232,15 @@ const getGroupWinnerPhoto = (group) => {
   return effectiveCurationItems.value.find(i => (i.photo_id === group.winner_id || i.id === group.winner_id)) || null;
 };
 
-// Sub-groups for active area
+// Sub-groups: Candidate pool is SHARED; only confirmed 'sure' groups are filtered by activeArea
 const activeSubGroups = computed(() => {
-  return subGroups.value.filter(g => activeArea.value === 'all' || g.area === activeArea.value);
+  return subGroups.value.filter(g => {
+    if (g.status === 'sure' && activeArea.value !== 'all') {
+      const groupArea = g.area || 'exhibition';
+      if (groupArea !== activeArea.value) return false;
+    }
+    return true;
+  });
 });
 
 const activeGroupIds = computed(() => new Set(activeSubGroups.value.map(g => g.id)));
@@ -289,6 +299,85 @@ const poolItems = poolPhotos;
 const rejectedItems = rejectedPhotos;
 const groupItems = computed(() => filteredItems.value.filter(i => Boolean(i.group_id)));
 
+// Multi-selection state for creating groups easily
+const selectedPhotoIds = ref(new Set());
+const showCreateGroupFromSelectionModal = ref(false);
+const selectionGroupName = ref('');
+const selectionGroupArea = ref('exhibition');
+const selectionGroupStatus = ref('maybe'); // 'maybe' | 'sure' | 'pool'
+const selectionExistingGroupId = ref('');
+
+const isPhotoSelected = (photoId) => {
+  return selectedPhotoIds.value.has(photoId);
+};
+
+const togglePhotoSelection = (photoId) => {
+  const next = new Set(selectedPhotoIds.value);
+  if (next.has(photoId)) {
+    next.delete(photoId);
+  } else {
+    next.add(photoId);
+  }
+  selectedPhotoIds.value = next;
+};
+
+const clearSelection = () => {
+  selectedPhotoIds.value = new Set();
+};
+
+const selectedPhotosList = computed(() => {
+  return effectiveCurationItems.value.filter(i => selectedPhotoIds.value.has(i.photo_id || i.id));
+});
+
+const openCreateGroupFromSelection = () => {
+  if (selectedPhotoIds.value.size === 0) return;
+  const species = selectedPhotosList.value.map(p => p.photo_data?.species_he).filter(Boolean);
+  const uniqueSpecies = [...new Set(species)];
+  if (uniqueSpecies.length === 1) {
+    selectionGroupName.value = `${uniqueSpecies[0]} - בחירה`;
+  } else if (selectedPhotosList.value[0]?.photo_data?.title) {
+    selectionGroupName.value = `${selectedPhotosList.value[0].photo_data.title} - חלופות`;
+  } else {
+    selectionGroupName.value = 'תת-קבוצה חדשה';
+  }
+
+  selectionGroupArea.value = activeArea.value === 'wall' ? 'wall' : 'exhibition';
+  selectionGroupStatus.value = 'maybe';
+  selectionExistingGroupId.value = '';
+  showCreateGroupFromSelectionModal.value = true;
+};
+
+const handleConfirmCreateGroupFromSelection = async () => {
+  if (selectedPhotoIds.value.size === 0) return;
+  try {
+    let targetGroupId = selectionExistingGroupId.value;
+    let targetGroupName = '';
+
+    if (!targetGroupId) {
+      const name = selectionGroupName.value.trim() || 'תת-קבוצה חדשה';
+      targetGroupId = await createSubGroup(name, selectionGroupArea.value, selectionGroupStatus.value);
+      targetGroupName = name;
+    } else {
+      const existing = subGroups.value.find(g => g.id === targetGroupId);
+      targetGroupName = existing ? existing.name : '';
+    }
+
+    for (const photoItem of selectedPhotosList.value) {
+      await assignPhotoToGroup(
+        photoItem.photo_id || photoItem.id,
+        targetGroupId,
+        targetGroupName,
+        photoItem.photo_data
+      );
+    }
+
+    clearSelection();
+    showCreateGroupFromSelectionModal.value = false;
+  } catch (err) {
+    console.error('Group creation from selection error:', err);
+  }
+};
+
 // Voting Actions
 const handleVote = async (photoId, score) => {
   if (!currentUser.value) {
@@ -323,7 +412,11 @@ const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
   const item = effectiveCurationItems.value.find(i => i.photo_id === photoId || i.id === photoId);
   try {
     const updates = { status: newStatus };
-    if (newArea) updates.area = newArea;
+    if (newStatus === 'sure') {
+      updates.area = newArea || (activeArea.value === 'wall' ? 'wall' : 'exhibition');
+    } else if (newArea) {
+      updates.area = newArea;
+    }
     await updateCurationStatus(photoId, updates, item?.photo_data);
   } catch (err) {
     console.error('Status update error:', err);
@@ -331,15 +424,36 @@ const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
 };
 
 // Moving group between columns
-const handleMoveGroupStatus = async (groupId, newStatus) => {
+const handleMoveGroupStatus = async (groupId, newStatus, newArea = null) => {
   if (!isOwner.value) return;
   try {
-    await updateSubGroup(groupId, { status: newStatus });
+    const updates = { status: newStatus };
+    if (newStatus === 'sure') {
+      updates.area = newArea || (activeArea.value === 'wall' ? 'wall' : 'exhibition');
+    }
+    await updateSubGroup(groupId, updates);
     const g = subGroups.value.find(x => x.id === groupId);
-    if (g) g.status = newStatus;
+    if (g) {
+      g.status = newStatus;
+      if (updates.area) g.area = updates.area;
+    }
   } catch (err) {
     console.error('Move group status error:', err);
   }
+};
+
+// Toggle item area between exhibition and wall
+const handleToggleItemArea = async (photoId, currentArea) => {
+  if (!isOwner.value) return;
+  const nextArea = currentArea === 'wall' ? 'exhibition' : 'wall';
+  await handleMoveStatus(photoId, 'sure', nextArea);
+};
+
+// Toggle group area between exhibition and wall
+const handleToggleGroupArea = async (groupId, currentArea) => {
+  if (!isOwner.value) return;
+  const nextArea = currentArea === 'wall' ? 'exhibition' : 'wall';
+  await handleMoveGroupStatus(groupId, 'sure', nextArea);
 };
 
 // Pick sub-group winner
@@ -823,7 +937,9 @@ const handleExecuteImport = async () => {
           <div class="flex items-center justify-between pb-2 border-b border-amber-500/20">
             <div class="flex items-center gap-2">
               <span class="text-base">🌟</span>
-              <h3 class="font-bold text-amber-300 text-sm">מועמדות בטוחות</h3>
+              <h3 class="font-bold text-amber-300 text-sm">
+                {{ activeArea === 'wall' ? 'בטוחות לקיר התמונות' : (activeArea === 'exhibition' ? 'בטוחות לתערוכה ראשית' : 'מועמדות בטוחות') }}
+              </h3>
             </div>
             <span class="px-2 py-0.5 bg-amber-950/80 text-amber-300 border border-amber-500/40 rounded-full text-xs font-bold font-mono">
               {{ sureCount }}
@@ -849,6 +965,7 @@ const handleExecuteImport = async () => {
               @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
               @drag-start="handleDragGroupStart"
               @vote="handleVote"
+              @toggle-area="({ groupId, currentArea }) => handleToggleGroupArea(groupId, currentArea)"
             />
 
             <!-- Standalone Photos in Sure -->
@@ -857,7 +974,8 @@ const handleExecuteImport = async () => {
               :key="item.id"
               :draggable="isOwner"
               @dragstart="handleDragPhotoStart($event, item.id)"
-              class="group bg-slate-950 border border-slate-800 hover:border-amber-500/50 rounded-xl p-3 space-y-2.5 transition shadow-lg relative"
+              class="group bg-slate-950 border rounded-xl p-3 space-y-2.5 transition shadow-lg relative"
+              :class="isPhotoSelected(item.id) ? 'ring-2 ring-purple-500 border-purple-500 shadow-purple-900/40' : 'border-slate-800 hover:border-amber-500/50'"
             >
               <!-- Image Preview -->
               <div
@@ -865,9 +983,25 @@ const handleExecuteImport = async () => {
                 @click="previewPhoto = item.photo_data"
               >
                 <img :src="item.photo_data?.thumbnail || item.photo_data?.display" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                
+                <!-- Multi-select checkbox button -->
+                <button
+                  type="button"
+                  @click.stop="togglePhotoSelection(item.id)"
+                  class="absolute top-2 left-2 z-20 w-6 h-6 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-md"
+                  :class="isPhotoSelected(item.id)
+                    ? 'bg-purple-600 text-white ring-2 ring-purple-400 scale-110 shadow-purple-500/50'
+                    : 'bg-slate-950/80 hover:bg-purple-900/60 text-slate-400 hover:text-purple-200 border border-slate-700/80'"
+                  :title="isPhotoSelected(item.id) ? 'בטל סימון' : 'סמן לאיחוד בקבוצה'"
+                >
+                  <span v-if="isPhotoSelected(item.id)" class="text-xs font-black">✓</span>
+                  <span v-else class="text-[11px] font-bold">+</span>
+                </button>
+
                 <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-amber-300 border border-amber-500/40 font-bold">
                   {{ item.photo_data?.species_he || 'תמונה' }}
                 </span>
+
                 <!-- Net Score Badge -->
                 <span
                   class="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-md"
@@ -880,7 +1014,20 @@ const handleExecuteImport = async () => {
 
               <!-- Title & EXIF -->
               <div>
-                <h4 class="text-xs font-bold text-slate-100 truncate">{{ item.photo_data?.title }}</h4>
+                <div class="flex items-center justify-between gap-1">
+                  <h4 class="text-xs font-bold text-slate-100 truncate">{{ item.photo_data?.title }}</h4>
+                  <!-- Area Badge / Switcher -->
+                  <button
+                    v-if="isOwner"
+                    type="button"
+                    @click="handleToggleItemArea(item.id, item.area || 'exhibition')"
+                    class="px-1.5 py-0.2 rounded text-[9px] font-bold shrink-0 transition"
+                    :class="(item.area || 'exhibition') === 'wall' ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/30' : 'bg-indigo-950/80 text-indigo-300 border border-indigo-500/30'"
+                    :title="'לחץ להעברה אל ' + ((item.area || 'exhibition') === 'wall' ? 'תערוכה ראשית' : 'קיר תמונות')"
+                  >
+                    {{ (item.area || 'exhibition') === 'wall' ? '🧱 קיר' : '🖼️ תערוכה' }} ⇄
+                  </button>
+                </div>
                 <p class="text-[10px] text-slate-400 truncate">
                   {{ item.photo_data?.exif?.camera_model }} • {{ item.photo_data?.exif?.lens_model }}
                 </p>
@@ -949,12 +1096,11 @@ const handleExecuteImport = async () => {
                 </button>
                 <button
                   type="button"
-                  @click="openAssignPhotoModal(item)"
+                  @click="togglePhotoSelection(item.id)"
                   class="text-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-0.5 font-semibold"
-                  title="צרף לתת-קבוצה (ראש בראש)"
+                  title="סמן תמונה זו לאיחוד בקבוצה"
                 >
-                  <span>⚔️</span>
-                  <span>קבץ</span>
+                  <span>{{ isPhotoSelected(item.id) ? '✓ סומן' : '+ סמן לקבוצה' }}</span>
                 </button>
                 <button
                   type="button"
@@ -968,7 +1114,7 @@ const handleExecuteImport = async () => {
 
             <div v-if="sureCount === 0" class="text-center py-12 px-2 text-xs text-slate-500 italic border border-dashed border-slate-800 rounded-xl space-y-1">
               <p>טרם נבחרו מועמדות סופיות.</p>
-              <p class="text-[10px] text-slate-600">גרור לכאן תמונה או קבוצה, או לחץ ״🌟 קדם לבטוחה״.</p>
+              <p class="text-[10px] text-slate-600">סמן תמונות, גרור לכאן, או לחץ ״🌟 קדם לבטוחה״ מתוך המועמדות האפשריות.</p>
             </div>
           </div>
         </div>
@@ -1008,6 +1154,7 @@ const handleExecuteImport = async () => {
               @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
               @drag-start="handleDragGroupStart"
               @vote="handleVote"
+              @toggle-area="({ groupId, currentArea }) => handleToggleGroupArea(groupId, currentArea)"
             />
 
             <!-- Standalone Photos in Maybe -->
@@ -1016,13 +1163,29 @@ const handleExecuteImport = async () => {
               :key="item.id"
               :draggable="isOwner"
               @dragstart="handleDragPhotoStart($event, item.id)"
-              class="group bg-slate-950 border border-slate-800 hover:border-sky-500/50 rounded-xl p-3 space-y-2.5 transition shadow-lg"
+              class="group bg-slate-950 border rounded-xl p-3 space-y-2.5 transition shadow-lg relative"
+              :class="isPhotoSelected(item.id) ? 'ring-2 ring-purple-500 border-purple-500 shadow-purple-900/40' : 'border-slate-800 hover:border-sky-500/50'"
             >
               <div
                 class="relative aspect-[3/2] rounded-lg overflow-hidden bg-slate-900 cursor-pointer"
                 @click="previewPhoto = item.photo_data"
               >
                 <img :src="item.photo_data?.thumbnail || item.photo_data?.display" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                
+                <!-- Multi-select checkbox button -->
+                <button
+                  type="button"
+                  @click.stop="togglePhotoSelection(item.id)"
+                  class="absolute top-2 left-2 z-20 w-6 h-6 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-md"
+                  :class="isPhotoSelected(item.id)
+                    ? 'bg-purple-600 text-white ring-2 ring-purple-400 scale-110 shadow-purple-500/50'
+                    : 'bg-slate-950/80 hover:bg-purple-900/60 text-slate-400 hover:text-purple-200 border border-slate-700/80'"
+                  :title="isPhotoSelected(item.id) ? 'בטל סימון' : 'סמן לאיחוד בקבוצה'"
+                >
+                  <span v-if="isPhotoSelected(item.id)" class="text-xs font-black">✓</span>
+                  <span v-else class="text-[11px] font-bold">+</span>
+                </button>
+
                 <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-sky-300 border border-sky-500/40 font-bold">
                   {{ item.photo_data?.species_he || 'תמונה' }}
                 </span>
@@ -1064,12 +1227,11 @@ const handleExecuteImport = async () => {
                 </button>
                 <button
                   type="button"
-                  @click="openAssignPhotoModal(item)"
+                  @click="togglePhotoSelection(item.id)"
                   class="text-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-0.5 font-semibold"
-                  title="צרף לתת-קבוצה (ראש בראש)"
+                  title="סמן תמונה זו לאיחוד בקבוצה"
                 >
-                  <span>⚔️</span>
-                  <span>קבץ</span>
+                  <span>{{ isPhotoSelected(item.id) ? '✓ סומן' : '+ סמן לקבוצה' }}</span>
                 </button>
                 <button type="button" @click="handleMoveStatus(item.id, 'pool')" class="text-slate-400 hover:underline cursor-pointer">
                   העבר למאגר ➡
@@ -1122,6 +1284,7 @@ const handleExecuteImport = async () => {
               @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
               @drag-start="handleDragGroupStart"
               @vote="handleVote"
+              @toggle-area="({ groupId, currentArea }) => handleToggleGroupArea(groupId, currentArea)"
             />
 
             <!-- Standalone Photos in Pool -->
@@ -1130,13 +1293,29 @@ const handleExecuteImport = async () => {
               :key="item.id"
               :draggable="isOwner"
               @dragstart="handleDragPhotoStart($event, item.id)"
-              class="group bg-slate-950 border border-slate-800 hover:border-slate-600 rounded-xl p-3 space-y-2.5 transition shadow-lg"
+              class="group bg-slate-950 border rounded-xl p-3 space-y-2.5 transition shadow-lg relative"
+              :class="isPhotoSelected(item.id) ? 'ring-2 ring-purple-500 border-purple-500 shadow-purple-900/40' : 'border-slate-800 hover:border-slate-600'"
             >
               <div
                 class="relative aspect-[3/2] rounded-lg overflow-hidden bg-slate-900 cursor-pointer"
                 @click="previewPhoto = item.photo_data"
               >
                 <img :src="item.photo_data?.thumbnail || item.photo_data?.display" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                
+                <!-- Multi-select checkbox button -->
+                <button
+                  type="button"
+                  @click.stop="togglePhotoSelection(item.id)"
+                  class="absolute top-2 left-2 z-20 w-6 h-6 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-md"
+                  :class="isPhotoSelected(item.id)
+                    ? 'bg-purple-600 text-white ring-2 ring-purple-400 scale-110 shadow-purple-500/50'
+                    : 'bg-slate-950/80 hover:bg-purple-900/60 text-slate-400 hover:text-purple-200 border border-slate-700/80'"
+                  :title="isPhotoSelected(item.id) ? 'בטל סימון' : 'סמן לאיחוד בקבוצה'"
+                >
+                  <span v-if="isPhotoSelected(item.id)" class="text-xs font-black">✓</span>
+                  <span v-else class="text-[11px] font-bold">+</span>
+                </button>
+
                 <span class="absolute top-2 right-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-full text-[10px] text-slate-300 border border-slate-700 font-bold">
                   {{ item.photo_data?.species_he || 'תמונה' }}
                 </span>
@@ -1167,12 +1346,11 @@ const handleExecuteImport = async () => {
                 </button>
                 <button
                   type="button"
-                  @click="openAssignPhotoModal(item)"
+                  @click="togglePhotoSelection(item.id)"
                   class="text-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-0.5 font-semibold"
-                  title="צרף לתת-קבוצה (ראש בראש)"
+                  title="סמן תמונה זו לאיחוד בקבוצה"
                 >
-                  <span>⚔️</span>
-                  <span>קבץ</span>
+                  <span>{{ isPhotoSelected(item.id) ? '✓ סומן' : '+ סמן לקבוצה' }}</span>
                 </button>
                 <button type="button" @click="handleMoveStatus(item.id, 'sure')" class="text-amber-300 hover:underline cursor-pointer">
                   🌟 בטוחה ⬅
@@ -1221,6 +1399,7 @@ const handleExecuteImport = async () => {
               @move-status="({ groupId, newStatus }) => handleMoveGroupStatus(groupId, newStatus)"
               @drag-start="handleDragGroupStart"
               @vote="handleVote"
+              @toggle-area="({ groupId, currentArea }) => handleToggleGroupArea(groupId, currentArea)"
             />
 
             <!-- Standalone Photos in Rejected -->
@@ -1952,6 +2131,179 @@ const handleExecuteImport = async () => {
         <div class="mt-3 text-center">
           <h4 class="text-base font-bold text-white">{{ previewPhoto.title }}</h4>
           <p class="text-xs text-sky-400">{{ previewPhoto.species_he }} • {{ previewPhoto.exif?.camera_model }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- FLOATING MULTI-SELECT BAR (BOTTOM OF SCREEN)             -->
+    <!-- ======================================================== -->
+    <transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="transform translate-y-20 opacity-0"
+      enter-to-class="transform translate-y-0 opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="transform translate-y-0 opacity-100"
+      leave-to-class="transform translate-y-20 opacity-0"
+    >
+      <div
+        v-if="selectedPhotoIds.size > 0"
+        class="fixed bottom-6 inset-x-0 z-40 max-w-xl mx-auto px-4"
+      >
+        <div class="bg-slate-900/95 border border-purple-500/50 backdrop-blur-xl rounded-2xl p-3 shadow-2xl flex items-center justify-between gap-3 ring-1 ring-purple-500/30">
+          <div class="flex items-center gap-3 min-w-0">
+            <!-- Count badge -->
+            <span class="px-2.5 py-1 bg-purple-600 text-white font-black rounded-xl text-xs shrink-0 shadow">
+              {{ selectedPhotoIds.size }} נבחרו
+            </span>
+
+            <!-- Mini thumbnail previews of selected photos -->
+            <div class="flex items-center -space-x-2 space-x-reverse overflow-hidden py-0.5">
+              <img
+                v-for="p in selectedPhotosList.slice(0, 5)"
+                :key="p.id"
+                :src="p.photo_data?.thumbnail"
+                class="w-8 h-8 rounded-full object-cover border-2 border-slate-900 shrink-0 shadow"
+              />
+              <span
+                v-if="selectedPhotosList.length > 5"
+                class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 border-2 border-slate-900 flex items-center justify-center text-[10px] font-bold shrink-0"
+              >
+                +{{ selectedPhotosList.length - 5 }}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- Action Button: Create Group -->
+            <button
+              type="button"
+              @click="openCreateGroupFromSelection"
+              class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer flex items-center gap-1.5"
+            >
+              <span>⚔️</span>
+              <span>צור תת-קבוצה...</span>
+            </button>
+
+            <!-- Clear Selection -->
+            <button
+              type="button"
+              @click="clearSelection"
+              class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition cursor-pointer text-xs"
+              title="בטל סימון"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: CREATE SUB-GROUP FROM SELECTED PHOTOS             -->
+    <!-- ======================================================== -->
+    <div
+      v-if="showCreateGroupFromSelectionModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+      @click="showCreateGroupFromSelectionModal = false"
+    >
+      <div
+        class="bg-slate-900 border border-purple-500/50 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl"
+        @click.stop
+      >
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">⚔️</span>
+            <div>
+              <h3 class="font-bold text-lg text-white">איחוד {{ selectedPhotosList.length }} תמונות לתת-קבוצה</h3>
+              <p class="text-xs text-purple-300">התמונות יוצגו כמשבצת אחת בלוח ויתחרו ראש בראש</p>
+            </div>
+          </div>
+          <button @click="showCreateGroupFromSelectionModal = false" class="text-slate-400 hover:text-white cursor-pointer">✕</button>
+        </div>
+
+        <!-- Selected Photos Preview Grid -->
+        <div class="grid grid-cols-4 gap-2 bg-slate-950 p-2.5 rounded-xl border border-slate-800 max-h-36 overflow-y-auto">
+          <div
+            v-for="p in selectedPhotosList"
+            :key="p.id"
+            class="relative aspect-[3/2] rounded-lg overflow-hidden bg-slate-900 border border-slate-800"
+          >
+            <img :src="p.photo_data?.thumbnail" class="w-full h-full object-cover" />
+            <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[9px] text-white truncate px-1">
+              {{ p.photo_data?.title }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Form: Name -->
+        <div class="space-y-1">
+          <label class="text-xs font-semibold text-slate-300">שם תת-הקבוצה:</label>
+          <input
+            v-model="selectionGroupName"
+            type="text"
+            placeholder="לדוגמה: שלדג לבן-חזה - בחירת תנוחה"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 focus:outline-none focus:border-purple-500"
+            @keydown.enter="handleConfirmCreateGroupFromSelection"
+          />
+        </div>
+
+        <!-- Form: Where to place it (Column & Area) -->
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-300">איפה למקם בלוח?</label>
+            <select
+              v-model="selectionGroupStatus"
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+            >
+              <option value="maybe">🤔 מועמדות אפשריות (מומלץ)</option>
+              <option value="sure">🌟 מועמדות בטוחות</option>
+              <option value="pool">📥 מאגר לתערוכה</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-300">שייך אל:</label>
+            <select
+              v-model="selectionGroupArea"
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+            >
+              <option value="exhibition">🖼️ תערוכה ראשית</option>
+              <option value="wall">🧱 קיר תמונות</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Existing Group Alternative (if groups exist) -->
+        <div v-if="activeSubGroups.length > 0" class="pt-2 border-t border-slate-800 space-y-1">
+          <label class="text-[11px] text-slate-400">או הוסף לתת-קבוצה קיימת:</label>
+          <select
+            v-model="selectionExistingGroupId"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300"
+          >
+            <option value="">-- בחר קבוצה קיימת במקום ליצור חדשה --</option>
+            <option v-for="g in activeSubGroups" :key="g.id" :value="g.id">
+              {{ g.name }} ({{ getGroupPhotos(g.id).length }} תמונות)
+            </option>
+          </select>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+          <button
+            @click="showCreateGroupFromSelectionModal = false"
+            class="px-4 py-2 text-xs text-slate-400 hover:text-white cursor-pointer"
+          >
+            ביטול
+          </button>
+          <button
+            @click="handleConfirmCreateGroupFromSelection"
+            :disabled="!selectionGroupName.trim() && !selectionExistingGroupId"
+            class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-40 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
+          >
+            {{ selectionExistingGroupId ? 'הוסף לקבוצה קיימת' : 'צור תת-קבוצה ואחד' }}
+          </button>
         </div>
       </div>
     </div>
