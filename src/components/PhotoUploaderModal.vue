@@ -400,6 +400,38 @@ const publishQueueItem = async (item) => {
   }
 };
 
+// Publish Single Item with visual feedback and modal close
+const isPublishingSingle = ref(false);
+
+const handlePublishSingle = async () => {
+  if (!currentItem.value || isPublishingSingle.value) return;
+
+  isPublishingSingle.value = true;
+  errorMessage.value = '';
+  successMessage.value = '';
+
+  try {
+    await publishQueueItem(currentItem.value);
+    successMessage.value = currentItem.value.isReplacement 
+      ? 'התמונה עודכנה בהצלחה כגרסה חדשה!' 
+      : 'התמונה פורסמה בהצלחה באתר!';
+    
+    emit('photo-uploaded', currentItem.value);
+
+    setTimeout(() => {
+      // If only 1 photo in queue, close modal
+      if (uploadQueue.value.length <= 1 || uploadQueue.value.every(i => i.status === 'published')) {
+        emit('close');
+      }
+    }, 2000);
+  } catch (err) {
+    console.error('Publish error:', err);
+    errorMessage.value = `שגיאה בפרסום: ${err.message}`;
+  } finally {
+    isPublishingSingle.value = false;
+  }
+};
+
 // Publish All Ready & Matched Items in the Queue
 const isPublishingAll = ref(false);
 const publishAllProgressText = ref('');
@@ -739,12 +771,16 @@ const publishedCount = computed(() => uploadQueue.value.filter(i => i.status ===
           <div class="flex justify-end pt-2">
             <button
               type="button"
-              @click="publishQueueItem(currentItem)"
-              :disabled="currentItem.status === 'published' || isPublishingAll"
-              class="px-5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer"
-              :class="currentItem.status === 'published' ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg'"
+              @click="handlePublishSingle"
+              :disabled="currentItem.status === 'published' || isPublishingSingle || isPublishingAll"
+              class="px-6 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
+              :class="currentItem.status === 'published' ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/30'"
             >
-              <span>{{ currentItem.status === 'published' ? '✓ פורסם' : (currentItem.isReplacement ? '🔄 פרסם כגרסה מעודכנת' : '🚀 פרסם תמונה זו') }}</span>
+              <span v-if="isPublishingSingle" class="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+              <span v-else>{{ currentItem.status === 'published' ? '✓' : (currentItem.isReplacement ? '🔄' : '🚀') }}</span>
+              <span>
+                {{ isPublishingSingle ? 'מעלה ומפרסם באתר...' : (currentItem.status === 'published' ? 'פורסם בהצלחה' : (currentItem.isReplacement ? 'פרסם כגרסה מעודכנת' : 'פרסם תמונה זו')) }}
+              </span>
             </button>
           </div>
 
@@ -785,14 +821,26 @@ const publishedCount = computed(() => uploadQueue.value.filter(i => i.status ===
       <footer class="p-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/40">
         <button @click="emit('close')" class="px-4 py-2 text-xs text-slate-400 hover:text-white cursor-pointer">סגור</button>
         <div class="flex items-center gap-2">
+          <!-- Quick publish button for current item or all items -->
           <button
-            v-if="readyCount > 0"
+            v-if="currentItem && currentItem.status !== 'published'"
+            @click="handlePublishSingle"
+            :disabled="isPublishingSingle || isPublishingAll"
+            class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs transition cursor-pointer shadow-lg flex items-center gap-2 shadow-emerald-900/30"
+          >
+            <span v-if="isPublishingSingle" class="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+            <span v-else>🚀</span>
+            <span>{{ isPublishingSingle ? 'מעלה ומפרסם...' : (currentItem.isReplacement ? 'פרסם גרסה מעודכנת' : 'פרסם תמונה זו לאתר') }}</span>
+          </button>
+          <button
+            v-else-if="readyCount > 1"
             @click="publishAllReadyItems"
             :disabled="isPublishingAll || isBatchProcessing"
-            class="px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs transition cursor-pointer shadow-lg flex items-center gap-2"
+            class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs transition cursor-pointer shadow-lg flex items-center gap-2 shadow-emerald-900/30"
           >
-            <span>🚀</span>
-            <span>{{ readyCount === 1 ? 'פרסם תמונה לאתר' : `פרסם את כל ${readyCount} התמונות` }}</span>
+            <span v-if="isPublishingAll" class="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+            <span v-else>🚀</span>
+            <span>{{ isPublishingAll ? 'מפרסם את כל התמונות...' : `פרסם את כל ${readyCount} התמונות` }}</span>
           </button>
         </div>
       </footer>
