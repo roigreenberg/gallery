@@ -120,10 +120,71 @@ const countVotes = (votes = {}) => {
   return Object.keys(votes).length;
 };
 
+// Automatically derive exhibition items from initialPhotos (196 exhibition candidates)
+const defaultExhibitionItems = computed(() => {
+  return (props.initialPhotos || [])
+    .filter(p => p.is_exhibition_candidate || p.exhibition?.candidate)
+    .map(p => {
+      const score = p.exhibition_score || p.exhibition?.score || 1;
+      const status = score === 2 ? 'sure' : 'maybe';
+      return {
+        id: p.id,
+        photo_id: p.id,
+        photo_data: {
+          id: p.id,
+          title: p.title || p.ai?.title || p.filename || '',
+          title_en: p.title_en || p.ai?.title_en || '',
+          thumbnail: p.thumb_url || p.paths?.thumbnail || p.thumbnail || '',
+          display: p.display_url || p.paths?.display || p.display || '',
+          species_he: p.species_he || p.ai?.species_hebrew || '',
+          species_en: p.species_en || p.ai?.species_en || '',
+          species_la: p.species_la || p.ai?.species_latin || '',
+          category: p.category || p.ai?.category || 'wildlife',
+          humorous_description: p.humorous_description || p.ai?.humorous_description || '',
+          humorous_description_en: p.humorous_description_en || p.ai?.humorous_description_en || '',
+          exhibition_score: score,
+          exif: p.exif || {}
+        },
+        area: 'exhibition',
+        status: status,
+        group_id: null,
+        group_name: null,
+        votes: {},
+        ai_critique: null,
+        notes: '',
+        is_default: true
+      };
+    });
+});
+
+// Merged items: default exhibition candidates + any custom overrides/votes from Firestore
+const effectiveCurationItems = computed(() => {
+  const map = new Map();
+  for (const item of defaultExhibitionItems.value) {
+    map.set(item.id, item);
+  }
+
+  for (const fireItem of curationItems.value) {
+    const key = fireItem.photo_id || fireItem.id;
+    if (map.has(key)) {
+      const def = map.get(key);
+      map.set(key, {
+        ...def,
+        ...fireItem,
+        photo_data: { ...def.photo_data, ...(fireItem.photo_data || {}) }
+      });
+    } else {
+      map.set(key, fireItem);
+    }
+  }
+
+  return Array.from(map.values());
+});
+
 // Filtered items based on area & search
 const filteredItems = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
-  return curationItems.value.filter(item => {
+  return effectiveCurationItems.value.filter(item => {
     if (activeArea.value !== 'all' && item.area !== activeArea.value) {
       return false;
     }
@@ -149,20 +210,26 @@ const activeSubGroups = computed(() => {
 });
 
 const getGroupPhotos = (groupId) => {
-  return curationItems.value.filter(i => i.group_id === groupId);
+  return effectiveCurationItems.value.filter(i => i.group_id === groupId);
 };
 
 // Voting Actions
 const handleVote = async (photoId, score) => {
-  if (!currentUser.value) return;
-  const item = curationItems.value.find(i => i.photo_id === photoId || i.id === photoId);
+  if (!currentUser.value) {
+    try {
+      await loginWithGoogle();
+    } catch (e) {}
+    return;
+  }
+  const item = effectiveCurationItems.value.find(i => i.photo_id === photoId || i.id === photoId);
+  if (!item) return;
   const currentVote = item?.votes?.[currentUser.value.uid]?.score;
 
   try {
     if (currentVote === score) {
       await removeVoteOnCurationItem(photoId, currentUser.value);
     } else {
-      await voteOnCurationItem(photoId, currentUser.value, score);
+      await voteOnCurationItem(photoId, currentUser.value, score, item.photo_data);
     }
   } catch (err) {
     console.error('Vote error:', err);
@@ -171,6 +238,13 @@ const handleVote = async (photoId, score) => {
 
 // Moving between tiers
 const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
+  if (!isOwner.value) {
+    if (!currentUser.value) {
+      try { await loginWithGoogle(); } catch (e) {}
+    }
+    return;
+  }
+  const item = effectiveCurationItems.value.find(i => i.photo_id === photoId || i.id === photoId);
   try {
     const updates = { status: newStatus };
     if (newArea) updates.area = newArea;
@@ -178,7 +252,7 @@ const handleMoveStatus = async (photoId, newStatus, newArea = null) => {
       updates.groupId = null;
       updates.groupName = null;
     }
-    await updateCurationStatus(photoId, updates);
+    await updateCurationStatus(photoId, updates, item?.photo_data);
   } catch (err) {
     console.error('Status update error:', err);
   }
@@ -349,39 +423,10 @@ const handleExecuteImport = async () => {
     <!-- Loading State -->
     <div v-if="isAuthLoading" class="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
       <div class="w-10 h-10 rounded-full border-3 border-indigo-500 border-t-transparent animate-spin"></div>
-      <p class="text-sm text-slate-400">טוען נתוני אימות...</p>
+      <p class="text-sm text-slate-400">טוען נתונים...</p>
     </div>
 
-    <!-- Login Lock Screen (For unauthenticated visitors) -->
-    <div v-else-if="!currentUser" class="min-h-[75vh] flex items-center justify-center px-4">
-      <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-8 text-center space-y-6 shadow-2xl backdrop-blur-xl">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-500 flex items-center justify-center mx-auto text-3xl shadow-lg shadow-indigo-500/20">
-          🔒
-        </div>
-        <div class="space-y-2">
-          <h2 class="text-2xl font-bold text-white tracking-tight">אזור אוצרות סגור לתערוכה</h2>
-          <p class="text-sm text-slate-400 leading-relaxed">
-            מתחם זה מיועד לבחירת תצלומים, דירוג מועמדויות לקיר התמונות ולתערוכה הראשית, והתייעצות עם אוצר הבינה המלאכותית.
-          </p>
-        </div>
-        <button
-          type="button"
-          @click="loginWithGoogle"
-          class="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm flex items-center justify-center gap-3 transition shadow-lg cursor-pointer"
-        >
-          <svg class="w-5 h-5" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          <span>התחבר עם חשבון Google</span>
-        </button>
-        <p class="text-[11px] text-slate-500">נגיש רק למי שהוזמן לקישור זה.</p>
-      </div>
-    </div>
-
-    <!-- Main Curation Workspace -->
+    <!-- Main Curation Workspace (Accessible to everyone, sign-in enables voting & curating) -->
     <div v-else class="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       
       <!-- Top Bar: Header & Controls -->
@@ -397,16 +442,22 @@ const handleExecuteImport = async () => {
           </a>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">חדר אוצרות: תערוכה וקיר תמונות</h1>
+              <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">מועמדות לתערוכה וקיר תמונות</h1>
               <span v-if="isOwner" class="px-2 py-0.5 text-[11px] bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full font-bold">
                 👑 בעלים ואוצר ראשי
               </span>
-              <span v-else class="px-2 py-0.5 text-[11px] bg-sky-500/20 text-sky-300 border border-sky-500/30 rounded-full font-semibold">
-                🗳️ שופט / מדרג מוזמן
+              <span v-else-if="currentUser" class="px-2 py-0.5 text-[11px] bg-sky-500/20 text-sky-300 border border-sky-500/30 rounded-full font-semibold">
+                🗳️ שופט / מדרג
+              </span>
+              <span v-else class="px-2 py-0.5 text-[11px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full font-semibold">
+                🏛️ תצוגת מועמדות
               </span>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">
+            <p v-if="currentUser" class="text-xs text-slate-400 mt-0.5">
               שלום <strong class="text-slate-200">{{ currentUser.displayName || currentUser.email }}</strong> • דרג תמונות, הוסף הערות ובחר מועמדות.
+            </p>
+            <p v-else class="text-xs text-slate-400 mt-0.5">
+              צפייה במועמדות לתערוכה ולקיר התמונות. התחבר עם חשבון Google כדי להצביע ולהשפיע.
             </p>
           </div>
         </div>
@@ -422,7 +473,7 @@ const handleExecuteImport = async () => {
             <span>🖼️</span>
             <span>תערוכה ראשית</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ curationItems.filter(i => i.area === 'exhibition' && i.status === 'sure').length }}
+              {{ effectiveCurationItems.filter(i => i.area === 'exhibition' && i.status === 'sure').length }}
             </span>
           </button>
 
@@ -435,7 +486,7 @@ const handleExecuteImport = async () => {
             <span>🧱</span>
             <span>קיר תמונות</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ curationItems.filter(i => i.area === 'wall' && i.status === 'sure').length }}
+              {{ effectiveCurationItems.filter(i => i.area === 'wall' && i.status === 'sure').length }}
             </span>
           </button>
 
@@ -445,12 +496,28 @@ const handleExecuteImport = async () => {
             class="px-3.5 py-2 rounded-lg text-xs font-medium transition cursor-pointer"
             :class="activeArea === 'all' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'"
           >
-            <span>הכל ({{ curationItems.length }})</span>
+            <span>הכל ({{ effectiveCurationItems.length }})</span>
           </button>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex items-center gap-2">
+          <!-- Sign in button if not logged in -->
+          <button
+            v-if="!currentUser"
+            type="button"
+            @click="loginWithGoogle"
+            class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-900 text-xs font-bold transition shadow-sm flex items-center gap-2 cursor-pointer"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>התחבר להצבעה</span>
+          </button>
+
           <!-- Import Photos (Owner only) -->
           <button
             v-if="isOwner"
@@ -459,7 +526,7 @@ const handleExecuteImport = async () => {
             class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
             <span>➕</span>
-            <span>ייבא תמונות מהגלריה</span>
+            <span>ייבא תמונות נוספות</span>
           </button>
 
           <!-- Create Sub-Group (Owner only) -->
@@ -593,7 +660,7 @@ const handleExecuteImport = async () => {
                   type="button"
                   @click="handleVote(item.id, 2)"
                   class="p-1 rounded hover:bg-slate-800 transition cursor-pointer"
-                  :class="{ 'ring-1 ring-amber-400 bg-amber-500/20': item.votes?.[currentUser.uid]?.score === 2 }"
+                  :class="{ 'ring-1 ring-amber-400 bg-amber-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 2 }"
                   title="🔥 חובה בתערוכה (+2)"
                 >
                   🔥
@@ -602,7 +669,7 @@ const handleExecuteImport = async () => {
                   type="button"
                   @click="handleVote(item.id, 1)"
                   class="p-1 rounded hover:bg-slate-800 transition cursor-pointer"
-                  :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': item.votes?.[currentUser.uid]?.score === 1 }"
+                  :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 1 }"
                   title="👍 מוצלחת מאוד (+1)"
                 >
                   👍
@@ -611,7 +678,7 @@ const handleExecuteImport = async () => {
                   type="button"
                   @click="handleVote(item.id, 0)"
                   class="p-1 rounded hover:bg-slate-800 transition cursor-pointer"
-                  :class="{ 'ring-1 ring-slate-400 bg-slate-700': item.votes?.[currentUser.uid]?.score === 0 }"
+                  :class="{ 'ring-1 ring-slate-400 bg-slate-700': currentUser && item.votes?.[currentUser.uid]?.score === 0 }"
                   title="🤔 מתלבט (0)"
                 >
                   🤔
@@ -620,7 +687,7 @@ const handleExecuteImport = async () => {
                   type="button"
                   @click="handleVote(item.id, -1)"
                   class="p-1 rounded hover:bg-slate-800 transition cursor-pointer"
-                  :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': item.votes?.[currentUser.uid]?.score === -1 }"
+                  :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': currentUser && item.votes?.[currentUser.uid]?.score === -1 }"
                   title="👎 פחות מתאים (-1)"
                 >
                   👎
@@ -711,10 +778,10 @@ const handleExecuteImport = async () => {
 
               <!-- Voting Bar -->
               <div class="flex items-center justify-between bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 text-xs">
-                <button @click="handleVote(item.id, 2)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-amber-400 bg-amber-500/20': item.votes?.[currentUser.uid]?.score === 2 }" title="🔥 חובה (+2)">🔥</button>
-                <button @click="handleVote(item.id, 1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': item.votes?.[currentUser.uid]?.score === 1 }" title="👍 מוצלחת (+1)">👍</button>
-                <button @click="handleVote(item.id, 0)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-slate-400 bg-slate-700': item.votes?.[currentUser.uid]?.score === 0 }" title="🤔 מתלבט (0)">🤔</button>
-                <button @click="handleVote(item.id, -1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': item.votes?.[currentUser.uid]?.score === -1 }" title="👎 פחות מתאים (-1)">👎</button>
+                <button @click="handleVote(item.id, 2)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-amber-400 bg-amber-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 2 }" title="🔥 חובה (+2)">🔥</button>
+                <button @click="handleVote(item.id, 1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-emerald-400 bg-emerald-500/20': currentUser && item.votes?.[currentUser.uid]?.score === 1 }" title="👍 מוצלחת (+1)">👍</button>
+                <button @click="handleVote(item.id, 0)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-slate-400 bg-slate-700': currentUser && item.votes?.[currentUser.uid]?.score === 0 }" title="🤔 מתלבט (0)">🤔</button>
+                <button @click="handleVote(item.id, -1)" class="p-1 rounded hover:bg-slate-800 cursor-pointer" :class="{ 'ring-1 ring-rose-400 bg-rose-500/20': currentUser && item.votes?.[currentUser.uid]?.score === -1 }" title="👎 פחות מתאים (-1)">👎</button>
                 <span class="text-[10px] text-slate-400 font-mono pr-1">({{ countVotes(item.votes) }})</span>
               </div>
 

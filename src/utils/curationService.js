@@ -93,7 +93,7 @@ export const batchAddPhotosToCuration = async (photos, area = 'pool', status = '
 /**
  * Update curation item status or area
  */
-export const updateCurationStatus = async (photoId, { area, status, groupId = null, groupName = null }) => {
+export const updateCurationStatus = async (photoId, { area, status, groupId = null, groupName = null }, photoData = null) => {
   if (!db) throw new Error('Database not connected');
   const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
   const docRef = doc(db, 'curation_items', cleanId);
@@ -106,7 +106,27 @@ export const updateCurationStatus = async (photoId, { area, status, groupId = nu
   if (groupId !== undefined) updates.group_id = groupId;
   if (groupName !== undefined) updates.group_name = groupName;
 
-  await updateDoc(docRef, updates);
+  if (photoData) {
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) {
+      await setDoc(docRef, {
+        photo_id: photoId,
+        photo_data: photoData,
+        area: area || 'exhibition',
+        status: status || 'pool',
+        group_id: groupId,
+        group_name: groupName,
+        votes: {},
+        ai_critique: null,
+        notes: '',
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+      return;
+    }
+  }
+
+  await setDoc(docRef, updates, { merge: true });
 };
 
 /**
@@ -117,22 +137,49 @@ export const updateCurationStatus = async (photoId, { area, status, groupId = nu
  *   0: 🤔 ניטרלי / מתלבט
  *  -1: 👎 פחות מתאים
  */
-export const voteOnCurationItem = async (photoId, user, score) => {
+export const voteOnCurationItem = async (photoId, user, score, photoData = null) => {
   if (!db || !user) throw new Error('Must be logged in to vote');
   const cleanId = String(photoId).replace(/[^a-zA-Z0-9_-]/g, '_');
   const docRef = doc(db, 'curation_items', cleanId);
 
-  const updateKey = `votes.${user.uid}`;
-  await updateDoc(docRef, {
-    [updateKey]: {
-      score,
-      user_name: user.displayName || user.email.split('@')[0],
-      user_photo: user.photoURL || '',
-      user_email: user.email,
-      timestamp: Date.now()
+  const snap = await getDoc(docRef);
+  if (!snap.exists() && photoData) {
+    await setDoc(docRef, {
+      photo_id: photoId,
+      photo_data: photoData,
+      area: 'exhibition',
+      status: (photoData.exhibition_score === 2) ? 'sure' : 'maybe',
+      group_id: null,
+      group_name: null,
+      votes: {
+        [user.uid]: {
+          score,
+          user_name: user.displayName || user.email.split('@')[0],
+          user_photo: user.photoURL || '',
+          user_email: user.email,
+          timestamp: Date.now()
+        }
+      },
+      ai_critique: null,
+      notes: '',
+      created_at: serverTimestamp(),
+      updated_at: serverTimestamp()
+    });
+    return;
+  }
+
+  await setDoc(docRef, {
+    votes: {
+      [user.uid]: {
+        score,
+        user_name: user.displayName || user.email.split('@')[0],
+        user_photo: user.photoURL || '',
+        user_email: user.email,
+        timestamp: Date.now()
+      }
     },
     updated_at: serverTimestamp()
-  });
+  }, { merge: true });
 };
 
 /**
