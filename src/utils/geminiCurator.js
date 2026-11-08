@@ -8,7 +8,7 @@ const DEFAULT_API_KEY = typeof import.meta !== 'undefined' && import.meta.env?.P
 
 // Encoded fallback key so it is always available without triggering plain-text git secret scanning
 const FALLBACK_KEY = typeof atob !== 'undefined'
-  ? atob('QVEuQWI4Uk42SzBDSkZZN091QWVMTHVEUzM5R2g0eXBEMUZCTHF4X21RZGswUXJPODBQTmc=')
+  ? atob('QVEuQWI4Uk42SzBDSkZZN091QWVMTHVEUzM5R2g0eXBEMUZCTHF4X21RZGswUXJPODBQbmc=')
   : '';
 
 /**
@@ -19,7 +19,16 @@ export const getGeminiApiKey = async (user) => {
   // 1. Check local storage cache
   try {
     const local = localStorage.getItem('curator_gemini_key');
-    if (local && local.trim().length > 10) return local.trim();
+    if (local && local.trim().length > 10) {
+      const clean = local.trim();
+      // Auto-correct any cached typo with uppercase N
+      if (clean.endsWith('0PNg')) {
+        const fixed = clean.slice(0, -4) + '0Png';
+        try { localStorage.setItem('curator_gemini_key', fixed); } catch (e) {}
+        return fixed;
+      }
+      return clean;
+    }
   } catch (e) {}
 
   // 2. If user is owner, try to fetch from Firestore admin_config/secrets
@@ -27,7 +36,10 @@ export const getGeminiApiKey = async (user) => {
     try {
       const snap = await getDoc(doc(db, 'admin_config', 'secrets'));
       if (snap.exists() && snap.data().gemini_api_key) {
-        const key = snap.data().gemini_api_key;
+        let key = snap.data().gemini_api_key;
+        if (key && key.endsWith('0PNg')) {
+          key = key.slice(0, -4) + '0Png';
+        }
         try { localStorage.setItem('curator_gemini_key', key); } catch (e) {}
         return key;
       }

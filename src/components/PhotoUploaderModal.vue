@@ -177,14 +177,26 @@ const processQueue = async () => {
       const exifData = await extractExifFromFile(item.file);
       item.exif = exifData;
 
-      // 2. Check for duplicate / existing version match
+      // 2. Resize to WebP (Display 2048px & Thumb 600px)
+      item.statusText = 'ממיר ל-WebP ברזולוציה גבוהה...';
+      const displayWebP = await resizeImageToWebP(item.file, 2048, 0.88);
+      const thumbWebP = await resizeImageToWebP(item.file, 600, 0.82);
+      item.displayBlob = displayWebP.blob;
+      item.thumbBlob = thumbWebP.blob;
+      item.dimensions = {
+        width: displayWebP.width,
+        height: displayWebP.height,
+        aspectRatio: displayWebP.aspectRatio
+      };
+
+      // 3. Check for duplicate / existing version match
       const matched = findExistingPhotoMatch(item.file, exifData, allPhotosList.value);
 
-      if (matched) {
+      if (matched && (matched.title || matched.ai?.title || matched.species_he || matched.ai?.species_hebrew)) {
         item.matchedPhoto = matched;
         item.isReplacement = true;
         item.status = 'matched';
-        item.statusText = `זוהתה תמונה קיימת: ${matched.title || matched.id}`;
+        item.statusText = `זוהתה תמונה קיימת: ${matched.title || matched.ai?.title || matched.id}`;
 
         // Pre-fill existing metadata
         item.titleHe = matched.title || matched.ai?.title || '';
@@ -206,18 +218,6 @@ const processQueue = async () => {
         const cleanName = item.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
         item.titleHe = cleanName;
 
-        // 3. Resize to WebP
-        item.statusText = 'ממיר ל-WebP ברזולוציה גבוהה...';
-        const displayWebP = await resizeImageToWebP(item.file, 2048, 0.88);
-        const thumbWebP = await resizeImageToWebP(item.file, 600, 0.82);
-        item.displayBlob = displayWebP.blob;
-        item.thumbBlob = thumbWebP.blob;
-        item.dimensions = {
-          width: displayWebP.width,
-          height: displayWebP.height,
-          aspectRatio: displayWebP.aspectRatio
-        };
-
         // 4. Run Gemini AI for new photo
         if (key) {
           item.statusText = 'מנתח באמצעות Gemini AI...';
@@ -234,13 +234,19 @@ const processQueue = async () => {
             item.humorHe = aiData.humorous_description || '';
             item.humorEn = aiData.humorous_description_en || '';
             item.tagsHe = (aiData.tags || []).join(', ');
+            item.status = 'ready';
+            item.statusText = 'מוכן לפרסום (זוהה ע״י AI)';
           } catch (aiErr) {
             console.warn('Gemini tagging failed for queue item:', aiErr);
+            item.errorMessage = `שגיאת AI: ${aiErr.message}`;
+            errorMessage.value = `שימו לב: ניתוח ה-AI נתקל בשגיאה (${aiErr.message}). באפשרותך ללחוץ 'הפעל זיהוי AI' או לערוך ידנית.`;
+            item.status = 'ready';
+            item.statusText = 'מוכן לפרסום (ללא AI)';
           }
+        } else {
+          item.status = 'ready';
+          item.statusText = 'מוכן לפרסום';
         }
-
-        item.status = 'ready';
-        item.statusText = 'מוכן לפרסום';
       }
     } catch (err) {
       console.error(`Error processing ${item.name}:`, err);
