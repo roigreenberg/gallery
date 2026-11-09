@@ -221,29 +221,16 @@ const effectiveCurationItems = computed(() => {
     if (map.has(key)) {
       const def = map.get(key);
 
-      // Status resolution:
-      // 1. If currently marked as 'sure' in Firestore -> 'sure'
-      // 2. If owner explicitly moved it recently (is_manual_move is set) -> respect owner's choice
-      // 3. If it was in Firestore without judge votes (Roi's manual pick prior to the reset button) -> restore 'sure'
-      // 4. Otherwise, use fireItem.status if set, or fallback to def.status ('maybe' / 'pool')
-      const voteKeys = Object.keys(fireItem.votes || {});
-      const hasOnlyOwnerOrEmptyVotes = voteKeys.length === 0 || 
-        voteKeys.every(uid => fireItem.votes[uid]?.user_email === 'roigreenberg@gmail.com');
-
-      let finalStatus = fireItem.status;
-      if (fireItem.status === 'sure') {
-        finalStatus = 'sure';
-      } else if (fireItem.is_manual_move) {
-        finalStatus = fireItem.status || def.status;
-      } else if (hasOnlyOwnerOrEmptyVotes && fireItem.status !== 'rejected' && !fireItem.group_id) {
-        finalStatus = 'sure';
-      } else if (!finalStatus) {
-        finalStatus = def.status;
-      }
+      // Clean status & area resolution:
+      // Status comes from Firestore if present, otherwise from default ('maybe' for score 2, 'pool' for score 1).
+      // NEVER force photos into 'sure' automatically! Only manual owner moves belong in 'sure'.
+      const finalStatus = fireItem.status || def.status;
+      const finalArea = (fireItem.area && fireItem.area !== 'pool') ? fireItem.area : (def.area || 'exhibition');
 
       map.set(key, {
         ...def,
         ...fireItem,
+        area: finalArea,
         status: finalStatus,
         photo_data: { ...def.photo_data, ...(fireItem.photo_data || {}) }
       });
@@ -345,6 +332,35 @@ const sureCount = computed(() => sureGroups.value.length + surePhotos.value.leng
 const maybeCount = computed(() => maybeGroups.value.length + maybePhotos.value.length);
 const poolCount = computed(() => poolGroups.value.length + poolPhotos.value.length);
 const rejectedCount = computed(() => rejectedGroups.value.length + rejectedPhotos.value.length);
+
+// Area counts: candidate pool is shared, only confirmed 'sure' items are partitioned
+const areaCounts = computed(() => {
+  const countFor = (areaTarget) => {
+    if (areaTarget === 'all') {
+      return effectiveCurationItems.value.filter(i => !i.group_id || !activeGroupIds.value.has(i.group_id)).length + activeSubGroups.value.length;
+    }
+    const standalone = effectiveCurationItems.value.filter(i => {
+      if (i.group_id && activeGroupIds.value.has(i.group_id)) return false;
+      if (i.status === 'sure') {
+        return (i.area || 'exhibition') === areaTarget;
+      }
+      return true; // shared candidate pool
+    }).length;
+
+    const groups = activeSubGroups.value.filter(g => {
+      if (g.status === 'sure') return (g.area || 'exhibition') === areaTarget;
+      return true;
+    }).length;
+
+    return standalone + groups;
+  };
+
+  return {
+    exhibition: countFor('exhibition'),
+    wall: countFor('wall'),
+    all: countFor('all')
+  };
+});
 
 // Backward-compatibility aliases
 const sureItems = surePhotos;
@@ -852,7 +868,7 @@ const handleExecuteImport = async () => {
             <span>🖼️</span>
             <span>תערוכה ראשית</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ (effectiveCurationItems.filter(i => i.area === 'exhibition' && (!i.group_id || !activeGroupIds.has(i.group_id))).length) + activeSubGroups.filter(g => g.area === 'exhibition').length }}
+              {{ areaCounts.exhibition }}
             </span>
           </button>
 
@@ -865,7 +881,7 @@ const handleExecuteImport = async () => {
             <span>🧱</span>
             <span>קיר תמונות</span>
             <span class="px-1.5 py-0.2 bg-black/30 rounded-full text-[11px]">
-              {{ (effectiveCurationItems.filter(i => i.area === 'wall' && (!i.group_id || !activeGroupIds.has(i.group_id))).length) + activeSubGroups.filter(g => g.area === 'wall').length }}
+              {{ areaCounts.wall }}
             </span>
           </button>
 
@@ -875,7 +891,7 @@ const handleExecuteImport = async () => {
             class="px-3.5 py-2 rounded-lg text-xs font-medium transition cursor-pointer"
             :class="activeArea === 'all' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'"
           >
-            <span>הכל ({{ (effectiveCurationItems.filter(i => !i.group_id || !activeGroupIds.has(i.group_id)).length) + activeSubGroups.length }})</span>
+            <span>הכל ({{ areaCounts.all }})</span>
           </button>
         </div>
 
