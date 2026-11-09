@@ -156,8 +156,8 @@ export const voteOnCurationItem = async (photoId, user, score, photoData = null)
   const snap = await getDoc(docRef);
   if (!snap.exists() && photoData) {
     // CRITICAL: Voting MUST NEVER modify status or area.
-    // Default status: 'sure' for score 2, 'pool' for score 1.
-    const initialStatus = photoData.status || (photoData.exhibition_score === 2 ? 'sure' : 'pool');
+    // Default status: 'maybe' for score 2, 'pool' for score 1.
+    const initialStatus = photoData.status || (photoData.exhibition_score === 2 ? 'maybe' : 'pool');
 
     await setDoc(docRef, {
       photo_id: photoId,

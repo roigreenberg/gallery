@@ -176,9 +176,9 @@ const defaultExhibitionItems = computed(() => {
     .filter(p => p.is_exhibition_candidate || p.exhibition?.candidate)
     .map(p => {
       const score = p.exhibition_score || p.exhibition?.score || 1;
-      // Link 2 / Score 2 (121 photos) -> 'sure' (מועמדות בטוחות לתערוכה ראשית)
+      // Link 2 / Score 2 (121 photos) -> 'maybe' (מועמדות אפשריות)
       // Link 1 / Score 1 (74 photos) -> 'pool' (מאגר כללי לתערוכה)
-      const status = score === 2 ? 'sure' : 'pool';
+      const status = score === 2 ? 'maybe' : 'pool';
       return {
         id: p.id,
         photo_id: p.id,
@@ -220,11 +220,22 @@ const effectiveCurationItems = computed(() => {
     const key = fireItem.photo_id || fireItem.id;
     if (map.has(key)) {
       const def = map.get(key);
-      // Status priority:
-      // If photo has exhibition_score === 2 (the 121 favorites) and was not explicitly moved away by Roi,
-      // preserve 'sure'!
+
+      // Status resolution:
+      // 1. If currently marked as 'sure' in Firestore -> 'sure'
+      // 2. If owner explicitly moved it recently (is_manual_move is set) -> respect owner's choice
+      // 3. If it was in Firestore without judge votes (Roi's manual pick prior to the reset button) -> restore 'sure'
+      // 4. Otherwise, use fireItem.status if set, or fallback to def.status ('maybe' / 'pool')
+      const voteKeys = Object.keys(fireItem.votes || {});
+      const hasOnlyOwnerOrEmptyVotes = voteKeys.length === 0 || 
+        voteKeys.every(uid => fireItem.votes[uid]?.user_email === 'roigreenberg@gmail.com');
+
       let finalStatus = fireItem.status;
-      if (def.photo_data?.exhibition_score === 2 && !fireItem.is_manual_move) {
+      if (fireItem.status === 'sure') {
+        finalStatus = 'sure';
+      } else if (fireItem.is_manual_move) {
+        finalStatus = fireItem.status || def.status;
+      } else if (hasOnlyOwnerOrEmptyVotes && fireItem.status !== 'rejected' && !fireItem.group_id) {
         finalStatus = 'sure';
       } else if (!finalStatus) {
         finalStatus = def.status;
